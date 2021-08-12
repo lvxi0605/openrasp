@@ -116,6 +116,7 @@
                             <Rasp-Module-Class>com.baidu.openrasp.EngineBoot</Rasp-Module-Class>
                         </manifestEntries>
                     </archive>
+                    <outputDirectory>../integration-test/rasp</outputDirectory>
                     <excludes>
                         <exclude>**/pluginUnitTest/</exclude>
                     </excludes>

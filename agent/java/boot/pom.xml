@@ -48,6 +48,7 @@
                             <Can-Retransform-Classes>true</Can-Retransform-Classes>
                         </manifestEntries>
                     </archive>
+                    <outputDirectory>../integration-test/rasp</outputDirectory>
                 </configuration>
             </plugin>
         </plugins>
