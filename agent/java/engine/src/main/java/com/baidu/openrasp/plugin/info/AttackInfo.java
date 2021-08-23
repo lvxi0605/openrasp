@@ -254,4 +254,12 @@ public class AttackInfo extends EventInfo {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    public JsonObject getExtras() {
+        return extras;
+    }
+
+    public void setExtras(JsonObject extras) {
+        this.extras = extras;
+    }
 }

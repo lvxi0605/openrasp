@@ -25,7 +25,7 @@ import java.io.IOException;
 
 /**
  * Created by tyy on 18-4-28.
- * <p>
+ * <P>
  * sql Prepare 查询 hook 点
  */
 @HookAnnotation
@@ -42,7 +42,8 @@ public class SQLPreparedStatementHook extends AbstractSqlHook {
                 || "com/mysql/cj/jdbc/ClientPreparedStatement".equals(className)) {
             this.type = SqlType.MYSQL;
             this.exceptions = new String[]{"java/sql/SQLException"};
-            return true;
+            // 钩子报错，暂时关闭
+            return false;
         }
 
         /* SQLite */

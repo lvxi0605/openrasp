@@ -16,6 +16,7 @@
 
 package com.baidu.openrasp.plugin.checker.v8;
 
+import com.baidu.openrasp.HookHandler;
 import com.baidu.openrasp.plugin.checker.AttackChecker;
 import com.baidu.openrasp.plugin.checker.CheckParameter;
 import com.baidu.openrasp.plugin.info.EventInfo;
@@ -47,6 +48,12 @@ public class V8AttackChecker extends AttackChecker {
      */
     @Override
     public List<EventInfo> checkParam(CheckParameter checkParameter) {
-        return JS.Check(checkParameter);
+        List<EventInfo> returnObj = JS.Check(checkParameter);
+        // 校验是否存放结果
+        if (!returnObj.isEmpty() && HookHandler.dataThreadHook.get() instanceof Boolean && (Boolean) HookHandler.dataThreadHook.get())
+        {
+            HookHandler.dataThreadHook.set(returnObj);
+        }
+        return returnObj;
     }
 }

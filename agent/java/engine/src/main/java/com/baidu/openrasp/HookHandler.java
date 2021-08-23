@@ -234,6 +234,13 @@ public class HookHandler {
         requestCache.set(null);
     }
 
+    // 当前v8返回数据
+    public static ThreadLocal<Object> dataThreadHook = new ThreadLocal<Object>() {
+        @Override
+        protected Object initialValue() {
+            return null;
+        }
+    };
     /**
      * 在过滤器中进入的hook点
      *
