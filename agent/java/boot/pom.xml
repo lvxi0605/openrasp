@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.baidu.openrasp</groupId>
-        <artifactId>openrasp</artifactId>
+        <groupId>com.gxdun.corerasp</groupId>
+        <artifactId>corerasp</artifactId>
         <version>${rasp.version}</version>
     </parent>
 
@@ -41,9 +41,9 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Premain-Class>com.baidu.openrasp.Agent</Premain-Class>
-                            <Agent-Class>com.baidu.openrasp.Agent</Agent-Class>
-                            <Main-Class>com.baidu.openrasp.Agent</Main-Class>
+                            <Premain-Class>com.gxdun.corerasp.Agent</Premain-Class>
+                            <Agent-Class>com.gxdun.corerasp.Agent</Agent-Class>
+                            <Main-Class>com.gxdun.corerasp.Agent</Main-Class>
                             <Can-Redefine-Classes>true</Can-Redefine-Classes>
                             <Can-Retransform-Classes>true</Can-Retransform-Classes>
                         </manifestEntries>

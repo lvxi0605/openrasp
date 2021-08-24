@@ -943,7 +943,7 @@ function validate_stack_java(stacks) {
             if (! method.startsWith('java.') 
                 && !method.startsWith('sun.') 
                 && !method.startsWith('com.sun.') 
-                && !method.startsWith('com.baidu.openrasp.')) 
+                && !method.startsWith('com.gxdun.corerasp.'))
             {
                 userCode = true
             }
