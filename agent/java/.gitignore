@@ -45,6 +45,6 @@ src/main/resources/environment
 
 bin/
 
-/**/*.log
+/**/*.log*
 integration-test/rasp/rasp.jar
 integration-test/rasp/rasp-engine.jar
