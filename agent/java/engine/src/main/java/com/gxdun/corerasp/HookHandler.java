@@ -46,7 +46,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @SuppressWarnings("unused")
 public class HookHandler {
     public static final String OPEN_RASP_HEADER_KEY = "X-Protected-By";
-    public static final String OPEN_RASP_HEADER_VALUE = "OpenRASP";
+    public static final String OPEN_RASP_HEADER_VALUE = "CoreRASP";
     public static final String REQUEST_ID_HEADER_KEY = "X-Request-ID";
     public static AtomicLong requestSum = new AtomicLong(0);
     public static final Logger LOGGER = Logger.getLogger(HookHandler.class.getName());
