@@ -142,6 +142,7 @@ public class CustomClassTransformer implements ClassFileTransformer {
         if (loader != null && jspClassLoaderNames.contains(loader.getClass().getName())) {
             jspClassLoaderCache.put(className.replace("/", "."), new SoftReference<ClassLoader>(loader));
         }
+        byte[] lsBuffer = null;
         for (final AbstractClassHook hook : hooks) {
             if (hook.isClassMatched(className)) {
                 CtClass ctClass = null;
@@ -152,9 +153,13 @@ public class CustomClassTransformer implements ClassFileTransformer {
                     if (loader == null) {
                         hook.setLoadedByBootstrapLoader(true);
                     }
-                    classfileBuffer = hook.transformClass(ctClass);
-                    if (classfileBuffer != null) {
+                    lsBuffer = hook.transformClass(ctClass);
+                    if (lsBuffer != null) {
                         checkNecessaryHookType(hook.getType());
+                    }
+                    if (lsBuffer != null)
+                    {
+                        classfileBuffer = lsBuffer;
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
