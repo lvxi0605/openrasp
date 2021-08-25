@@ -3004,6 +3004,59 @@ function findFirstMobileNumber(data) {
     }
 }
 
+plugin.register('xssSql', function(params, context) {
+
+	var values = params.values;
+	if (values == null)
+		{
+		return null;
+		}
+
+        var returnData = new Array();
+        for (var value of values) {
+            returnData.push(regReplace(value));
+        }
+
+    return {
+        message:    '',
+        algorithm:  'xssSql',
+        data: returnData
+    }
+})
+
+function regReplace(inputStr)
+{
+	if(inputStr=="")
+		return "";
+
+	inputStr = inputStr.replace(/&Tab;*/ig,"");
+	
+	inputStr = inputStr.replace(/(&#+x*\d+;*)|(\\u+00\d{0,2};*)/ig,function(word){//|(\\+\d{0,3};*)//实体编码没有8进制 
+		var CharCode = word.match(/\d+/i);//word.replace("&","").replace("#","").replace(";","").replace(/\\u/ig,"");
+		if((word.toLowerCase().indexOf('u')>-1 && word.toLowerCase().indexOf('\\')>-1) || word.toLowerCase().indexOf('x')>-1)
+		{
+			CharCode = parseInt(CharCode, 16);// &#x28; 和 \u0061 都是16进制
+		}
+		if(CharCode>128)//超过ascii表了
+		{
+			return word;//中文
+		}
+		if(Number(CharCode)>=0 && Number(CharCode)<=31)
+		{
+			return "";
+		}
+		return String.fromCharCode(CharCode);
+	});
+	
+	inputStr = inputStr.replace(/(javascript)|(<\s*\r*\n*script)|(script\s*\r*\n*>)|(<\s*\r*\n*iframe)|(<\s*\r*\n*embed)|(<\s*\r*\n*object)|(alert\r*\n*\s*\()|(prompt\r*\n*\s*\()|(confirm\r*\n*\s*\()|(addEventListener\r*\n*\s*\()|(expression\r*\n*\s*\()|(eval\r*\n*\s*\()|(onmouseover\r*\n*\s*=)|(onclimbatree\r*\n*\s*=)|(onhashchange\r*\n*\s*=)|(onerror\r*\n*\s*=)|(action\r*\n*\s*=)|(formaction\r*\n*\s*=)|(onload\r*\n*\s*=)|(onstart\r*\n*\s*=)|(onfocus\r*\n*\s*=)|(oncut\r*\n*\s*=)|(code\r*\n*\s*=)|(location\r*\n*\s*.)/ig,
+	function(word){//"[_$&_]"
+		return '['+word.substring(1,word.length-1)+']';
+	});
+	
+	return inputStr;
+}
+
+
 // 匹配银行卡、信用卡
 function findFirstBankCard(data) {
     const regexBankCard = /(?<!\d)(?:62|3|5[1-5]|4\d)\d{2}(?:[ -]?\d{4}){3}(?!\d)/;
