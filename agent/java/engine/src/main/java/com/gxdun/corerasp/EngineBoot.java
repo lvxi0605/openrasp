@@ -48,15 +48,15 @@ public class EngineBoot implements Module {
     public void start(String mode, Instrumentation inst) throws Exception {
         System.out.println("\n\n" +
                 "   ____                   ____  ___   _____ ____ \n" +
-                "  / __ \\____  ___  ____  / __ \\/   | / ___// __ \\\n" +
+                "  / __ \\/   | / ___// __ \\\n" +
                 " / / / / __ \\/ _ \\/ __ \\/ /_/ / /| | \\__ \\/ /_/ /\n" +
                 "/ /_/ / /_/ /  __/ / / / _, _/ ___ |___/ / ____/ \n" +
-                "\\____/ .___/\\___/_/ /_/_/ |_/_/  |_/____/_/      \n" +
-                "    /_/                                          \n\n");
+                "_/ |_/_/  |_/____/_/      \n" +
+                "                                         \n\n");
         try {
             Loader.load();
         } catch (Exception e) {
-            System.out.println("[OpenRASP] Failed to load native library, please refer to https://rasp.baidu.com/doc/install/software.html#faq-v8-load for possible solutions.");
+            System.out.println("[CoreRASP] Failed to load native library, please refer to https://rasp.baidu.com/doc/install/software.html#faq-v8-load for possible solutions.");
             e.printStackTrace();
             return;
         }
@@ -78,7 +78,7 @@ public class EngineBoot implements Module {
                     CloudCacheModel.getInstance().getRaspId());
         }
         deleteTmpDir();
-        String message = "[OpenRASP] Engine Initialized [" + Agent.projectVersion + " (build: GitCommit="
+        String message = "[CoreRASP] Engine Initialized [" + Agent.projectVersion + " (build: GitCommit="
                 + Agent.gitCommit + " date=" + Agent.buildTime + ")]";
         System.out.println(message);
         Logger.getLogger(EngineBoot.class.getName()).info(message);
@@ -93,7 +93,7 @@ public class EngineBoot implements Module {
         }
         JS.Dispose();
         CheckerManager.release();
-        String message = "[OpenRASP] Engine Released [" + Agent.projectVersion + " (build: GitCommit="
+        String message = "[CoreRASP] Engine Released [" + Agent.projectVersion + " (build: GitCommit="
                 + Agent.gitCommit + " date=" + Agent.buildTime + ")]";
         System.out.println(message);
     }
@@ -120,7 +120,7 @@ public class EngineBoot implements Module {
         if (!CloudUtils.checkCloudControlEnter()) {
             LogConfig.syslogManager();
         } else {
-            System.out.println("[OpenRASP] RASP ID: " + CloudCacheModel.getInstance().getRaspId());
+            System.out.println("[CoreRASP] RASP ID: " + CloudCacheModel.getInstance().getRaspId());
         }
         return true;
     }

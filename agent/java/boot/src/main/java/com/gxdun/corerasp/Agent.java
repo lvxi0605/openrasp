@@ -93,7 +93,7 @@ public class Agent {
             readVersion();
             ModuleLoader.load(mode, action, inst);
         } catch (Throwable e) {
-            System.err.println("[OpenRASP] Failed to initialize, will continue without security protection.");
+            System.err.println("[CoreRASP] Failed to initialize, will continue without security protection.");
             e.printStackTrace();
         }
     }

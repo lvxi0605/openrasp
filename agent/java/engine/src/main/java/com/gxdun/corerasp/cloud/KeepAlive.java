@@ -46,7 +46,7 @@ public class KeepAlive extends CloudTimerTask {
     private DependencyReport dependencyReport = new DependencyReport();
 
     public KeepAlive() {
-        super("OpenRASP Heartbeat Thread");
+        super("CoreRASP Heartbeat Thread");
         if (Config.getConfig().isDependencyCheckEnable()) {
             dependencyReport.start();
         }
@@ -91,7 +91,7 @@ public class KeepAlive extends CloudTimerTask {
         try {
             LogTool.warn(ErrorType.HEARTBEAT_ERROR, t.getMessage(), t);
         } catch (Throwable e) {
-            System.out.println("OpenRASP timer logger failed: " + e.getMessage());
+            System.out.println("CoreRASP timer logger failed: " + e.getMessage());
             e.printStackTrace();
         }
     }

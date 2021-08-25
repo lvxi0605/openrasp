@@ -81,6 +81,8 @@ public class CloudHttp implements Request {
             if (conn instanceof HttpsURLConnection && !Config.getConfig().isHttpsVerifyPeer()) {
                 skipSSL((HttpsURLConnection) conn);
             }
+            // TODO需要服务同步修改
+
             HttpURLConnection httpUrlConnection = (HttpURLConnection) conn;
             httpUrlConnection.setRequestProperty("Content-Type", "application/json");
             String appId = Config.getConfig().getCloudAppId();

@@ -52,7 +52,7 @@ public class JarFileHelper {
             path = URLDecoder.decode(
                     localUrl.getFile().replace("+", "%2B"), "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            System.err.println("[OpenRASP] Failed to get jarFile path.");
+            System.err.println("[CoreRASP] Failed to get jarFile path.");
             e.printStackTrace();
         }
         return path;

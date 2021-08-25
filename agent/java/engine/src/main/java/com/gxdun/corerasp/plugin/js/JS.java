@@ -64,7 +64,7 @@ public class JS {
     public synchronized static boolean Initialize() {
         try {
             if (!V8.Initialize()) {
-                throw new Exception("[OpenRASP] Failed to initialize V8 worker threads");
+                throw new Exception("[CoreRASP] Failed to initialize V8 worker threads");
             }
             V8.SetLogger(new com.gxdun.corerasp.v8.Logger() {
                 @Override

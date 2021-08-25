@@ -92,13 +92,13 @@ public class ModuleLoader {
     public static synchronized void release(String mode) {
         try {
             if (engineContainer != null) {
-                System.out.println("[OpenRASP] Start to release OpenRASP");
+                System.out.println("[CoreRASP] Start to release CoreRASP");
 
                 engineContainer.release(mode);
 
                 engineContainer = null;
             } else {
-                System.out.println("[OpenRASP] The OpenRASP has not be bean initialized");
+                System.out.println("[CoreRASP] The CoreRASP has not be bean initialized");
             }
         } catch (Throwable throwable) {
             // ignore
@@ -121,12 +121,12 @@ public class ModuleLoader {
                     throw t;
                 }
             } else {
-                System.out.println("[OpenRASP] The OpenRASP has bean initialized and cannot be initialized again");
+                System.out.println("[CoreRASP] The OpenRASP has bean initialized and cannot be initialized again");
             }
         } else if (Module.START_ACTION_UNINSTALL.equals(action)) {
             release(mode);
         } else {
-            throw new IllegalStateException("[OpenRASP] Can not support the action: " + action);
+            throw new IllegalStateException("[CoreRASP] Can not support the action: " + action);
         }
     }
 

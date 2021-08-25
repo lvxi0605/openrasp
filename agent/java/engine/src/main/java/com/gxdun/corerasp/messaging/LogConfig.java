@@ -35,7 +35,7 @@ public class LogConfig {
     public static void ConfigFileAppender() throws Exception {
         DynamicConfigAppender.initLog4jLogger();
         DynamicConfigAppender.fileAppenderAddBurstFilter();
-        System.out.println("[OpenRASP] Log4j initialized successfully");
+        System.out.println("[CoreRASP] Log4j initialized successfully");
     }
 
     /**

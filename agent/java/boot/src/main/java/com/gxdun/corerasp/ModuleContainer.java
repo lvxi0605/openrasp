@@ -64,11 +64,11 @@ public class ModuleContainer implements Module {
                     moduleClass = moduleClassLoader.loadClass(moduleEnterClassName);
                     module = (Module) moduleClass.newInstance();
                 } else {
-                    throw new Exception("[OpenRASP] Failed to initialize module jar: " + jarName);
+                    throw new Exception("[CoreRASP] Failed to initialize module jar: " + jarName);
                 }
             }
         } catch (Throwable t) {
-            System.err.println("[OpenRASP] Failed to initialize module jar: " + jarName);
+            System.err.println("[CoreRASP] Failed to initialize module jar: " + jarName);
             throw t;
         }
     }
@@ -85,7 +85,7 @@ public class ModuleContainer implements Module {
                 module.release(mode);
             }
         } catch (Throwable t) {
-            System.err.println("[OpenRASP] Failed to release module: " + moduleName);
+            System.err.println("[CoreRASP] Failed to release module: " + moduleName);
             throw t;
         }
     }

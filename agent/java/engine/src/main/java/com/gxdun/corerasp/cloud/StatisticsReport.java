@@ -78,7 +78,7 @@ public class StatisticsReport extends CloudTimerTask {
         try {
             LogTool.warn(ErrorType.STATISTICSREPORT_ERROR, t.getMessage(), t);
         } catch (Throwable e) {
-            System.out.println("OpenRASP timer logger failed: " + e.getMessage());
+            System.out.println("CoreRASP timer logger failed: " + e.getMessage());
             e.printStackTrace();
         }
     }

@@ -79,7 +79,7 @@ public abstract class CloudTimerTask implements Runnable {
                     }
                 }
             } catch (Throwable t) {
-                System.out.println("OpenRASP cloud task failed: " + t.getMessage());
+                System.out.println("CoreRASP cloud task failed: " + t.getMessage());
                 t.printStackTrace();
             }
         }
