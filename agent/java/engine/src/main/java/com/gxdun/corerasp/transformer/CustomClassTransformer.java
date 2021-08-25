@@ -156,11 +156,9 @@ public class CustomClassTransformer implements ClassFileTransformer {
                     lsBuffer = hook.transformClass(ctClass);
                     if (lsBuffer != null) {
                         checkNecessaryHookType(hook.getType());
-                    }
-                    if (lsBuffer != null)
-                    {
                         classfileBuffer = lsBuffer;
                     }
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
