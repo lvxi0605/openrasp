@@ -55,10 +55,24 @@ public class JS {
     public static final Logger LOGGER = Logger.getLogger(JS.class.getPackage().getName());
     public static Object watchId = null;
 
-    private static String pluginConfig = "global.checkPoints=['command','directory','fileUpload','readFile','request','requestEnd','sql','sql_exception','writeFile','xxe','ognl','deserialization','reflection','webdav','ssrf','include','eval','copy','rename','loadLibrary','ssrfRedirect','deleteFile','mongodb','response','link','xssSql'];";
+    private static String pluginConfig;
 
     static {
+
         Base64Support.enable();
+        StringBuilder plugin = new StringBuilder("global.checkPoints=[");
+        for (Type type :Type.values())
+        {
+            Boolean js = type.getJsRegister();
+            if (js == null || !js)
+            {
+                continue;
+            }
+            plugin.append("'" + type.getName() + "',");
+        }
+        plugin.setLength(plugin.length() - 1);
+        plugin.append("];");
+        pluginConfig = plugin.toString();
     }
 
     public synchronized static boolean Initialize() {

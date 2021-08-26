@@ -40,29 +40,30 @@ public class CheckParameter {
 
     public enum Type {
         // js插件检测
-        SQL("sql", new V8AttackChecker(), 1),
-        COMMAND("command", new V8AttackChecker(), 1 << 1),
-        DIRECTORY("directory", new V8AttackChecker(), 1 << 2),
-        REQUEST("request", new V8AttackChecker(), 1 << 3),
-        READFILE("readFile", new V8AttackChecker(), 1 << 5),
-        WRITEFILE("writeFile", new V8AttackChecker(), 1 << 6),
-        FILEUPLOAD("fileUpload", new V8AttackChecker(), 1 << 7),
-        RENAME("rename", new V8AttackChecker(), 1 << 8),
-        XXE("xxe", new V8AttackChecker(), 1 << 9),
-        OGNL("ognl", new V8AttackChecker(), 1 << 10),
-        DESERIALIZATION("deserialization", new V8AttackChecker(), 1 << 11),
-        WEBDAV("webdav", new V8AttackChecker(), 1 << 12),
-        INCLUDE("include", new V8AttackChecker(), 1 << 13),
-        SSRF("ssrf", new V8AttackChecker(), 1 << 14),
-        SQL_EXCEPTION("sql_exception", new V8AttackChecker(), 1 << 15),
-        REQUESTEND("requestEnd", new V8AttackChecker(), 1 << 17),
-        DELETEFILE("deleteFile", new V8AttackChecker(), 1 << 18),
-        MONGO("mongodb", new V8AttackChecker(), 1 << 19),
-        LOADLIBRARY("loadLibrary", new V8AttackChecker(), 1 << 20),
-        SSRF_REDIRECT("ssrfRedirect", new V8AttackChecker(), 1 << 21),
-        RESPONSE("response", new V8AttackChecker(false), 1 << 23),
-        LINK("link", new V8AttackChecker(), 1 << 24),
-        XSS_SQL("xssSql", new V8AttackChecker(), 1 << 25),
+        SQL("sql", new V8AttackChecker(), 1,true),
+        COMMAND("command", new V8AttackChecker(), 1 << 1,true),
+        DIRECTORY("directory", new V8AttackChecker(), 1 << 2,true),
+        REQUEST("request", new V8AttackChecker(), 1 << 3,true),
+        READFILE("readFile", new V8AttackChecker(), 1 << 5,true),
+        WRITEFILE("writeFile", new V8AttackChecker(), 1 << 6,true),
+        FILEUPLOAD("fileUpload", new V8AttackChecker(), 1 << 7,true),
+        RENAME("rename", new V8AttackChecker(), 1 << 8,true),
+        XXE("xxe", new V8AttackChecker(), 1 << 9,true),
+        OGNL("ognl", new V8AttackChecker(), 1 << 10,true),
+        DESERIALIZATION("deserialization", new V8AttackChecker(), 1 << 11,true),
+        WEBDAV("webdav", new V8AttackChecker(), 1 << 12,true),
+        INCLUDE("include", new V8AttackChecker(), 1 << 13,true),
+        SSRF("ssrf", new V8AttackChecker(), 1 << 14,true),
+        SQL_EXCEPTION("sql_exception", new V8AttackChecker(), 1 << 15,true),
+        REQUESTEND("requestEnd", new V8AttackChecker(), 1 << 17,true),
+        DELETEFILE("deleteFile", new V8AttackChecker(), 1 << 18,true),
+        MONGO("mongodb", new V8AttackChecker(), 1 << 19,true),
+        LOADLIBRARY("loadLibrary", new V8AttackChecker(), 1 << 20,true),
+        SSRF_REDIRECT("ssrfRedirect", new V8AttackChecker(), 1 << 21,true),
+        RESPONSE("response", new V8AttackChecker(false), 1 << 23,true),
+        LINK("link", new V8AttackChecker(), 1 << 24,true),
+        XSS_SQL("xssSql", new V8AttackChecker(), 1 << 25,true),
+        EVAL("eval", new V8AttackChecker(), 1 << 26,true),
         // java本地检测
         XSS_USERINPUT("xss_userinput", new XssChecker(), 1 << 16),
         SQL_SLOW_QUERY("sqlSlowQuery", new SqlResultChecker(false), 0),
@@ -85,11 +86,22 @@ public class CheckParameter {
         String name;
         Checker checker;
         Integer code;
+        // js层会有校验，这里注册了，js才会进行校验 现在放在代码里，后续可以移除到配置中
+        // reflection copy 没有找到应用点 eval
+        Boolean jsRegister;
 
         Type(String name, Checker checker, Integer code) {
             this.name = name;
             this.checker = checker;
             this.code = code;
+        }
+
+        Type(String name, Checker checker, Integer code,Boolean jsRegister)
+        {
+            this.name = name;
+            this.checker = checker;
+            this.code = code;
+            this.jsRegister = jsRegister;
         }
 
         public String getName() {
@@ -103,6 +115,8 @@ public class CheckParameter {
         public Integer getCode() {
             return code;
         }
+
+        public Boolean getJsRegister(){return jsRegister;}
 
         @Override
         public String toString() {
