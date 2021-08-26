@@ -27,4 +27,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface HookAnnotation {
+    // 加载所有hook时加载code来确定服务器code匹配，进行判断是否需要关闭
+    String code() default "";
 }

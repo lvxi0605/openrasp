@@ -17,9 +17,11 @@
 package com.gxdun.corerasp;
 
 import com.gxdun.corerasp.cloud.CloudManager;
+import com.gxdun.corerasp.cloud.managehook.config.HookManageConfiguration;
 import com.gxdun.corerasp.cloud.model.CloudCacheModel;
 import com.gxdun.corerasp.cloud.utils.CloudUtils;
 import com.gxdun.corerasp.config.Config;
+import com.gxdun.corerasp.hook.AbstractClassHook;
 import com.gxdun.corerasp.messaging.LogConfig;
 import com.gxdun.corerasp.plugin.checker.CheckerManager;
 import com.gxdun.corerasp.plugin.js.JS;
@@ -76,6 +78,8 @@ public class EngineBoot implements Module {
             CrashReporter.install(Config.getConfig().getCloudAddress() + "/v1/agent/crash/report",
                     Config.getConfig().getCloudAppId(), Config.getConfig().getCloudAppSecret(),
                     CloudCacheModel.getInstance().getRaspId());
+            // TODO 001 开启代码层开关
+            //initHookManagerConfig();
         }
         deleteTmpDir();
         String message = "[CoreRASP] Engine Initialized [" + Agent.projectVersion + " (build: GitCommit="
@@ -135,4 +139,12 @@ public class EngineBoot implements Module {
         transformer.retransform();
     }
 
+    private void initHookManagerConfig()
+    {
+        for (AbstractClassHook hook : transformer.getHooks())
+        {
+            HookManageConfiguration.addHookCodeInformation(hook.getClass());
+        }
+        HookManageConfiguration.initCommandCahe();
+    }
 }
