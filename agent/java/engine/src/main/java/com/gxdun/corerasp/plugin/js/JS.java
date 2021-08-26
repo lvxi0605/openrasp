@@ -70,6 +70,7 @@ public class JS {
             }
             plugin.append("'" + type.getName() + "',");
         }
+
         plugin.setLength(plugin.length() - 1);
         plugin.append("];");
         pluginConfig = plugin.toString();

@@ -68,6 +68,7 @@ public class CheckParameter {
         XSS_USERINPUT("xss_userinput", new XssChecker(), 1 << 16),
         SQL_SLOW_QUERY("sqlSlowQuery", new SqlResultChecker(false), 0),
 
+
         // 安全基线检测
         POLICY_LOG("log", new LogChecker(false), 1 << 22),
         POLICY_MONGO_CONNECTION("mongoConnection", new MongoConnectionChecker(false), 0),
