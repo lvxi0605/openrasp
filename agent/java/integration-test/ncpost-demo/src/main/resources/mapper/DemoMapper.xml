@@ -10,7 +10,13 @@
 	<select id="getList" resultMap="test"> 
 		select * from test
 	</select>
-	
+
+	<select id="getListById" parameterType="string" resultMap="test">
+		select *
+		from test
+		where id = #{id}
+	</select>
+
 	<update id="updateById">
 	update test set name = #{name} where id = #{id}
 	</update>

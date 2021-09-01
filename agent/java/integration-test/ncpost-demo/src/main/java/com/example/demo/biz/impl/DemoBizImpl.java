@@ -25,16 +25,21 @@ public class DemoBizImpl extends ServiceImpl<DemoMapper,TestEntry> implements ID
 		}
 		
 	}
+
+
+	@Override
+	public TestEntry getListById(String id)
+	{
+			return baseMapper.getListById(id);
+	}
 	
 	@Transactional
 	@Override
 	public void txTest(String id, String name) throws Exception
 	{
-		System.out.println("!@3");
 		baseMapper.updateById(id,name);
 		baseMapper.insert(UUID.randomUUID().toString(), name);
-		if ("123".equals(id))
-		{
+		if ("123".equals(id)){
 			throw new Exception("呵呵呵");
 		}
 	}

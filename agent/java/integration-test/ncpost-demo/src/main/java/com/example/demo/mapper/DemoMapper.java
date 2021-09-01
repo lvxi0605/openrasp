@@ -10,6 +10,8 @@ import com.example.demo.entry.TestEntry;
 public interface DemoMapper extends BaseMapper<TestEntry>
 {
 	public List<TestEntry> getList();
+
+	TestEntry getListById(String id);
 	
 	
 	public void updateById(@Param("id") String id, @Param("name") String name);

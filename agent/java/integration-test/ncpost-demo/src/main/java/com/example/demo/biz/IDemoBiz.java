@@ -8,7 +8,9 @@ import com.example.demo.entry.TestEntry;
 public interface IDemoBiz extends IService<TestEntry>
 {
 	public List<TestEntry> sayHello();
-	
+
+	TestEntry getListById(String id);
+
 	/**
 	 * 事务测试
 	 * @param id

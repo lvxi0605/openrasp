@@ -56,7 +56,7 @@ public class Config extends FileScanListener {
     static final int MAX_LOG_REGEX_COUNT = 20;
     static final int MAX_LOG_REGEX_LENGTH = 200;
     static final String CONFIG_DIR_NAME = "conf";
-    static final String CONFIG_FILE_NAME = "openrasp.yml";
+    static final String CONFIG_FILE_NAME = "corerasp.yml";
     public static final Logger LOGGER = Logger.getLogger(Config.class.getName());
     public static final String[] FILE_MONITOR_MODE = new String[]{"jnotify", "scan", "disable"};
     public static String baseDirectory;
@@ -205,7 +205,7 @@ public class Config extends FileScanListener {
                 }
             }
         } catch (Exception e) {
-            LogTool.warn(ErrorType.CONFIG_ERROR, "openrasp.yml parsing failed: " + e.getMessage(), e);
+            LogTool.warn(ErrorType.CONFIG_ERROR, "corerasp.yml parsing failed: " + e.getMessage(), e);
         } finally {
             // 出现解析问题使用默认值
             for (ConfigItem item : ConfigItem.values()) {

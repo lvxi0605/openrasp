@@ -112,8 +112,8 @@ public abstract class AbstractSqlHook extends AbstractClassHook {
     public static boolean checkSqlException(SQLException e) {
         int errCode = e.getErrorCode();
         if (e != null && errCode == 0) {
-            String message = "Unable to derive error code from SQL exceptions, error message: " + e.getMessage() + "." +
-                    "Please refer to https://rasp.baidu.com/doc/usage/exception.html#faq-errorcode for details.";
+            String message = "Unable to derive error code from SQL exceptions, error message: " + e.getMessage() + ".";
+            //+ "Please refer to https://rasp.baidu.com/doc/usage/exception.html#faq-errorcode for details.";
             LogTool.traceHookWarn(message, e);
             return true;
         }

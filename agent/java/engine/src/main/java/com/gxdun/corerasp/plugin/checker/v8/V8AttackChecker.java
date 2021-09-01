@@ -49,11 +49,7 @@ public class V8AttackChecker extends AttackChecker {
     @Override
     public List<EventInfo> checkParam(CheckParameter checkParameter) {
         List<EventInfo> returnObj = JS.Check(checkParameter);
-        // 校验是否存放结果
-        if (!returnObj.isEmpty() && HookHandler.dataThreadHook.get() instanceof Boolean && (Boolean) HookHandler.dataThreadHook.get())
-        {
-            HookHandler.dataThreadHook.set(returnObj);
-        }
+        HookHandler.dataThreadHook.set(returnObj);
         return returnObj;
     }
 }

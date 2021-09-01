@@ -19,6 +19,9 @@ package com.gxdun.corerasp.plugin.checker;
 import com.gxdun.corerasp.plugin.event.CheckEventListener;
 import com.gxdun.corerasp.plugin.info.AttackInfo;
 import com.gxdun.corerasp.plugin.info.EventInfo;
+import com.gxdun.corerasp.tool.thread.NameableThreadFactory;
+
+import java.util.concurrent.*;
 
 /**
  * Created by tyy on 17-11-22.
@@ -26,10 +29,18 @@ import com.gxdun.corerasp.plugin.info.EventInfo;
  * 攻击检测事件监听器
  */
 public class AttackCheckListener implements CheckEventListener {
+
+    ThreadPoolExecutor threadPoolExecutor =  new ThreadPoolExecutor(0, 4, 1, TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>(), new NameableThreadFactory("attack_alarm_log_"), new ThreadPoolExecutor.CallerRunsPolicy());
+
     @Override
-    public void onCheckUpdate(EventInfo info) {
+    public void onCheckUpdate(final EventInfo info) {
         if (info instanceof AttackInfo) {
-            Checker.ATTACK_ALARM_LOGGER.info(info);
+            threadPoolExecutor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    Checker.ATTACK_ALARM_LOGGER.info(info);
+                }
+            });
         }
     }
 

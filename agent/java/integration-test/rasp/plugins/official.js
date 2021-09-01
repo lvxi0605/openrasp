@@ -41,13 +41,13 @@ var algorithmConfig = {
     // 快速设置
     meta: {
         // 若 all_log 开启，表示为观察模式，会将所有的 block 都改为 log
-        all_log: true,
+        all_log: false,
 
         // 若 is_dev 开启，表示为线下环境，将开启更多消耗性能的检测算法
         is_dev:  false,
 
         // 若 log_event 开启，将打印应用行为信息到 plugin.log
-        log_event: false,
+        log_event: true,
 
         // schema 版本
         schema_version: 1
@@ -620,6 +620,13 @@ var algorithmConfig = {
 
         // Content-Type 过滤
         content_type: 'html|json|xml'
+    },
+    xssSql_save:{
+        name:   'xss_sql拦截',
+        //action: 'rewrite',
+        action: 'block',
+        algorithm: 'xssSql_save',
+        filter_regex: /(javascript)|(<\s*\r*\n*script)|(script\s*\r*\n*>)|(<\s*\r*\n*iframe)|(<\s*\r*\n*embed)|(<\s*\r*\n*object)|(alert\r*\n*\s*\()|(prompt\r*\n*\s*\()|(confirm\r*\n*\s*\()|(addEventListener\r*\n*\s*\()|(expression\r*\n*\s*\()|(eval\r*\n*\s*\()|(onmouseover\r*\n*\s*=)|(onclimbatree\r*\n*\s*=)|(onhashchange\r*\n*\s*=)|(onerror\r*\n*\s*=)|(action\r*\n*\s*=)|(formaction\r*\n*\s*=)|(onload\r*\n*\s*=)|(onstart\r*\n*\s*=)|(onfocus\r*\n*\s*=)|(oncut\r*\n*\s*=)|(code\r*\n*\s*=)|(location\r*\n*\s*.)/ig
     }
 }
 
@@ -3004,58 +3011,92 @@ function findFirstMobileNumber(data) {
     }
 }
 
-plugin.register('xssSql', function(params, context) {
-
-	var values = params.values;
-	if (values == null)
-		{
-		return null;
-		}
-
-        var returnData = new Array();
-        for (var value of values) {
-            returnData.push(regReplace(value));
+if (algorithmConfig.xssSql_save.action != 'ignore') {
+    plugin.register('xssSql', function (params, context) {
+        if (!params.preparedStatementSqlParams) {
+            return undefined
         }
 
-    return {
-        message:    '',
-        algorithm:  'xssSql',
-        data: returnData
-    }
-})
+        if(algorithmConfig.xssSql_save.action!='rewrite'){
+            for (var i in params.preparedStatementSqlParams) {
+                var preparedParam = params.preparedStatementSqlParams[i];
+                if (!preparedParam.value) {
+                    continue;
+                }
+                var checkResult = regReplace(preparedParam.value);
+                if (checkResult && checkResult.IsDetect) {
+                    return {
+                        message: '',
+                        action:algorithmConfig.xssSql_save.action,
+                        algorithm: algorithmConfig.xssSql_save.algorithm,
+                    }
+                }
+            }
+        }else {
+            var changeParamsList = [];
+            for (var i in params.preparedStatementSqlParams) {
+                var preparedParam = params.preparedStatementSqlParams[i];
+                if (!preparedParam.value) {
+                    continue;
+                }
+                var checkResult = regReplace(preparedParam.value);
+                if (checkResult && checkResult.IsDetect) {
+                    //变了
+                    plugin.log('SQL XSS check: ' + i + " , " + preparedParam.value + " => " + checkResult.retStr);
+                    var changeParamObject = {
+                        index: preparedParam.index,
+                        method: preparedParam.method,
+                        value: checkResult.retStr
+                    }
+                    changeParamObject.value = checkResult.retStr
+                    changeParamsList.push(changeParamObject)
+                }
+            }
+            if (changeParamsList.length == 0) {
+                return undefined
+            }
+            return {
+                message: 'SQL XSS checked',
+                action: algorithmConfig.xssSql_save.action,
+                algorithm: algorithmConfig.xssSql_save.algorithm,
+                xssSqlChangeParams: changeParamsList
+            }
+        }
+    })
+}
 
 function regReplace(inputStr)
 {
-	if(inputStr=="")
-		return "";
+    var IsDetect=false;
+    if(!inputStr)
+        return {"retStr":"","IsDetect":IsDetect};
 
-	inputStr = inputStr.replace(/&Tab;*/ig,"");
-	
-	inputStr = inputStr.replace(/(&#+x*\d+;*)|(\\u+00\d{0,2};*)/ig,function(word){//|(\\+\d{0,3};*)//实体编码没有8进制 
-		var CharCode = word.match(/\d+/i);//word.replace("&","").replace("#","").replace(";","").replace(/\\u/ig,"");
-		if((word.toLowerCase().indexOf('u')>-1 && word.toLowerCase().indexOf('\\')>-1) || word.toLowerCase().indexOf('x')>-1)
-		{
-			CharCode = parseInt(CharCode, 16);// &#x28; 和 \u0061 都是16进制
-		}
-		if(CharCode>128)//超过ascii表了
-		{
-			return word;//中文
-		}
-		if(Number(CharCode)>=0 && Number(CharCode)<=31)
-		{
-			return "";
-		}
-		return String.fromCharCode(CharCode);
-	});
-	
-	inputStr = inputStr.replace(/(javascript)|(<\s*\r*\n*script)|(script\s*\r*\n*>)|(<\s*\r*\n*iframe)|(<\s*\r*\n*embed)|(<\s*\r*\n*object)|(alert\r*\n*\s*\()|(prompt\r*\n*\s*\()|(confirm\r*\n*\s*\()|(addEventListener\r*\n*\s*\()|(expression\r*\n*\s*\()|(eval\r*\n*\s*\()|(onmouseover\r*\n*\s*=)|(onclimbatree\r*\n*\s*=)|(onhashchange\r*\n*\s*=)|(onerror\r*\n*\s*=)|(action\r*\n*\s*=)|(formaction\r*\n*\s*=)|(onload\r*\n*\s*=)|(onstart\r*\n*\s*=)|(onfocus\r*\n*\s*=)|(oncut\r*\n*\s*=)|(code\r*\n*\s*=)|(location\r*\n*\s*.)/ig,
-	function(word){//"[_$&_]"
-		return '['+word.substring(1,word.length-1)+']';
-	});
-	
-	return inputStr;
+    inputStr = inputStr.replace(/&Tab;*/ig,"");
+
+    inputStr = inputStr.replace(/(&#+x*\d+;*)|(\\u+00\d{0,2};*)/ig,function(word){//|(\\+\d{0,3};*)//实体编码没有8进制
+        var CharCode = word.match(/\d+/i);//word.replace("&","").replace("#","").replace(";","").replace(/\\u/ig,"");
+        if((word.toLowerCase().indexOf('u')>-1 && word.toLowerCase().indexOf('\\')>-1) || word.toLowerCase().indexOf('x')>-1)
+        {
+            CharCode = parseInt(CharCode, 16);// &#x28; 和 \u0061 都是16进制
+        }
+        if(CharCode>128)//超过ascii表了
+        {
+            return word;//中文
+        }
+        if(Number(CharCode)>=0 && Number(CharCode)<=31)
+        {
+            return "";
+        }
+        return String.fromCharCode(CharCode);
+    });
+
+    inputStr = inputStr.replace(algorithmConfig.xssSql_save.filter_regex ,
+        function(word){//"[_$&_]"
+            IsDetect=true;
+            return '['+word.substring(1,word.length-1)+']';
+        });
+    return {"retStr":inputStr,"IsDetect":IsDetect};
 }
-
 
 // 匹配银行卡、信用卡
 function findFirstBankCard(data) {
@@ -3139,5 +3180,5 @@ if (algorithmConfig.response_dataLeak.action != 'ignore') {
     })
 }
 
-plugin.log('OpenRASP official plugin: Initialized, version', plugin_version)
+plugin.log('CoreRASP official plugin: Initialized, version', plugin_version)
 

@@ -16,12 +16,28 @@
 
 package com.gxdun.corerasp.hook.sql;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.gxdun.corerasp.HookHandler;
+import com.gxdun.corerasp.config.Config;
+import com.gxdun.corerasp.messaging.ErrorType;
+import com.gxdun.corerasp.messaging.LogTool;
+import com.gxdun.corerasp.plugin.checker.CheckParameter;
+import com.gxdun.corerasp.plugin.checker.local.ConfigurableChecker;
+import com.gxdun.corerasp.plugin.info.AttackInfo;
+import com.gxdun.corerasp.plugin.info.EventInfo;
+import com.gxdun.corerasp.tool.CollectionUtil;
 import com.gxdun.corerasp.tool.annotation.HookAnnotation;
+import com.gxdun.corerasp.hook.model.SQLPreparedParam;
 import javassist.CannotCompileException;
 import javassist.CtClass;
 import javassist.NotFoundException;
 
 import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  * Created by tyy on 18-4-28.
@@ -33,6 +49,8 @@ public class SQLPreparedStatementHook extends AbstractSqlHook {
 
     private String className;
 
+    private static ThreadLocal<Map<PreparedStatement, Map<Integer, SQLPreparedParam>>> sqlParamsData = new ThreadLocal<Map<PreparedStatement, Map<Integer, SQLPreparedParam>>>();
+
     @Override
     public boolean isClassMatched(String className) {
 
@@ -43,7 +61,7 @@ public class SQLPreparedStatementHook extends AbstractSqlHook {
             this.type = SqlType.MYSQL;
             this.exceptions = new String[]{"java/sql/SQLException"};
             // 钩子报错，暂时关闭
-            return false;
+            return true;
         }
 
         /* SQLite */
@@ -146,6 +164,10 @@ public class SQLPreparedStatementHook extends AbstractSqlHook {
 //            } catch (CannotCompileException e) {
 //                insertBefore(ctClass, "executeBatchInternal", null, checkSqlSrc);
 //            }
+            insertSetSqlPreparedStatementParams(ctClass,"setString","(ILjava/lang/String;)V",originalSqlCode);
+            insertSetSqlPreparedStatementParams(ctClass,"setNString","(ILjava/lang/String;)V",originalSqlCode);
+            addCheckSQLXSS(ctClass,originalSqlCode);
+
             addCatch(ctClass, "execute", null, originalSqlCode);
             addCatch(ctClass, "executeUpdate", null, originalSqlCode);
             addCatch(ctClass, "executeQuery", null, originalSqlCode);
@@ -161,5 +183,133 @@ public class SQLPreparedStatementHook extends AbstractSqlHook {
 //            insertBefore(ctClass, "prepareStatement", null, checkSqlSrc);
 //        }
     }
+
+    private void addCheckSQLXSS(CtClass ctClass,String originalSqlCode)  throws NotFoundException, CannotCompileException {
+
+        String scr = getInvokeStaticSrc(SQLPreparedStatementHook.class, "checkSQLXSS","\"" + type.name + "\",$0,"+originalSqlCode, PreparedStatement.class, int.class, String.class);
+
+        insertBefore(ctClass, "execute", null, scr);
+        insertBefore(ctClass, "executeUpdate", null, scr);
+        insertBefore(ctClass, "executeQuery", null, scr);
+        try {
+            insertBefore(ctClass, "executeBatch", null, scr);
+        } catch (CannotCompileException e) {
+            insertBefore(ctClass, "executeBatchInternal", null, scr);
+        }
+    }
+
+    public static void checkSQLXSS(String server, PreparedStatement preparedStatement, String stmt) {
+        if (stmt != null && !stmt.isEmpty() ) {
+            Map<Integer, SQLPreparedParam>  preparedStatementSqlParams = SQLPreparedStatementHook.getPreparedStatementSqlParams(preparedStatement);
+            if(CollectionUtil.isEmpty(preparedStatementSqlParams)){
+                return;
+            }
+            if(!SQLPreparedStatementHook.isChangeDbSQL(stmt)){
+                return;
+            }
+            HashMap<String, Object> params = new HashMap<String, Object>(4);
+            params.put("server", server);
+            params.put("query", stmt);
+            params.put("preparedStatementSqlParams",preparedStatementSqlParams);
+            HookHandler.doCheck(CheckParameter.Type.XSS_SQL, params);
+            List<EventInfo> eventInfos = HookHandler.dataThreadHook.get();
+            if(CollectionUtil.isNotEmpty(eventInfos)){
+                String action = ConfigurableChecker.getActionElement(Config.getConfig().getAlgorithmConfig(),"xssSql_save");
+                if(!"rewrite".equals(action)){
+                    return;
+                }
+                for (EventInfo eventInfo : eventInfos) {
+                   if(!(eventInfo instanceof AttackInfo)) {
+                       continue;
+                   }
+                   AttackInfo attackInfo = (AttackInfo) eventInfo;
+                   JsonObject extras = attackInfo.getExtras();
+                   if(extras==null){
+                       continue;
+                   }
+                   JsonArray xssSqlChangeParams = extras.getAsJsonArray("xssSqlChangeParams");
+                   if(xssSqlChangeParams==null ||  xssSqlChangeParams.size()==0){
+                       continue;
+                   }
+                    for (JsonElement xssSqlChangeParam : xssSqlChangeParams) {
+                        JsonObject paramJsonObject = xssSqlChangeParam.getAsJsonObject();
+                        int index = paramJsonObject.get("index").getAsInt();
+                        String method = paramJsonObject.get("method").getAsString();
+                        String value = paramJsonObject.get("value").getAsString();
+                        if("setString".equals(method)){
+                            try {
+                                preparedStatement.setString(index,value);
+                            } catch (SQLException e) {
+                                LogTool.error(ErrorType.PLUGIN_ERROR, "xss_sql setString 错误", e);
+                            }
+                        }else if ("setNString".equals(method)){
+                            try {
+                                preparedStatement.setNString(index,value);
+                            } catch (SQLException e) {
+                                LogTool.error(ErrorType.PLUGIN_ERROR, "xss_sql setNString 错误", e);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static boolean isChangeDbSQL(String stmt){
+        String tmpStmt = stmt.trim();
+        if(tmpStmt.length()<6){
+            return false;
+        }
+        String sqlType = tmpStmt.substring(0, 6);
+        if("select".equalsIgnoreCase(sqlType) || "delete".equalsIgnoreCase(sqlType)){
+            return false;
+        }
+        return true;
+    }
+
+
+    private void insertSetSqlPreparedStatementParams(CtClass ctClass,String methodName, String desc,String originalSqlCode){
+        try {
+            String putScr = getInvokeStaticSrc(SQLPreparedStatementHook.class, "putPreparedStatementSqlParam","$0,"+originalSqlCode+",\""+methodName+"\",$1,$2", PreparedStatement.class, String.class,String.class,int.class, String.class);
+            insertBefore(ctClass,methodName,desc,putScr);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        } catch (CannotCompileException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void putPreparedStatementSqlParam(PreparedStatement preparedStatement,String stmt,String method,int i,String value){
+        if(!SQLPreparedStatementHook.isChangeDbSQL(stmt)){
+            return;
+        }
+        Map<PreparedStatement,Map<Integer, SQLPreparedParam>> preparedStatementMap = sqlParamsData.get();
+        if(preparedStatementMap==null){
+            preparedStatementMap = new HashMap<PreparedStatement,Map<Integer, SQLPreparedParam>>();
+            sqlParamsData.set(preparedStatementMap);
+        }
+        Map<Integer, SQLPreparedParam> integerSQLPreparedParamMap = preparedStatementMap.get(preparedStatement);
+        if(integerSQLPreparedParamMap==null){
+            integerSQLPreparedParamMap = new HashMap<Integer, SQLPreparedParam>();
+            preparedStatementMap.put(preparedStatement,integerSQLPreparedParamMap);
+        }
+
+        SQLPreparedParam sqlPreparedParam = new SQLPreparedParam();
+        sqlPreparedParam.setIndex(i);
+        sqlPreparedParam.setMethod(method);
+        sqlPreparedParam.setValue(value);
+        integerSQLPreparedParamMap.put(i,sqlPreparedParam);
+    }
+
+
+    public static Map<Integer, SQLPreparedParam> getPreparedStatementSqlParams(PreparedStatement preparedStatement){
+        Map<PreparedStatement,Map<Integer, SQLPreparedParam>> preparedStatementMap = SQLPreparedStatementHook.sqlParamsData.get();
+        if(preparedStatementMap==null){
+            return null;
+        }
+        return preparedStatementMap.get(preparedStatement);
+    }
+
+
 
 }

@@ -81,7 +81,7 @@ public class XssSqlHook extends AbstractSqlHook
 			Map<String,Object> params = new HashMap<String,Object>();
 			params.put("values", valuesMap.values().toArray());
 			// 获取数据
-			HookHandler.dataThreadHook.set(true);
+			//HookHandler.dataThreadHook.set(true);
 			HookHandler.doCheck(CheckParameter.Type.XSS_SQL, params);
 			byte[][] returnValue = getData();
 
@@ -177,7 +177,7 @@ public class XssSqlHook extends AbstractSqlHook
 			}
 			Map<String,Object> params = new HashMap<String,Object>();
 			params.put("values", values);
-			HookHandler.dataThreadHook.set(true);
+			//HookHandler.dataThreadHook.set(true);
 			HookHandler.doCheck(CheckParameter.Type.XSS_SQL, params);
 			byte[][] returnValue = getData();
 			if (returnValue.length == jr.size())

@@ -271,7 +271,7 @@ public class DynamicConfigAppender {
         if (isCloud) {
             return path;
         } else {
-            String configPath = FileUtil.getBaseDir() + File.separator + "conf" + File.separator + "openrasp.yml";
+            String configPath = FileUtil.getBaseDir() + File.separator + "conf" + File.separator + "corerasp.yml";
             File configFile = new File(configPath);
             if (configFile.exists()) {
                 try {
@@ -286,7 +286,7 @@ public class DynamicConfigAppender {
                         }
                     }
                 } catch (Exception e) {
-                    String message = "get log4j custom path failed from openrasp.yml";
+                    String message = "get log4j custom path failed from corerasp.yml";
                     LogLog.warn(message, e);
                 }
             }

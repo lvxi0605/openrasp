@@ -24,6 +24,8 @@ import com.gxdun.corerasp.messaging.ErrorType;
 import com.gxdun.corerasp.messaging.LogTool;
 import com.gxdun.corerasp.plugin.checker.CheckParameter;
 import com.gxdun.corerasp.plugin.checker.CheckerManager;
+import com.gxdun.corerasp.plugin.info.AttackInfo;
+import com.gxdun.corerasp.plugin.info.EventInfo;
 import com.gxdun.corerasp.request.AbstractRequest;
 import com.gxdun.corerasp.request.DubboRequest;
 import com.gxdun.corerasp.request.HttpServletRequest;
@@ -34,6 +36,7 @@ import org.apache.log4j.Logger;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
@@ -235,9 +238,9 @@ public class HookHandler {
     }
 
     // 当前v8返回数据
-    public static ThreadLocal<Object> dataThreadHook = new ThreadLocal<Object>() {
+    public static ThreadLocal<List<EventInfo>> dataThreadHook = new ThreadLocal<List<EventInfo>>() {
         @Override
-        protected Object initialValue() {
+        protected List<EventInfo> initialValue() {
             return null;
         }
     };
@@ -270,7 +273,7 @@ public class HookHandler {
     }
 
     private static void handleBlock(CheckParameter parameter) {
-        SecurityException securityException = new SecurityException("Request blocked by OpenRASP");
+        SecurityException securityException = new SecurityException("Request blocked by CoreRASP");
         if (responseCache.get() != null) {
             responseCache.get().sendError(parameter);
         }
