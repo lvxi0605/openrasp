@@ -20,11 +20,13 @@ package com.gxdun.corerasp.hook;
 import com.gxdun.corerasp.config.Config;
 import com.gxdun.corerasp.messaging.ErrorType;
 import com.gxdun.corerasp.messaging.LogTool;
+import com.gxdun.corerasp.tool.annotation.HookAnnotation;
 import javassist.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.util.Collections;
 import java.util.LinkedList;
 
@@ -356,6 +358,26 @@ public abstract class AbstractClassHook {
                     ".getName().equals(\"com.gxdun.corerasp.exceptions.SecurityException\")){throw t;}}";
         }
         return src;
+        // TODO 001 代码层开关
+        // return setEnable(invokeClass,src);
     }
 
+
+    // 追加开关控制
+    private String setEnable(Class invokeClass, String src)
+    {
+        Annotation annot = invokeClass.getAnnotation(HookAnnotation.class);
+        if (annot == null)
+        {
+            return src;
+        }
+        String code = ((HookAnnotation) annot).code();
+        if (StringUtils.isEmpty(code))
+        {
+            return src;
+        }
+
+        return "if(com.baidu.openrasp.cloud.managehook.config.HookManageConfiguration.getHookEnable("+ code +"){" + src + "}";
+
+    }
 }
