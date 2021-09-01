@@ -3026,7 +3026,7 @@ if (algorithmConfig.xssSql_save.action != 'ignore') {
                 var checkResult = regReplace(preparedParam.value);
                 if (checkResult && checkResult.IsDetect) {
                     return {
-                        message: '',
+                        message: 'SQL XSS checked',
                         action:algorithmConfig.xssSql_save.action,
                         algorithm: algorithmConfig.xssSql_save.algorithm,
                     }
