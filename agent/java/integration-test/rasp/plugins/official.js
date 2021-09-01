@@ -47,7 +47,7 @@ var algorithmConfig = {
         is_dev:  false,
 
         // 若 log_event 开启，将打印应用行为信息到 plugin.log
-        log_event: true,
+        log_event: false,
 
         // schema 版本
         schema_version: 1
