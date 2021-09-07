@@ -67,7 +67,7 @@ public class TomcatSecurityChecker extends ServerPolicyChecker {
                     checkManagerPassword(tomcatBaseDir, infos);
                     checkDirectoryListing(tomcatBaseDir, infos);
                     checkDefaultApp(tomcatBaseDir, infos);
-                    System.out.println("[OpenRASP] Tomcat security baseline - inspection completed");
+                    System.out.println("[CoreRASP] Tomcat security baseline - inspection completed");
                 } else {
                     LogTool.warn(ErrorType.PLUGIN_ERROR, getFormattedMessage(TOMCAT_CHECK_ERROR_LOG_CHANNEL,
                             "Unable to locate tomcat base directory: failed to read system property \"catalina.base\""));

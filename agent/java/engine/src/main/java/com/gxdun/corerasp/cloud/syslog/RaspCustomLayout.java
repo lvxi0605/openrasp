@@ -4,7 +4,7 @@ import org.apache.log4j.PatternLayout;
 import org.apache.log4j.helpers.PatternParser;
 
 /**
- * @program openrasp
+ * @program corerasp
  * @description: 自定义patternLayout
  * @author: anyang
  * @create: 2018/10/23 11:49

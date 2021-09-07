@@ -40,7 +40,7 @@ import java.lang.instrument.UnmodifiableClassException;
 /**
  * Created by tyy on 18-1-24.
  *
- * OpenRasp 引擎启动类
+ * CoreRasp 引擎启动类
  */
 public class EngineBoot implements Module {
 
@@ -58,7 +58,8 @@ public class EngineBoot implements Module {
         try {
             Loader.load();
         } catch (Exception e) {
-            System.out.println("[CoreRASP] Failed to load native library, please refer to https://rasp.baidu.com/doc/install/software.html#faq-v8-load for possible solutions.");
+            System.out.println("[CoreRASP] Failed to load native library");
+                   // ", please refer to https://rasp.baidu.com/doc/install/software.html#faq-v8-load for possible solutions.");
             e.printStackTrace();
             return;
         }

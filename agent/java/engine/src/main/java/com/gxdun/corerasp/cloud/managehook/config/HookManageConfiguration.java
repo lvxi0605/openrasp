@@ -104,7 +104,7 @@ public class HookManageConfiguration
 	
 	
 	/*------------------command start--------------------*/
-	private static final String COMMANDPAGE = "com.baidu.openrasp.cloud.managehook.commad";
+	private static final String COMMANDPAGE = "com.gxdun.corerasp.cloud.managehook.command";
 	
 	private static Map<String,Class<? extends AbstractCommand>> cmmandTypeCache = new HashMap<String,Class<? extends AbstractCommand>>();
 

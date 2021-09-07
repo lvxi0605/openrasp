@@ -45,7 +45,7 @@ public class DependencyReport extends CloudTimerTask {
     private static final int INIT_INTERNAL = 120;
 
     public DependencyReport() {
-        super("OpenRASP Dependency Report Thread");
+        super("CoreRASP Dependency Report Thread");
     }
 
     @Override

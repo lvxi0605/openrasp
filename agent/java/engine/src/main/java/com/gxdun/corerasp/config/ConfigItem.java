@@ -227,7 +227,7 @@ public enum ConfigItem {
             if (Config.getConfig().debugLevel < 0) {
                 Config.getConfig().debugLevel = 0;
             } else if (Config.getConfig().debugLevel > 0) {
-                String debugEnableMessage = "[OpenRASP] Debug output enabled, debug_level=" + debugLevel;
+                String debugEnableMessage = "[CoreRASP] Debug output enabled, debug_level=" + debugLevel;
                 System.out.println(debugEnableMessage);
                 Config.LOGGER.info(debugEnableMessage);
             }
@@ -287,7 +287,7 @@ public enum ConfigItem {
 
         @Override
         public String getDefaultValue() {
-            return "https://rasp.baidu.com/blocked/?request_id=%request_id%";
+            return "https://www.corecna.com/blocked/?request_id=%request_id%";
         }
     }),
 
@@ -299,7 +299,7 @@ public enum ConfigItem {
 
         @Override
         public String getDefaultValue() {
-            return "{\"error\":true, \"reason\": \"Request blocked by OpenRASP\"," +
+            return "{\"error\":true, \"reason\": \"Request blocked by CoreRASP\"," +
                     " \"request_id\": \"%request_id%\"}";
         }
     }),
@@ -313,7 +313,7 @@ public enum ConfigItem {
         @Override
         public String getDefaultValue() {
             return "<?xml version=\"1.0\"?><doc><error>true</error>" +
-                    "<reason>Request blocked by OpenRASP</reason>" +
+                    "<reason>Request blocked by CoreRASP</reason>" +
                     "<request_id>%request_id%</request_id></doc>";
         }
     }),
@@ -326,7 +326,7 @@ public enum ConfigItem {
 
         @Override
         public String getDefaultValue() {
-            return "</script><script>location.href=\"https://rasp.baidu.com/blocked2/" +
+            return "</script><script>location.href=\"https://www.corecna.com/blocked2/" +
                     "?request_id=%request_id%\"</script>";
         }
     }),
@@ -423,7 +423,7 @@ public enum ConfigItem {
 
         @Override
         public String getDefaultValue() {
-            return "OPENRASP";
+            return "CORERASP";
         }
     }),
 
@@ -669,7 +669,7 @@ public enum ConfigItem {
         }
     }),
 
-    HTTPS_VERIFY_SSL(new ConfigSetter<String>("openrasp.ssl_verifypeer") {
+    HTTPS_VERIFY_SSL(new ConfigSetter<String>("corerasp.ssl_verifypeer") {
         @Override
         public synchronized void setValue(String httpsVerifyPeer) {
             Config.getConfig().isHttpsVerifyPeer = Boolean.parseBoolean(httpsVerifyPeer);

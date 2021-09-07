@@ -156,7 +156,7 @@ public class Config extends FileScanListener {
                 addConfigFileMonitor();
             }
         } catch (FileNotFoundException e) {
-            handleException("Could not find openrasp.yml, using default settings: " + e.getMessage(), e);
+            handleException("Could not find corerasp.yml, using default settings: " + e.getMessage(), e);
         } catch (JNotifyException e) {
             handleException("add listener on " + configFileDir + " failed because:" + e.getMessage(), e);
         } catch (Exception e) {
@@ -281,7 +281,7 @@ public class Config extends FileScanListener {
                     DynamicConfigAppender.setLogMaxBackup();
                 }
             } catch (Exception e) {
-                LogTool.warn(ErrorType.CONFIG_ERROR, "update openrasp.yml failed: " + e.getMessage(), e);
+                LogTool.warn(ErrorType.CONFIG_ERROR, "update corerasp.yml failed: " + e.getMessage(), e);
             }
         }
     }

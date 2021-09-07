@@ -121,7 +121,7 @@ public class ModuleLoader {
                     throw t;
                 }
             } else {
-                System.out.println("[CoreRASP] The OpenRASP has bean initialized and cannot be initialized again");
+                System.out.println("[CoreRASP] The CoreRASP has bean initialized and cannot be initialized again");
             }
         } else if (Module.START_ACTION_UNINSTALL.equals(action)) {
             release(mode);
@@ -215,7 +215,7 @@ public class ModuleLoader {
 
         String pkgs = System.getProperty("jboss.modules.system.pkgs");
         System.out.println("origin pkgs = " + pkgs);
-        if (null == pkgs || !pkgs.contains("baidu.openrasp")) {
+        if (null == pkgs || !pkgs.contains("gxdun.corerasp")) {
             if (pkgs != null && !pkgs.isEmpty()) {
                 pkgs = System.setProperty("jboss.modules.system.pkgs",
                         pkgs + ",org.jboss.logmanager,com.gxdun.corerasp,com.sdwaf,javax.servlet,javax.el");

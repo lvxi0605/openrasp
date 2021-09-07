@@ -377,7 +377,7 @@ public abstract class AbstractClassHook {
             return src;
         }
 
-        return "if(com.baidu.openrasp.cloud.managehook.config.HookManageConfiguration.getHookEnable("+ code +"){" + src + "}";
+        return "if(com.gxdun.corerasp.cloud.managehook.config.HookManageConfiguration.getHookEnable("+ code +"){" + src + "}";
 
     }
 }

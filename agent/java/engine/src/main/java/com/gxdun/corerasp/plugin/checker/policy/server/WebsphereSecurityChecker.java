@@ -22,7 +22,7 @@ import com.gxdun.corerasp.plugin.info.EventInfo;
 import java.util.List;
 
 /**
- * @program openrasp
+ * @program corerasp
  * @description: websphere基线检查
  * @author: anyang
  * @create: 2018/10/12 10:36
