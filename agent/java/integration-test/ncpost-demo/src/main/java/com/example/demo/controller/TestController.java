@@ -33,9 +33,16 @@ public class TestController
 	@GetMapping("/getListById")
 	@ResponseBody
 	public Object getListById(String id) throws Exception {
-		demoBiz.txTest(UUID.randomUUID().toString(),"<script>alert(1);</script>");
+		demoBiz.txTest(UUID.randomUUID().toString(),"alert");
 		return demoBiz.getListById(id);
 	}
+
+	@GetMapping("/testSQLXSS")
+	@ResponseBody
+	public void testSQLXSS() throws Exception {
+		 demoBiz.testSQLXSS();
+	}
+
 
 
 	@PostMapping("/upload")

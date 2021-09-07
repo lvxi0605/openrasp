@@ -528,7 +528,7 @@ public enum ConfigItem {
             return "false";
         }
     }),
-
+/*
     RESPONSE_HEADERS(new ConfigSetter<Map<Object, Object>>("inject.custom_headers") {
         @Override
         public synchronized void setValue(Map<Object, Object> responseHeaders) {
@@ -564,7 +564,7 @@ public enum ConfigItem {
             return headers;
         }
     }),
-
+*/
     DEPENDENCY_CHECK_INTERVAL(new ConfigSetter<String>("dependency_check.interval") {
         @Override
         public synchronized void setValue(String dependencyCheckInterval) {

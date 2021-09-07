@@ -235,11 +235,11 @@ public class Config extends FileScanListener {
                 if (entry.getValue() instanceof JsonObject) {
                     value = CloudUtils.getMapGsonObject().fromJson((JsonObject) entry.getValue(), Map.class);
                 }
-            } else if (entry.getKey().equals(ConfigItem.RESPONSE_HEADERS.toString())) {
+            }/* else if (entry.getKey().equals(ConfigItem.RESPONSE_HEADERS.toString())) {
                 if (entry.getValue() instanceof JsonObject) {
                     value = CloudUtils.getMapGsonObject().fromJson((JsonObject) entry.getValue(), Map.class);
                 }
-            } else if (entry.getKey().equals(ConfigItem.SECURITY_WEAK_PASSWORDS.toString())) {
+            } */else if (entry.getKey().equals(ConfigItem.SECURITY_WEAK_PASSWORDS.toString())) {
                 if (entry.getValue() instanceof JsonArray) {
                     value = new Gson().fromJson((JsonArray) entry.getValue(), new TypeToken<List<String>>() {
                     }.getType());

@@ -1,5 +1,6 @@
 package com.example.demo.biz;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -18,4 +19,6 @@ public interface IDemoBiz extends IService<TestEntry>
 	 * @throws Exception
 	 */
 	public void txTest(String id, String name) throws Exception;
+
+	void testSQLXSS() throws IOException;
 }

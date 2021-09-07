@@ -288,6 +288,7 @@ public class HookHandler {
     private static void setUserDefinedResponseHeader(HttpServletResponse response) {
         Map<Object, Object> headers = Config.getConfig().getResponseHeaders();
         if (headers != null && !headers.isEmpty()) {
+
             for (Map.Entry<Object, Object> entry : headers.entrySet()) {
                 response.setHeader(entry.getKey().toString(), entry.getValue().toString());
             }
