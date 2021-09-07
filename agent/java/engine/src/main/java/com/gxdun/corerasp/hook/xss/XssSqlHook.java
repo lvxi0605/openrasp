@@ -31,18 +31,18 @@ public class XssSqlHook extends AbstractSqlHook
 
 	  @Override public boolean isClassMatched(String className)
 	  {
-	  
-	  if ("com/mysql/jdbc/PreparedStatement".equals(className) || "com/mysql/cj/jdbc/ClientPreparedStatement".equals(className))
-	  { 
-		  this.type = SqlType.MYSQL; 
-		  this.exceptions = new String[] { "java/sql/SQLException" };
-		  this.className = className;
-		  return true;
+
+//	  if ("com/mysql/jdbc/PreparedStatement".equals(className) || "com/mysql/cj/jdbc/ClientPreparedStatement".equals(className))
+//	  {
+//		  this.type = SqlType.MYSQL;
+//		  this.exceptions = new String[] { "java/sql/SQLException" };
+//		  this.className = className;
+//		  return true;
+//	  }
+
+	  	return false;
 	  }
-	  
-	  	return false; 
-	  }
-	  
+
 	  @Override public String getType() { return "sql"; }
 
 
@@ -217,7 +217,7 @@ public class XssSqlHook extends AbstractSqlHook
 		 }*/
 	  }
 
-	  
+
 //	  @Override
 //		protected void hookMethod(CtClass ctClass) throws IOException, CannotCompileException, NotFoundException {
 //
