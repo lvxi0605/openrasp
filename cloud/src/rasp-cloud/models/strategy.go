@@ -1,16 +1,4 @@
-//Copyright 2017-2020 Baidu Inc.
-//
-//Licensed under the Apache License, Version 2.0 (the "License");
-//you may not use this file except in compliance with the License.
-//You may obtain a copy of the License at
-//
-//http: //www.apache.org/licenses/LICENSE-2.0
-//
-//Unless required by applicable law or agreed to in writing, software
-//distributed under the License is distributed on an "AS IS" BASIS,
-//WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//See the License for the specific language governing permissions and
-//limitations under the License.
+//Copyright 2021-2021 corecna Inc.
 
 package models
 
@@ -18,27 +6,28 @@ import (
 	"crypto/sha1"
 	"errors"
 	"fmt"
-	"github.com/astaxie/beego"
-	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
 	"math/rand"
 	"rasp-cloud/mongo"
 	"rasp-cloud/tools"
 	"strconv"
 	"time"
+
+	"github.com/astaxie/beego"
+	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 )
 
 type Strategy struct {
-	Id               	string                 `json:"id" bson:"_id"`
-	AppId				string				   `json:"app_id" bson:"app_id"`
-	Name             	string                 `json:"name"  bson:"name"`
-	Description      	string                 `json:"description"  bson:"description"`
-	CreateTime       	int64                  `json:"create_time"  bson:"create_time"`
-	ConfigTime       	int64                  `json:"config_time"  bson:"config_time"`
-	GeneralConfig   	map[string]interface{} `json:"general_config"  bson:"general_config"`
-	WhitelistConfig  	[]WhitelistConfigItem  `json:"whitelist_config"  bson:"whitelist_config"`
-	SelectedPluginId 	string                 `json:"selected_plugin_id" bson:"selected_plugin_id"`
-	AlgorithmConfig     map[string]interface{} `json:"algorithm_config"`
+	Id               string                 `json:"id" bson:"_id"`
+	AppId            string                 `json:"app_id" bson:"app_id"`
+	Name             string                 `json:"name"  bson:"name"`
+	Description      string                 `json:"description"  bson:"description"`
+	CreateTime       int64                  `json:"create_time"  bson:"create_time"`
+	ConfigTime       int64                  `json:"config_time"  bson:"config_time"`
+	GeneralConfig    map[string]interface{} `json:"general_config"  bson:"general_config"`
+	WhitelistConfig  []WhitelistConfigItem  `json:"whitelist_config"  bson:"whitelist_config"`
+	SelectedPluginId string                 `json:"selected_plugin_id" bson:"selected_plugin_id"`
+	AlgorithmConfig  map[string]interface{} `json:"algorithm_config"`
 }
 
 const (
@@ -105,8 +94,8 @@ func FindStrategy(selector *Strategy, page int, perpage int) (count int, result 
 
 func GetStrategyById(id string, appId string) (strategy *Strategy, err error) {
 	err = mongo.FindOne(strategyCollectionName, bson.M{
-		"_id":     id,
-		"app_id":  appId}, &strategy)
+		"_id":    id,
+		"app_id": appId}, &strategy)
 	if err != nil {
 		return nil, err
 	}
@@ -146,7 +135,7 @@ func GetStrategyCount() (count int, err error) {
 	return mongo.Count(strategyCollectionName)
 }
 
-func SelectStratety(strategyId string, appId string, raspId []string) (exist bool, err error){
+func SelectStratety(strategyId string, appId string, raspId []string) (exist bool, err error) {
 	for _, id := range raspId {
 		rasp, err := GetRaspById(id)
 		if err != nil {

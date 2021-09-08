@@ -1,33 +1,22 @@
-//Copyright 2017-2020 Baidu Inc.
-//
-//Licensed under the Apache License, Version 2.0 (the "License");
-//you may not use this file except in compliance with the License.
-//You may obtain a copy of the License at
-//
-//http: //www.apache.org/licenses/LICENSE-2.0
-//
-//Unless required by applicable law or agreed to in writing, software
-//distributed under the License is distributed on an "AS IS" BASIS,
-//WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//See the License for the specific language governing permissions and
-//limitations under the License.
+//Copyright 2021-2021 corecna Inc.
 
 package logs
 
 import (
-	"net/url"
-	"rasp-cloud/es"
-	"github.com/olivere/elastic"
-	"time"
 	"context"
-	"github.com/oschwald/geoip2-golang"
-	"github.com/astaxie/beego"
-	"net"
-	"rasp-cloud/tools"
-	"encoding/json"
-	"rasp-cloud/conf"
-	"fmt"
 	"crypto/md5"
+	"encoding/json"
+	"fmt"
+	"net"
+	"net/url"
+	"rasp-cloud/conf"
+	"rasp-cloud/es"
+	"rasp-cloud/tools"
+	"time"
+
+	"github.com/astaxie/beego"
+	"github.com/olivere/elastic"
+	"github.com/oschwald/geoip2-golang"
 )
 
 var (
@@ -147,7 +136,7 @@ func AggregationAttackWithTime(startTime int64, endTime int64, interval string, 
 	interceptAggr := elastic.NewTermsAggregation().Field("intercept_state")
 	timeAggr.SubAggregation(interceptAggrName, interceptAggr)
 	timeQuery := elastic.NewRangeQuery("event_time").Gte(startTime).Lte(endTime)
-	aggrResult, err := es.ElasticClient.Search(AttackAlarmInfo.EsAliasIndex + "-" + appId).
+	aggrResult, err := es.ElasticClient.Search(AttackAlarmInfo.EsAliasIndex+"-"+appId).
 		Query(elastic.NewBoolQuery().Must(timeQuery)).
 		Aggregation(timeAggrName, timeAggr).
 		Size(0).
@@ -199,7 +188,7 @@ func AggregationAttackWithUserAgent(startTime int64, endTime int64, size int,
 	uaAggr := elastic.NewTermsAggregation().Field("header.user-agent.keyword").Size(size).OrderByCount(false)
 	timeQuery := elastic.NewRangeQuery("event_time").Gte(startTime).Lte(endTime)
 	aggrName := "aggr_ua"
-	aggrResult, err := es.ElasticClient.Search(AttackAlarmInfo.EsAliasIndex + "-" + appId).
+	aggrResult, err := es.ElasticClient.Search(AttackAlarmInfo.EsAliasIndex+"-"+appId).
 		Query(timeQuery).
 		Aggregation(aggrName, uaAggr).
 		Size(0).
@@ -234,7 +223,7 @@ func AggregationAttackWithType(startTime int64, endTime int64, size int,
 	typeAggr := elastic.NewTermsAggregation().Field("attack_type").Size(size).OrderByCount(false)
 	timeQuery := elastic.NewRangeQuery("event_time").Gte(startTime).Lte(endTime)
 	aggrName := "aggr_type"
-	aggrResult, err := es.ElasticClient.Search(AttackAlarmInfo.EsAliasIndex + "-" + appId).
+	aggrResult, err := es.ElasticClient.Search(AttackAlarmInfo.EsAliasIndex+"-"+appId).
 		Query(timeQuery).
 		Aggregation(aggrName, typeAggr).
 		Size(0).

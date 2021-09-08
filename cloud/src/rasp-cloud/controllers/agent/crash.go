@@ -1,36 +1,25 @@
-//Copyright 2017-2020 Baidu Inc.
-//
-//Licensed under the Apache License, Version 2.0 (the "License");
-//you may not use this file except in compliance with the License.
-//You may obtain a copy of the License at
-//
-//http: //www.apache.org/licenses/LICENSE-2.0
-//
-//Unless required by applicable law or agreed to in writing, software
-//distributed under the License is distributed on an "AS IS" BASIS,
-//WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//See the License for the specific language governing permissions and
-//limitations under the License.
+//Copyright 2021-2021 corecna Inc.
 
 package agent
 
 import (
-	"rasp-cloud/controllers"
-	"net/http"
-	"rasp-cloud/models"
-	"io/ioutil"
-	"net/mail"
-	"os"
-	"rasp-cloud/models/logs"
-	"strings"
-	"github.com/astaxie/beego"
 	"bytes"
-	"fmt"
-	"rasp-cloud/tools"
-	"html/template"
 	"encoding/base64"
 	"errors"
+	"fmt"
+	"html/template"
+	"io/ioutil"
+	"net/http"
+	"net/mail"
+	"os"
+	"rasp-cloud/controllers"
+	"rasp-cloud/models"
+	"rasp-cloud/models/logs"
+	"rasp-cloud/tools"
+	"strings"
 	"time"
+
+	"github.com/astaxie/beego"
 )
 
 type CrashController struct {

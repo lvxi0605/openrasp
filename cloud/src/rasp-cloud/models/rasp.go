@@ -1,38 +1,27 @@
-//Copyright 2017-2020 Baidu Inc.
-//
-//Licensed under the Apache License, Version 2.0 (the "License");
-//you may not use this file except in compliance with the License.
-//You may obtain a copy of the License at
-//
-//http: //www.apache.org/licenses/LICENSE-2.0
-//
-//Unless required by applicable law or agreed to in writing, software
-//distributed under the License is distributed on an "AS IS" BASIS,
-//WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//See the License for the specific language governing permissions and
-//limitations under the License.
+//Copyright 2021-2021 corecna Inc.
 
 package models
 
 import (
+	"errors"
+	"fmt"
 	"rasp-cloud/conf"
 	"rasp-cloud/mongo"
 	"rasp-cloud/tools"
+	"strconv"
+	"strings"
+	"time"
+
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/httplib"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
-	"time"
-	"strconv"
-	"errors"
-	"github.com/astaxie/beego/httplib"
-	"strings"
-	"fmt"
-	"github.com/astaxie/beego"
 )
 
 type Rasp struct {
 	Id                string            `json:"id" bson:"_id,omitempty"`
 	AppId             string            `json:"app_id" bson:"app_id,omitempty"`
-	StrategyId		  string			`json:"strategy_id" bson:"strategy_id,omitempty"`
+	StrategyId        string            `json:"strategy_id" bson:"strategy_id,omitempty"`
 	Version           string            `json:"version" bson:"version,omitempty"`
 	Os                string            `json:"os" bson:"os,omitempty"`
 	HostName          string            `json:"hostname" bson:"hostname,omitempty"`
@@ -56,12 +45,12 @@ type Rasp struct {
 }
 
 type RecordCount struct {
-	Id                string            `json:"version" bson:"_id"`
-	Count             int64    			`json:"count" bson:"count"`
+	Id    string `json:"version" bson:"_id"`
+	Count int64  `json:"count" bson:"count"`
 }
 
 const (
-	raspCollectionName = "rasp"
+	raspCollectionName     = "rasp"
 	defaultOfflineInterval = 180
 )
 
@@ -104,7 +93,7 @@ func init() {
 	OfflineIntervalString = strconv.FormatInt(OfflineInterval, 10)
 }
 
-func UpsertRaspById(id string, rasp *Rasp) (error) {
+func UpsertRaspById(id string, rasp *Rasp) error {
 	return mongo.UpsertId(raspCollectionName, id, rasp)
 }
 
@@ -183,7 +172,7 @@ func FindRasp(selector *Rasp, page int, perpage int) (count int, result []*Rasp,
 		delete(bsonModel, "hostname")
 		realHostnameList := selector.HostNameList
 		bsonModel["hostname"] = bson.M{
-			"$in":   realHostnameList,
+			"$in": realHostnameList,
 		}
 		delete(bsonModel, "hostname_list")
 	}
@@ -250,15 +239,15 @@ func FindRaspVersion(selector *Rasp) (result []*RecordCount, err error) {
 			and = append(and, bson.M{"language": language})
 			matchCase["$and"] = and
 		}
-		Operations := []bson.M {
+		Operations := []bson.M{
 			{
-				"$project": bson.M {
-					"app_id": 1,
-					"version": 1,
-					"language": 1,
+				"$project": bson.M{
+					"app_id":              1,
+					"version":             1,
+					"language":            1,
 					"last_heartbeat_time": 1,
-					"heartbeat_interval": 1,
-					"onlineTime": bson.M {
+					"heartbeat_interval":  1,
+					"onlineTime": bson.M{
 						"$add": []string{"$last_heartbeat_time", "$heartbeat_interval"}}},
 			},
 			{
@@ -272,7 +261,7 @@ func FindRaspVersion(selector *Rasp) (result []*RecordCount, err error) {
 			},
 			{
 				"$match": bson.M{
-					"count": bson.M{"$gt": 0 }},
+					"count": bson.M{"$gt": 0}},
 			},
 			{
 				"$sort": bson.M{
@@ -341,7 +330,7 @@ func RemoveRaspBySelector(selector map[string]interface{}, appId string) (int, e
 	offlineWhere := ""
 	if _, ok := selector["expire_time"]; ok {
 		expireTime := strconv.FormatInt(int64(selector["expire_time"].(float64)), 10)
-		offlineWhere = "this.last_heartbeat_time+this.heartbeat_interval+" + OfflineIntervalString+ "+" + expireTime + "<" +
+		offlineWhere = "this.last_heartbeat_time+this.heartbeat_interval+" + OfflineIntervalString + "+" + expireTime + "<" +
 			strconv.FormatInt(time.Now().Unix(), 10)
 	} else {
 		offlineWhere = "this.last_heartbeat_time+this.heartbeat_interval+" + OfflineIntervalString + "< " +

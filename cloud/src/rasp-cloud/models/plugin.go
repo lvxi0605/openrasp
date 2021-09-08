@@ -1,39 +1,27 @@
-//Copyright 2017-2020 Baidu Inc.
-//
-//Licensed under the Apache License, Version 2.0 (the "License");
-//you may not use this file except in compliance with the License.
-//You may obtain a copy of the License at
-//
-//http: //www.apache.org/licenses/LICENSE-2.0
-//
-//Unless required by applicable law or agreed to in writing, software
-//distributed under the License is distributed on an "AS IS" BASIS,
-//WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//See the License for the specific language governing permissions and
-//limitations under the License.
-
+//Copyright 2021-2021 corecna Inc.
 package models
 
 import (
-	"fmt"
-	"crypto/md5"
-	"rasp-cloud/mongo"
-	"gopkg.in/mgo.v2/bson"
-	"sync"
-	"time"
-	"regexp"
-	"encoding/json"
-	"errors"
-	"strconv"
-	"math/rand"
-	"crypto/sha1"
-	"rasp-cloud/tools"
-	"gopkg.in/mgo.v2"
 	"bufio"
 	"bytes"
-	"github.com/robertkrimen/otto"
+	"crypto/md5"
+	"crypto/sha1"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"math/rand"
 	"rasp-cloud/conf"
+	"rasp-cloud/mongo"
+	"rasp-cloud/tools"
+	"regexp"
+	"strconv"
 	"strings"
+	"sync"
+	"time"
+
+	"github.com/robertkrimen/otto"
+	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 )
 
 type Plugin struct {
@@ -231,9 +219,9 @@ func SetSelectedPlugin(appId string, pluginId string, strategyId string) (plugin
 		}
 	}
 	query := bson.M{"selected_plugin_id": pluginId, "app_id": appId}
-	if strategyId == ""{
+	if strategyId == "" {
 		return plugin, mongo.UpdateId(appCollectionName, appId, bson.M{"selected_plugin_id": pluginId})
-	}else {
+	} else {
 		return plugin, mongo.UpdateId(strategyCollectionName, strategyId, query)
 	}
 }
@@ -255,7 +243,7 @@ func MergeAlgorithmPlugin(oldId string, newId string) (err error) {
 		// 获取oldPluginConfig中的action，并用new中的值进行替换。如果不存在则覆盖
 		for k, v := range oldPluginConfig {
 			if newMap, ok := newPluginConfig[k].(map[string]interface{}); ok {
-				if oldMap, ok :=v.(map[string]interface{}); ok {
+				if oldMap, ok := v.(map[string]interface{}); ok {
 					if oldMap["action"] != nil {
 						if newMap["action"] == nil {
 							// 完全复制

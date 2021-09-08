@@ -1,30 +1,19 @@
-//Copyright 2017-2020 Baidu Inc.
-//
-//Licensed under the Apache License, Version 2.0 (the "License");
-//you may not use this file except in compliance with the License.
-//You may obtain a copy of the License at
-//
-//http: //www.apache.org/licenses/LICENSE-2.0
-//
-//Unless required by applicable law or agreed to in writing, software
-//distributed under the License is distributed on an "AS IS" BASIS,
-//WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//See the License for the specific language governing permissions and
-//limitations under the License.
+//Copyright 2021-2021 corecna Inc.
 
 package iast
 
 import (
 	"encoding/json"
 	"errors"
-	"github.com/astaxie/beego"
-	"github.com/gorilla/websocket"
 	"net/http"
 	"rasp-cloud/controllers"
 	"rasp-cloud/models"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/astaxie/beego"
+	"github.com/gorilla/websocket"
 )
 
 type IastController struct {
@@ -36,10 +25,10 @@ type WebsocketController struct {
 }
 
 type wsConnection struct {
-	wsSocket      *websocket.Conn // 底层websocket
+	wsSocket      *websocket.Conn        // 底层websocket
 	inChan        chan *models.WsMessage // 写IAST
 	outChan       chan *models.WsMessage // 读IAST
-	mutex         sync.Mutex // Mutex互斥锁，避免重复关闭管道
+	mutex         sync.Mutex             // Mutex互斥锁，避免重复关闭管道
 	isClosed      bool
 	closeChan     chan byte // 关闭通知
 	appId         string
@@ -48,9 +37,9 @@ type wsConnection struct {
 
 var (
 	wsUpgrader = websocket.Upgrader{
-		ReadBufferSize:    4096,
-		WriteBufferSize:   4096,
-		HandshakeTimeout:  6 * time.Second,
+		ReadBufferSize:   4096,
+		WriteBufferSize:  4096,
+		HandshakeTimeout: 6 * time.Second,
 		CheckOrigin: func(r *http.Request) bool {
 			return true
 		},
@@ -67,8 +56,8 @@ func recovery() {
 // @router / [post]
 func (o *IastController) Post() {
 	var param struct {
-		Order string         `json:"order"`
-		Data  *models.Iast   `json:"data" `
+		Order string       `json:"order"`
+		Data  *models.Iast `json:"data" `
 	}
 	var result = make(map[string]interface{})
 	var tmpResult = make(map[string]map[string]interface{})
@@ -95,7 +84,7 @@ func (o *IastController) Post() {
 	if models.IastApp.GetIastAppId(appId) {
 		wsConnInterface, success := IastConnection.Load(appId)
 		if !success {
-			o.ServeError(http.StatusBadRequest, "load Connection app failed for app:" + appId)
+			o.ServeError(http.StatusBadRequest, "load Connection app failed for app:"+appId)
 		}
 		wsConn = wsConnInterface.(*wsConnection)
 		//wsConn = IastConnection[appId]
@@ -123,7 +112,7 @@ func (o *IastController) Post() {
 					}
 					quit <- true
 					goto quit
-				case <- time.After(5 * time.Second):
+				case <-time.After(5 * time.Second):
 					beego.Error("TimeOut Recv Data From IAST!")
 					result["status"] = http.StatusBadRequest
 					result["description"] = "TimeOut Recv Data From IAST!"
@@ -133,11 +122,11 @@ func (o *IastController) Post() {
 					goto quit
 				}
 			}
-		//lable:
-		//	beego.Info("enter lable")
+			//lable:
+			//	beego.Info("enter lable")
 		quit:
 		}()
-		<- quit
+		<-quit
 		o.Serve(tmpResult[appId])
 	}
 	// 扫描器未连接
@@ -280,14 +269,14 @@ func (wsConn *wsConnection) procLoop(appId string) {
 	go func() {
 		for {
 			select {
-			case <- time.After(4 * time.Second):
+			case <-time.After(4 * time.Second):
 				if err := wsConn.wsWrite(websocket.TextMessage, []byte("heartbeat from OpenRASP cloud")); err != nil {
 					beego.Error("heartbeat error:", err)
 					goto error
 				}
 			}
 		}
-		error:
+	error:
 	}()
 
 	for {
@@ -297,7 +286,7 @@ func (wsConn *wsConnection) procLoop(appId string) {
 			models.Register.SetIastRegister(appId, 2)
 		}
 		if err != nil {
-			beego.Error("read error:" , err)
+			beego.Error("read error:", err)
 			break
 		}
 		if strings.Index(string(msg.Data), "status") == -1 {

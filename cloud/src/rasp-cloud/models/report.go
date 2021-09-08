@@ -1,24 +1,13 @@
-//Copyright 2017-2020 Baidu Inc.
-//
-//Licensed under the Apache License, Version 2.0 (the "License");
-//you may not use this file except in compliance with the License.
-//You may obtain a copy of the License at
-//
-//http: //www.apache.org/licenses/LICENSE-2.0
-//
-//Unless required by applicable law or agreed to in writing, software
-//distributed under the License is distributed on an "AS IS" BASIS,
-//WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//See the License for the specific language governing permissions and
-//limitations under the License.
+//Copyright 2021-2021 corecna Inc.
 
 package models
 
 import (
+	"context"
 	"rasp-cloud/es"
 	"time"
+
 	"github.com/olivere/elastic"
-	"context"
 )
 
 type ReportData struct {
@@ -39,13 +28,13 @@ func init() {
 }
 
 func CreateReportDataEsIndex(appId string) error {
-	return es.CreateEsIndex(ReportIndexName + "-" + appId,
-		AliasReportIndexName + "-" + appId, reportType + "-template")
+	return es.CreateEsIndex(ReportIndexName+"-"+appId,
+		AliasReportIndexName+"-"+appId, reportType+"-template")
 }
 
 func CreateDependencyEsIndex(appId string) error {
-	return es.CreateEsIndex(DependencyIndexName + "-" + appId,
-		AliasDependencyIndexName + "-" + appId,"dependency-data-template")
+	return es.CreateEsIndex(DependencyIndexName+"-"+appId,
+		AliasDependencyIndexName+"-"+appId, "dependency-data-template")
 }
 
 func AddReportData(reportData *ReportData, appId string) error {
@@ -64,7 +53,7 @@ func GetHistoryRequestSum(startTime int64, endTime int64, interval string, timeZ
 	requestSumAggr := elastic.NewSumAggregation().Field("request_sum")
 	timeAggr.SubAggregation(sumAggrName, requestSumAggr)
 	timeQuery := elastic.NewRangeQuery("time").Gte(startTime).Lte(endTime)
-	aggrResult, err := es.ElasticClient.Search(AliasReportIndexName + "-" + appId).
+	aggrResult, err := es.ElasticClient.Search(AliasReportIndexName+"-"+appId).
 		Query(timeQuery).
 		Aggregation(timeAggrName, timeAggr).
 		Size(0).
