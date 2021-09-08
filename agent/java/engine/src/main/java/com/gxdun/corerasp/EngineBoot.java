@@ -36,6 +36,7 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.lang.instrument.Instrumentation;
 import java.lang.instrument.UnmodifiableClassException;
+import java.util.Random;
 
 /**
  * Created by tyy on 18-1-24.
@@ -48,13 +49,20 @@ public class EngineBoot implements Module {
 
     @Override
     public void start(String mode, Instrumentation inst) throws Exception {
-        System.out.println("\n\n" +
-                "   ____                   ____  ___   _____ ____ \n" +
-                "  / __ \\/   | / ___// __ \\\n" +
-                " / / / / __ \\/ _ \\/ __ \\/ /_/ / /| | \\__ \\/ /_/ /\n" +
-                "/ /_/ / /_/ /  __/ / / / _, _/ ___ |___/ / ____/ \n" +
-                "_/ |_/_/  |_/____/_/      \n" +
-                "                                         \n\n");
+        System.out.println("\033[0;32m" +
+                "   ______                              ____     ___    _____    ____ \n" +
+                "  / ____/  ____    _____  ___         / __ \\   /   |  / ___/   / __ \\\n" +
+                " / /      / __ \\  / ___/ / _ \\       / /_/ /  / /| |  \\__ \\   / /_/ /\n" +
+                "/ /___   / /_/ / / /    /  __/      / _, _/  / ___ | ___/ /  / ____/ \n" +
+                "\\____/   \\____/ /_/     \\___/      /_/ |_|  /_/  |_|/____/  /_/      \033[0m\n");
+
+        Agent.readVersion();
+        BuildRASPModel.initRaspInfo(Agent.projectVersion, Agent.buildTime, Agent.gitCommit);
+
+        String versionMessage = "\033[1;43m CoreRASP \033[0m \033[1;33mversion: " + Agent.projectVersion + " \033[0;32mbuild: GitCommit="
+            + Agent.gitCommit + " date=" + Agent.buildTime + "\033[0m\n";
+        System.out.println(versionMessage);
+
         try {
             Loader.load();
         } catch (Exception e) {
@@ -66,9 +74,7 @@ public class EngineBoot implements Module {
         if (!loadConfig()) {
             return;
         }
-        //缓存rasp的build信息
-        Agent.readVersion();
-        BuildRASPModel.initRaspInfo(Agent.projectVersion, Agent.buildTime, Agent.gitCommit);
+        //BuildRASPModel
         // 初始化插件系统
         if (!JS.Initialize()) {
             return;
@@ -85,7 +91,6 @@ public class EngineBoot implements Module {
         deleteTmpDir();
         String message = "[CoreRASP] Engine Initialized [" + Agent.projectVersion + " (build: GitCommit="
                 + Agent.gitCommit + " date=" + Agent.buildTime + ")]";
-        System.out.println(message);
         Logger.getLogger(EngineBoot.class.getName()).info(message);
     }
 
