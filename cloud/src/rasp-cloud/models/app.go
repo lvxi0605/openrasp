@@ -128,15 +128,15 @@ var (
 		"clientip.header":    "ClientIP",
 		"block.status_code":  302,
 		"block.redirect_url": "https://rasp.baidu.com/blocked/?request_id=%request_id%",
-		"block.content_xml": "<?xml version=\"1.0\"?><doc><error>true</error><reason>Request blocked by OpenRASP" +
+		"block.content_xml": "<?xml version=\"1.0\"?><doc><error>true</error><reason>Request blocked by CoreRASP" +
 			"</reason><request_id>%request_id%</request_id></doc>",
 		"block.content_html": "</script><script>" +
 			"location.href=\"https://rasp.baidu.com/blocked2/?request_id=%request_id%\"</script>",
-		"block.content_json":    `{"error":true,"reason": "Request blocked by OpenRASP","request_id": "%request_id%"}`,
+		"block.content_json":    `{"error":true,"reason": "Request blocked by CoreRASP","request_id": "%request_id%"}`,
 		"plugin.timeout.millis": 100,
 		"body.maxbytes":         12288,
 		"inject.custom_headers": map[string]interface{}{
-			"X-Protected-By": "OpenRASP",
+			"X-Protected-By": "CoreRASP",
 		},
 		"plugin.filter":             true,
 		"cpu.usage.enable":          false,
@@ -146,7 +146,7 @@ var (
 		"log.maxstack":              50,
 		"log.maxburst":              100,
 		"log.maxbackup":             30,
-		"syslog.tag":                "OpenRASP",
+		"syslog.tag":                "CoreRASP",
 		"syslog.url":                "",
 		"syslog.facility":           1,
 		"syslog.enable":             false,
