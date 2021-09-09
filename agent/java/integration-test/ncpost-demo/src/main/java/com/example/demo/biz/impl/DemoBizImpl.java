@@ -25,6 +25,7 @@ public class DemoBizImpl extends ServiceImpl<DemoMapper,TestEntry> implements ID
 	public List<TestEntry> sayHello() 
 	{
 		try {
+			baseMapper.insert(UUID.randomUUID().toString(), "<script>alert(1);</script>");
 			return baseMapper.getList(); 
 		} catch (Exception e) {
 			return null;

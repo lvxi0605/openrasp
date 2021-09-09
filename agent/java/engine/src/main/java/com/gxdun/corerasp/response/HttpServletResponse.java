@@ -194,7 +194,7 @@ public class HttpServletResponse {
                     if (!isCommitted) {
                         resetBuffer();
                         Reflection.invokeMethod(response, "setStatus", new Class[]{int.class}, statusCode);
-                        if (statusCode >= 300 && statusCode <= 399) {
+                        if (statusCode >= 300 && statusCode <= 399 && blockUrl!=null && !blockUrl.trim().isEmpty()) {
                             setHeader("Location", blockUrl.replace(CONTENT_TYPE_REPLACE_REQUEST_ID, requestId));
                         }
                         setIntHeader(CONTENT_LENGTH_HEADER_KEY, script.getBytes().length);

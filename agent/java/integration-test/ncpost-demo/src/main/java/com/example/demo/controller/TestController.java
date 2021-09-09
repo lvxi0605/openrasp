@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.UUID;
 
 @RestController
@@ -25,8 +28,15 @@ public class TestController
 	
 	@GetMapping("/hello")
 	@ResponseBody
-	public Object hello()
+	public Object hello(HttpServletResponse response)
 	{
+		try{
+			PrintWriter writer = response.getWriter();
+			writer.println("hhhh");
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return demoBiz.sayHello();
 	}
 
