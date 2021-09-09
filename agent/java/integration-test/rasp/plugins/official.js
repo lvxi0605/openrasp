@@ -18,13 +18,6 @@ const plugin_desc    = '官方插件'
  * limitations under the License.
  */
 
-// 常用链接
-//
-// Web 攻击检测能力说明、零规则检测算法介绍
-// https://rasp.baidu.com/doc/usage/web.html
-//
-// CVE 漏洞覆盖说明
-// https://rasp.baidu.com/doc/usage/cve.html
 
 'use strict'
 var plugin  = new RASP(plugin_name)
@@ -137,7 +130,6 @@ var algorithmConfig = {
     sql_exception: {
         name:      '算法3 - 记录数据库异常',
         action:    'log',
-        reference: 'https://rasp.baidu.com/doc/dev/official.html#sql-exception',
 
         // error_code 最多允许 100 个，超过直接清空
         mysql: {
@@ -290,8 +282,7 @@ var algorithmConfig = {
     // 任意文件下载防护 - 使用 ../../ 跳出 web 目录读取敏感文件
     readFile_outsideWebroot: {
         name:      '算法4 - 禁止使用 ../../ 访问web目录以外的文件',
-        action:    'ignore',
-        reference: 'https://rasp.baidu.com/doc/dev/official.html#case-out-webroot'
+        action:    'ignore'
     },
     // 任意文件下载防护 - 读取敏感文件，最后一道防线
     readFile_unwanted: {
@@ -313,7 +304,6 @@ var algorithmConfig = {
     // https://rasp.baidu.com/doc/dev/official.html#case-file-write
     writeFile_script: {
         name:      '算法2 - 拦截 php/jsp 等脚本文件的写入操作',
-        reference: 'https://rasp.baidu.com/doc/dev/official.html#case-file-write',
         action:    'block',
         userinput:  true,
         lcs_search: false
@@ -433,7 +423,6 @@ var algorithmConfig = {
     // XXE - 使用 file 协议读取内容，可能误报，默认 log
     xxe_file: {
         name:      '算法3 - 使用 file:// 协议读取文件',
-        reference: 'https://rasp.baidu.com/doc/dev/official.html#case-xxe',
         action:    'log',
     },
 
@@ -2330,7 +2319,7 @@ plugin.register('writeFile', function (params, context) {
     // }
 
     // 关于这个算法，请参考这个插件定制文档
-    // https://rasp.baidu.com/doc/dev/official.html#case-file-write
+
     if (algorithmConfig.writeFile_script.action != 'ignore')
     {
         var all_parameter = get_all_parameter(context)
