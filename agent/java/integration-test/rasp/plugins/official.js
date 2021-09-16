@@ -1,4 +1,4 @@
-const plugin_version = '2021-0120-1430'
+const plugin_version = '2021-0120-1432'
 const plugin_name    = 'official'
 const plugin_desc    = '官方插件'
 
@@ -611,11 +611,22 @@ var algorithmConfig = {
         content_type: 'html|json|xml'
     },
     xssSql_save:{
-        name:   'xss_sql拦截',
-        //action: 'rewrite',
+        name:   '算法1 - xss_sql拦截',
         action: 'block',
         algorithm: 'xssSql_save',
-        filter_regex: /(javascript)|(<\s*\r*\n*script)|(script\s*\r*\n*>)|(<\s*\r*\n*iframe)|(<\s*\r*\n*embed)|(<\s*\r*\n*object)|(alert\r*\n*\s*\()|(prompt\r*\n*\s*\()|(confirm\r*\n*\s*\()|(addEventListener\r*\n*\s*\()|(expression\r*\n*\s*\()|(eval\r*\n*\s*\()|(onmouseover\r*\n*\s*=)|(onclimbatree\r*\n*\s*=)|(onhashchange\r*\n*\s*=)|(onerror\r*\n*\s*=)|(action\r*\n*\s*=)|(formaction\r*\n*\s*=)|(onload\r*\n*\s*=)|(onstart\r*\n*\s*=)|(onfocus\r*\n*\s*=)|(oncut\r*\n*\s*=)|(code\r*\n*\s*=)|(location\r*\n*\s*.)/ig
+        filter_regex: "(javascript)|(<\\s*\\r*\\n*script)|(script\\s*\\r*\\n*>)|(<\\s*\\r*\\n*iframe)|(<\\s*\\r*\\n*embed)|(<\\s*\\r*\\n*object)|(alert\\r*\\n*\\s*\\()|(prompt\\r*\\n*\\s*\\()|(confirm\\r*\\n*\\s*\\()|(addEventListener\\r*\\n*\\s*\\()|(expression\\r*\\n*\\s*\\()|(eval\\r*\\n*\\s*\\()|(onmouseover\\r*\\n*\\s*=)|(onclimbatree\\r*\\n*\\s*=)|(onhashchange\\r*\\n*\\s*=)|(onerror\\r*\\n*\\s*=)|(action\\r*\\n*\\s*=)|(formaction\\r*\\n*\\s*=)|(onload\\r*\\n*\\s*=)|(onstart\\r*\\n*\\s*=)|(onfocus\\r*\\n*\\s*=)|(oncut\\r*\\n*\\s*=)|(code\\r*\\n*\\s*=)|(location\\r*\\n*\\s*.)",
+        replaceSqlParam:true
+    },
+    //java 本地检测
+    requestPathScan_check404:{
+        name:   '算法1 - 校验服务器响应404次数',
+        action: 'log',
+        canAction:[
+            "log",
+            "ignore"
+        ],
+        algorithm: 'requestPathScan_check404',
+        countPerMinute:20
     }
 }
 
@@ -727,6 +738,8 @@ var cmdPostPattern  = new RegExp(algorithmConfig.command_common.pattern, 'i')
 
 // 敏感信息泄露 - Content Type 正则
 var dataLeakContentType = new RegExp(algorithmConfig.response_dataLeak.content_type, 'i')
+
+var xssSqlSaveFilterRegex  = new RegExp(algorithmConfig.xssSql_save.filter_regex, 'ig')
 
 if (! RASP.is_unittest)
 {
@@ -3006,7 +3019,7 @@ if (algorithmConfig.xssSql_save.action != 'ignore') {
             return undefined
         }
 
-        if(algorithmConfig.xssSql_save.action!='rewrite'){
+        if(!algorithmConfig.xssSql_save.replaceSqlParam){
             for (var i in params.preparedStatementSqlParams) {
                 var preparedParam = params.preparedStatementSqlParams[i];
                 if (!preparedParam.value) {
@@ -3045,10 +3058,11 @@ if (algorithmConfig.xssSql_save.action != 'ignore') {
                 return undefined
             }
             return {
-                message: 'SQL XSS checked',
+                message: 'SQL XSS checked,filtered SQL parameters',
                 action: algorithmConfig.xssSql_save.action,
                 algorithm: algorithmConfig.xssSql_save.algorithm,
-                xssSqlChangeParams: changeParamsList
+                xssSqlChangeParams: changeParamsList,
+                filter_request:true
             }
         }
     })
@@ -3079,7 +3093,7 @@ function regReplace(inputStr)
         return String.fromCharCode(CharCode);
     });
 
-    inputStr = inputStr.replace(algorithmConfig.xssSql_save.filter_regex ,
+    inputStr = inputStr.replace(xssSqlSaveFilterRegex,
         function(word){//"[_$&_]"
             IsDetect=true;
             return '['+word.substring(1,word.length-1)+']';

@@ -34,14 +34,17 @@ public class AttackCheckListener implements CheckEventListener {
 
     @Override
     public void onCheckUpdate(final EventInfo info) {
+        //必须放在外面,拿request信息
+        final String eventInfoString = info.toString();
         if (info instanceof AttackInfo) {
             threadPoolExecutor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    Checker.ATTACK_ALARM_LOGGER.info(info);
+                    Checker.ATTACK_ALARM_LOGGER.info(eventInfoString);
                 }
             });
         }
+
     }
 
 }

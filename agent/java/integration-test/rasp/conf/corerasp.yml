@@ -1,1 +1,6 @@
 debug.level: 1
+cloud.enable: true
+cloud.backend_url: http://127.0.0.1:8086/
+cloud.app_id: f8b775c8f028a01bfd1d45316ec4f3e4429faeda
+cloud.app_secret: 21v1SmRWbmv9U7N1nHG0S2JihchVcxfP4Pq1dIAfm9s
+cloud.heartbeat_interval: 5

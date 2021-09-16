@@ -49,6 +49,9 @@ public class AttackInfo extends EventInfo {
     public static final String TYPE_ATTACK = "attack";
     public static final String DEFAULT_LOCAL_PLUGIN_NAME = "java_builtin_plugin";
 
+    public static final String FILTER_REQUEST = "filter_request";
+
+
     public static final int DEFAULT_CONFIDENCE_VALUE = 100;
 
     private CheckParameter parameter;
@@ -85,7 +88,12 @@ public class AttackInfo extends EventInfo {
         this.algorithm = algorithm;
         this.params = params;
         this.extras = extras;
-        setBlock(CHECK_ACTION_BLOCK.equals(action));
+        if(CHECK_ACTION_BLOCK.equals(action)){
+            setBlock(!isFilterRequest());
+        }else {
+            setBlock(false);
+        }
+
     }
 
     public AttackInfo(CheckParameter parameter, String action, String message,
@@ -96,7 +104,21 @@ public class AttackInfo extends EventInfo {
         this.confidence = confidence;
         this.parameter = parameter;
         this.algorithm = algorithm;
-        setBlock(CHECK_ACTION_BLOCK.equals(action));
+        if(CHECK_ACTION_BLOCK.equals(action)){
+            setBlock(!isFilterRequest());
+        }else {
+            setBlock(false);
+        }
+    }
+
+    private boolean isFilterRequest(){
+        if(this.extras!=null){
+            JsonElement jsonElement = this.extras.get(FILTER_REQUEST);
+            if(jsonElement!=null){
+                return jsonElement.getAsBoolean();
+            }
+        }
+        return false;
     }
 
     /**
@@ -108,6 +130,7 @@ public class AttackInfo extends EventInfo {
     public Map<String, Object> getInfo() {
         Map<String, Object> info = new HashMap<String, Object>();
         AbstractRequest request = parameter.getRequest();
+
         Timestamp createTime = new Timestamp(parameter.getCreateTime());
 
         info.put("event_type", getType());

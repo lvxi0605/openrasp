@@ -19,6 +19,7 @@ func GetCurrentPath() (string, error) {
 	if err != nil {
 		return "", err
 	}
+	path = strings.ReplaceAll(path,"\\","/")
 	i := strings.LastIndex(path, "/")
 	if i < 0 {
 		i = strings.LastIndex(path, "\\")

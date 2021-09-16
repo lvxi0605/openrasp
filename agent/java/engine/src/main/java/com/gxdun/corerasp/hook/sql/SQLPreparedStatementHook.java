@@ -21,6 +21,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.gxdun.corerasp.HookHandler;
 import com.gxdun.corerasp.config.Config;
+import com.gxdun.corerasp.exceptions.SecurityException;
 import com.gxdun.corerasp.messaging.ErrorType;
 import com.gxdun.corerasp.messaging.LogTool;
 import com.gxdun.corerasp.plugin.checker.CheckParameter;
@@ -214,10 +215,6 @@ public class SQLPreparedStatementHook extends AbstractSqlHook {
             HookHandler.doCheck(CheckParameter.Type.XSS_SQL, params);
             List<EventInfo> eventInfos = HookHandler.dataThreadHook.get();
             if(CollectionUtil.isNotEmpty(eventInfos)){
-                String action = ConfigurableChecker.getActionElement(Config.getConfig().getAlgorithmConfig(),"xssSql_save");
-                if(!"rewrite".equals(action)){
-                    return;
-                }
                 for (EventInfo eventInfo : eventInfos) {
                    if(!(eventInfo instanceof AttackInfo)) {
                        continue;

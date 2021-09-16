@@ -18,11 +18,19 @@ package com.gxdun.corerasp.hook.server;
 
 import com.gxdun.corerasp.HookHandler;
 import com.gxdun.corerasp.config.Config;
+import com.gxdun.corerasp.exceptions.SecurityException;
 import com.gxdun.corerasp.hook.AbstractClassHook;
 import com.gxdun.corerasp.plugin.checker.CheckParameter;
+import com.gxdun.corerasp.plugin.checker.local.RequestPathScanChecker;
+import com.gxdun.corerasp.plugin.info.EventInfo;
+import com.gxdun.corerasp.request.AbstractRequest;
 import com.gxdun.corerasp.response.HttpServletResponse;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import com.gxdun.corerasp.tool.RequestUtil;
 import com.gxdun.corerasp.tool.Sampler;
 
 /**
@@ -63,6 +71,43 @@ public abstract class ServerResponseBodyHook extends AbstractClassHook {
         return sampler.check();
     }
 
+    protected static boolean isCheckRequest404() {
+        return !RequestPathScanChecker.isIgnore();
+    }
+
+    protected static void checkResponseStatus404(){
+        final HttpServletResponse httpServletResponse = HookHandler.responseCache.get();
+        if(httpServletResponse!=null){
+            final int status = httpServletResponse.getStatus();
+            if(status==404){
+                AbstractRequest request = HookHandler.requestCache.get();
+                String ip = RequestUtil.getIpAddr(request);
+                RequestPathScanChecker.RequestInfo requestInfo = RequestPathScanChecker.addRequestNotFoundInfo(ip,request.getRequestURI());
+                AtomicBoolean attacked = requestInfo.getAttacked();
+                if(requestInfo!=null && !attacked.get()) {
+                    HashMap<String, Object> checkParams = new HashMap<String, Object>();
+                    checkParams.put("ip", ip);
+                    checkParams.put("count", requestInfo.getCount().get());
+                    checkParams.put("urls", requestInfo.getUrls().keySet());
+                    synchronized (attacked) {
+                        if(attacked.get()){
+                            return;
+                        }
+                        try {
+                            HookHandler.doCheck(CheckParameter.Type.REQUEST_PATH_SCAN, checkParams);
+                        } finally {
+                            List<EventInfo> eventInfos = HookHandler.dataThreadHook.get();
+                            if (eventInfos != null && !eventInfos.isEmpty()) {
+                                //被拦截或者记录日志了,不要重复记录日志
+                                attacked.set(true);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     protected static void checkBody(HashMap<String, Object> params, boolean isCheckXss, boolean isCheckSensitive) {
         if (isCheckXss) {
             HookHandler.doCheck(CheckParameter.Type.XSS_USERINPUT, params);
@@ -73,5 +118,9 @@ public abstract class ServerResponseBodyHook extends AbstractClassHook {
             params.remove("content_length");
             HookHandler.doCheck(CheckParameter.Type.RESPONSE, params);
         }
+
+
+
+
     }
 }

@@ -59,6 +59,20 @@ public class HttpServletResponse {
         return response;
     }
 
+
+    public int getStatus() {
+        if (response != null) {
+            final Object status = Reflection.invokeMethod(response, "getStatus", new Class[]{});
+            if(status==null){
+                return 0;
+            }else if(status instanceof Integer){
+                return ((Integer) status);
+            }
+        }
+        return 0;
+    }
+
+
     /**
      * 设置响应头,覆盖原值
      *

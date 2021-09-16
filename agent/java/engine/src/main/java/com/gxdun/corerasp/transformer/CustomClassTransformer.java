@@ -25,10 +25,7 @@ import com.gxdun.corerasp.messaging.ErrorType;
 import com.gxdun.corerasp.messaging.LogTool;
 import com.gxdun.corerasp.tool.annotation.AnnotationScanner;
 import com.gxdun.corerasp.tool.annotation.HookAnnotation;
-import javassist.ClassClassPath;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.LoaderClassPath;
+import javassist.*;
 import org.apache.log4j.Logger;
 
 import java.io.ByteArrayInputStream;
@@ -38,9 +35,7 @@ import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.lang.ref.SoftReference;
 import java.security.ProtectionDomain;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
@@ -171,7 +166,27 @@ public class CustomClassTransformer implements ClassFileTransformer {
         serverDetector.detectServer(className, loader, domain);
         return classfileBuffer;
     }
-
+/*
+    private List<CtClass> getAllInterface(CtClass ctClass) throws NotFoundException {
+        if(ctClass==null || ctClass.getName().equals("java.lang.Object")){
+            return Collections.emptyList();
+        }
+        ArrayList<CtClass> classes = new ArrayList<CtClass>();
+        try {
+            CtClass[] interfaces = ctClass.getInterfaces();
+            for (int i = 0; i < interfaces.length; i++) {
+                List<CtClass> allInterface = getAllInterface(interfaces[i]);
+                classes.add(interfaces[i]);
+                classes.addAll(allInterface);
+            }
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
+        List<CtClass> allInterface = getAllInterface(ctClass.getSuperclass());
+        classes.addAll(allInterface);
+        return classes;
+    }
+*/
     private void checkNecessaryHookType(String type) {
         if (!isNecessaryHookComplete && necessaryHookType.contains(type)) {
             necessaryHookType.remove(type);

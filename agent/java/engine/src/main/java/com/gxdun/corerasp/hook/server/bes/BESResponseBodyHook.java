@@ -42,10 +42,16 @@ public class BESResponseBodyHook extends ServerResponseBodyHook {
     public static void getBuffer(Object response, Object trunk) {
         boolean isCheckXss = isCheckXss();
         boolean isCheckSensitive = isCheckSensitive();
-        if (HookHandler.isEnableXssHook() && (isCheckXss || isCheckSensitive) && trunk != null) {
+        boolean isCheckRequest404 = isCheckRequest404();
+        if (HookHandler.isEnableXssHook() && (isCheckXss || isCheckSensitive||isCheckRequest404)) {
             HookHandler.disableBodyXssHook();
-            HashMap<String, Object> params = new HashMap<String, Object>();
             try {
+                if(isCheckRequest404){
+                    checkResponseStatus404();
+                }
+                if(trunk ==null){
+                    return;
+                }
                 HttpServletResponse res = HookHandler.responseCache.get();
                 String enc = null;
                 String contentType = null;
@@ -53,6 +59,8 @@ public class BESResponseBodyHook extends ServerResponseBodyHook {
                     enc = res.getCharacterEncoding();
                     contentType = res.getContentType();
                 }
+
+                HashMap<String, Object> params = new HashMap<String, Object>();
                 if (enc != null) {
                     params.put("buffer", trunk);
                     params.put("content_length", Reflection.invokeMethod(response, "getContentLength", new Class[]{}));

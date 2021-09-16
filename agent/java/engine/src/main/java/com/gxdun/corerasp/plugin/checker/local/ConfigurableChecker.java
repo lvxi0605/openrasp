@@ -101,6 +101,18 @@ public abstract class ConfigurableChecker extends AttackChecker {
         return null;
     }
 
+    public static String getStringElement(JsonObject config, String key) {
+        try {
+            JsonElement jsonElement = config.get(key);
+            if(jsonElement!=null){
+                return jsonElement.getAsString();
+            }
+        } catch (Exception e) {
+            logJsonError(e);
+        }
+        return null;
+    }
+
     public static JsonElement getElement(JsonObject config, String key, String subKey) {
         if (config != null) {
             JsonElement jsonElement = config.get(key);
@@ -116,6 +128,17 @@ public abstract class ConfigurableChecker extends AttackChecker {
         try {
             JsonElement element = getElement(config, key, subKey);
             return element != null ? element.getAsInt() : DEFAULT_MIN_LENGTH;
+        } catch (Exception e) {
+            logJsonError(e);
+        }
+        return DEFAULT_MIN_LENGTH;
+    }
+
+    public static int getIntElement(JsonObject config, String key){
+
+        try {
+            JsonElement jsonElement = config.get(key);
+            return jsonElement != null ? jsonElement.getAsInt() : DEFAULT_MIN_LENGTH;
         } catch (Exception e) {
             logJsonError(e);
         }

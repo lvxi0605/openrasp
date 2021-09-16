@@ -43,7 +43,7 @@ public class TestController
 	@GetMapping("/getListById")
 	@ResponseBody
 	public Object getListById(String id) throws Exception {
-		demoBiz.txTest(UUID.randomUUID().toString(),"alert");
+		demoBiz.txTest(UUID.randomUUID().toString(),"<javascript>alert('ok')</javascript>");
 		return demoBiz.getListById(id);
 	}
 

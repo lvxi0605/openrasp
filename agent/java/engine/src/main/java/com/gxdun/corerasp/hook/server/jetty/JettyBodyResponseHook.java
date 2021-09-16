@@ -58,10 +58,15 @@ public class JettyBodyResponseHook extends ServerResponseBodyHook {
     public static void getJettyOutputBuffer(Object object) {
         boolean isCheckXss = isCheckXss();
         boolean isCheckSensitive = isCheckSensitive();
-        if (HookHandler.isEnableXssHook() && (isCheckXss || isCheckSensitive)) {
+        boolean isCheckRequest404 = isCheckRequest404();
+        if (HookHandler.isEnableXssHook() && (isCheckXss || isCheckSensitive||isCheckRequest404)) {
             HookHandler.disableBodyXssHook();
             HashMap<String, Object> params = new HashMap<String, Object>();
             try {
+                if(isCheckRequest404){
+                    checkResponseStatus404();
+                }
+
                 Object buffer = Reflection.getSuperField(object, "_buffer");
                 if (buffer != null) {
                     String content = buffer.toString();
@@ -84,8 +89,13 @@ public class JettyBodyResponseHook extends ServerResponseBodyHook {
     public static void getJetty9OutputBuffer(char[] buffer, int offset, int length) {
         boolean isCheckXss = isCheckXss();
         boolean isCheckSensitive = isCheckSensitive();
-        if (HookHandler.isEnableXssHook() && (isCheckXss || isCheckSensitive)) {
+        boolean isCheckRequest404 = isCheckRequest404();
+        if (HookHandler.isEnableXssHook() && (isCheckXss || isCheckSensitive || isCheckRequest404)) {
             HookHandler.disableBodyXssHook();
+            if(isCheckRequest404){
+                checkResponseStatus404();
+            }
+
             if (buffer != null && length > 0) {
                 HashMap<String, Object> params = new HashMap<String, Object>();
                 try {

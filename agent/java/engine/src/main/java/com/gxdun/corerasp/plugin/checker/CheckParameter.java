@@ -17,6 +17,7 @@
 package com.gxdun.corerasp.plugin.checker;
 
 import com.gxdun.corerasp.HookHandler;
+import com.gxdun.corerasp.plugin.checker.local.RequestPathScanChecker;
 import com.gxdun.corerasp.plugin.checker.local.SqlResultChecker;
 import com.gxdun.corerasp.plugin.checker.local.XssChecker;
 import com.gxdun.corerasp.plugin.checker.policy.LogChecker;
@@ -61,6 +62,8 @@ public class CheckParameter {
         LOADLIBRARY("loadLibrary", new V8AttackChecker(), 1 << 20,true),
         SSRF_REDIRECT("ssrfRedirect", new V8AttackChecker(), 1 << 21,true),
         RESPONSE("response", new V8AttackChecker(false), 1 << 23,true),
+
+
         LINK("link", new V8AttackChecker(), 1 << 24,true),
         XSS_SQL("xssSql", new V8AttackChecker(), 1 << 25,true),
         EVAL("eval", new V8AttackChecker(), 1 << 26,true),
@@ -68,6 +71,7 @@ public class CheckParameter {
         XSS_USERINPUT("xss_userinput", new XssChecker(), 1 << 16),
         SQL_SLOW_QUERY("sqlSlowQuery", new SqlResultChecker(false), 0),
 
+        REQUEST_PATH_SCAN("requestPathScan", new RequestPathScanChecker(true), 1 << 27),
 
         // 安全基线检测
         POLICY_LOG("log", new LogChecker(false), 1 << 22),

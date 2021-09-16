@@ -53,8 +53,12 @@ public class UndertowResponseBodyHook extends ServerResponseBodyHook {
     public static void getUndertowOutputBuffer(CharBuffer buffer) {
         boolean isCheckXss = isCheckXss();
         boolean isCheckSensitive = isCheckSensitive();
-        if (HookHandler.isEnableXssHook() && (isCheckXss || isCheckSensitive)) {
+        boolean isCheckRequest404 = isCheckRequest404();
+        if (HookHandler.isEnableXssHook() && (isCheckXss || isCheckSensitive||isCheckRequest404)) {
             HookHandler.disableBodyXssHook();
+            if(isCheckRequest404){
+                checkResponseStatus404();
+            }
             if (buffer != null) {
                 HashMap<String, Object> params = new HashMap<String, Object>();
                 try {
@@ -78,8 +82,12 @@ public class UndertowResponseBodyHook extends ServerResponseBodyHook {
     public static void getUndertowOutputBuffer(String buffer, int off, int len) {
         boolean isCheckXss = isCheckXss();
         boolean isCheckSensitive = isCheckSensitive();
-        if (HookHandler.isEnableXssHook() && (isCheckXss || isCheckSensitive)) {
+        boolean isCheckRequest404 = isCheckRequest404();
+        if (HookHandler.isEnableXssHook() && (isCheckXss || isCheckSensitive||isCheckRequest404)) {
             HookHandler.disableBodyXssHook();
+            if(isCheckRequest404){
+                checkResponseStatus404();
+            }
             if (buffer != null) {
                 HashMap<String, Object> params = new HashMap<String, Object>();
                 params.put("content", buffer);
@@ -91,6 +99,7 @@ public class UndertowResponseBodyHook extends ServerResponseBodyHook {
                     checkBody(params, isCheckXss, isCheckSensitive);
                 }
             }
+
         }
     }
 

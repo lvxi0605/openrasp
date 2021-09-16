@@ -51,8 +51,12 @@ public class WeblogicResponseBodyHook extends ServerResponseBodyHook {
     public static void getWeblogicOutputBuffer(CharBuffer buffer) {
         boolean isCheckXss = isCheckXss();
         boolean isCheckSensitive = isCheckSensitive();
-        if (HookHandler.isEnableXssHook() && (isCheckXss || isCheckSensitive)) {
+        boolean isCheckRequest404 = isCheckRequest404();
+        if (HookHandler.isEnableXssHook() && (isCheckXss || isCheckSensitive||isCheckRequest404)) {
             HookHandler.disableBodyXssHook();
+            if(isCheckRequest404){
+                checkResponseStatus404();
+            }
             HashMap<String, Object> params = new HashMap<String, Object>();
             try {
                 if (buffer != null) {

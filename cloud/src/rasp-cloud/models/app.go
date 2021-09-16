@@ -127,7 +127,8 @@ var (
 	DefaultGeneralConfig = map[string]interface{}{
 		"clientip.header":    "ClientIP",
 		"block.status_code":  302,
-		"block.redirect_url": "https://rasp.baidu.com/blocked/?request_id=%request_id%",
+		//"block.redirect_url": "https://rasp.baidu.com/blocked/?request_id=%request_id%",
+		"block.redirect_url": "",
 		"block.content_xml": "<?xml version=\"1.0\"?><doc><error>true</error><reason>Request blocked by CoreRASP</reason><request_id>%request_id%</request_id></doc>",
 		/*
 		"block.content_html": "</script><script>" +

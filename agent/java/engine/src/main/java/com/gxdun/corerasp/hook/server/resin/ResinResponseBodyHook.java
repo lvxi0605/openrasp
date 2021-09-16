@@ -52,8 +52,12 @@ public class ResinResponseBodyHook extends ServerResponseBodyHook {
     public static void getResinOutputBuffer(char[] buffer, int len, boolean isOutputStreamOnly) {
         boolean isCheckXss = isCheckXss();
         boolean isCheckSensitive = isCheckSensitive();
-        if (HookHandler.isEnableXssHook() && (isCheckXss || isCheckSensitive)) {
+        boolean isCheckRequest404 = isCheckRequest404();
+        if (HookHandler.isEnableXssHook() && (isCheckXss || isCheckSensitive||isCheckRequest404)) {
             HookHandler.disableBodyXssHook();
+            if(isCheckRequest404){
+                checkResponseStatus404();
+            }
             if (len > 0 && !isOutputStreamOnly) {
                 HashMap<String, Object> params = new HashMap<String, Object>();
                 try {
