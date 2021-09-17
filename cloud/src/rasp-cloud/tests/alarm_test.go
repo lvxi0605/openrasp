@@ -1,27 +1,27 @@
 package test
 
 import (
-	_ "rasp-cloud/tests/start"
-	"testing"
-	. "github.com/smartystreets/goconvey/convey"
-	"rasp-cloud/models"
-	"rasp-cloud/tests/start"
-	"time"
-	"github.com/bouk/monkey"
-	"reflect"
+	"crypto/tls"
+	"errors"
 	"github.com/astaxie/beego/httplib"
+	"github.com/bouk/monkey"
+	. "github.com/smartystreets/goconvey/convey"
+	"html/template"
+	"io"
+	"net"
 	"net/http"
 	"net/smtp"
-	"crypto/tls"
-	"net"
-	"path/filepath"
-	"rasp-cloud/tools"
-	"io"
-	"rasp-cloud/models/logs"
-	"errors"
-	"rasp-cloud/mongo"
 	"os"
-	"html/template"
+	"path/filepath"
+	"rasp-cloud/models"
+	"rasp-cloud/models/logs"
+	"rasp-cloud/mongo"
+	"rasp-cloud/tests/start"
+	_ "rasp-cloud/tests/start"
+	"rasp-cloud/tools"
+	"reflect"
+	"testing"
+	"time"
 )
 
 type writerCloser struct {
@@ -44,13 +44,13 @@ func TestAttackAlarmPush(t *testing.T) {
 			UserName:   "test",
 			Password:   "test",
 			Subject:    "test",
-			RecvAddr:   []string{"test@openrasp.com"},
+			RecvAddr:   []string{"test@corerasp.com"},
 			TlsEnable:  false,
 		}
 
 		start.TestApp.HttpAlarmConf = models.HttpAlarmConf{
 			Enable:   true,
-			RecvAddr: []string{"http://openrasp.com/alarm"},
+			RecvAddr: []string{"http://corerasp.com/alarm"},
 		}
 
 		start.TestApp.DingAlarmConf = models.DingAlarmConf{
@@ -63,7 +63,7 @@ func TestAttackAlarmPush(t *testing.T) {
 		}
 
 		start.TestApp.GeneralAlarmConf = models.GeneralAlarmConf{
-			AlarmCheckInterval:     120,
+			AlarmCheckInterval: 120,
 		}
 
 		alarms := []map[string]interface{}{
@@ -173,7 +173,7 @@ func TestAttackAlarmPush(t *testing.T) {
 			start.TestApp.EmailAlarmConf.Password = ""
 			err := models.PushEmailAttackAlarm(start.TestApp, 1, alarms, false)
 			So(err, ShouldEqual, nil)
-			start.TestApp.EmailAlarmConf.Subject = "openrasp"
+			start.TestApp.EmailAlarmConf.Subject = "corerasp"
 		})
 
 		Convey("when tls dialog has errors", func() {

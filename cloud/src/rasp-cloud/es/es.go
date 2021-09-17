@@ -184,7 +184,7 @@ func BulkInsertAlarm(docType string, docs []map[string]interface{}) (err error) 
 			if docType == "policy-alarm" || docType == "error-alarm" || docType == "attack-alarm" ||
 				docType == "crash-alarm" {
 				bulkService.Add(elastic.NewBulkUpdateRequest().
-					Index("real-openrasp-" + docType + "-" + appId).
+					Index("real-corerasp-" + docType + "-" + appId).
 					Type(docType).
 					Id(fmt.Sprint(doc["upsert_id"])).
 					DocAsUpsert(true).
@@ -192,7 +192,7 @@ func BulkInsertAlarm(docType string, docs []map[string]interface{}) (err error) 
 			} else {
 				if appId, ok := doc["app_id"].(string); ok {
 					bulkService.Add(elastic.NewBulkIndexRequest().
-						Index("real-openrasp-" + docType + "-" + appId).
+						Index("real-corerasp-" + docType + "-" + appId).
 						Type(docType).
 						OpType("index").
 						Doc(doc))

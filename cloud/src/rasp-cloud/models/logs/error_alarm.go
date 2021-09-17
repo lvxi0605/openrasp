@@ -1,19 +1,19 @@
 package logs
 
 import (
+	"crypto/md5"
+	"fmt"
 	"github.com/astaxie/beego"
 	"rasp-cloud/conf"
-	"fmt"
-	"crypto/md5"
 )
 
 var (
 	ErrorAlarmInfo = AlarmLogInfo{
 		EsType:       "error-alarm",
-		EsIndex:      "openrasp-error-alarm",
-		EsAliasIndex: "real-openrasp-error-alarm",
+		EsIndex:      "corerasp-error-alarm",
+		EsAliasIndex: "real-corerasp-error-alarm",
 		AlarmBuffer:  make(chan map[string]interface{}, conf.AppConfig.AlarmBufferSize),
-		FileLogger:   initAlarmFileLogger("openrasp-logs/error-alarm", "error.log"),
+		FileLogger:   initAlarmFileLogger("corerasp-logs/error-alarm", "error.log"),
 	}
 )
 

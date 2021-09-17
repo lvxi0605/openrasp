@@ -18,8 +18,8 @@ type ReportData struct {
 }
 
 var (
-	ReportIndexName      = "openrasp-report-data"
-	AliasReportIndexName = "real-openrasp-report-data"
+	ReportIndexName      = "corerasp-report-data"
+	AliasReportIndexName = "real-corerasp-report-data"
 	reportType           = "report-data"
 )
 

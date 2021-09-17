@@ -15,8 +15,8 @@
 package conf
 
 import (
-	"rasp-cloud/tools"
 	"github.com/astaxie/beego"
+	"rasp-cloud/tools"
 	"strings"
 )
 
@@ -25,9 +25,9 @@ const (
 	StartTypeAgent      = "agent"
 	StartTypeReset      = "reset"
 	StartTypeDefault    = "default"
-	RestartOperation 	= "restart"
-	StatusOperation 	= "status"
-	StopOperation 		= "stop"
+	RestartOperation    = "restart"
+	StatusOperation     = "status"
+	StopOperation       = "stop"
 )
 
 type RaspAppConfig struct {
@@ -80,7 +80,7 @@ func InitConfig(startFlag *Flag) {
 	path, err := tools.GetCurrentPath()
 	if err != nil {
 		beego.Warn(err)
-		path = "/home/openrasp/"
+		path = "/home/corerasp/"
 	}
 	AppConfig.Flag = startFlag
 	AppConfig.EsAddr = initArrayConfig(strings.Split(beego.AppConfig.String("EsAddr"), ","))
@@ -94,7 +94,7 @@ func InitConfig(startFlag *Flag) {
 	AppConfig.KafkaTopic = beego.AppConfig.DefaultString("KafkaTopic", "")
 	AppConfig.MongoDBAddr = initArrayConfig(strings.Split(beego.AppConfig.String("MongoDBAddr"), ","))
 	AppConfig.MongoDBPoolLimit = beego.AppConfig.DefaultInt("MongoDBPoolLimit", 1024)
-	AppConfig.MongoDBName = beego.AppConfig.DefaultString("MongoDBName", "openrasp")
+	AppConfig.MongoDBName = beego.AppConfig.DefaultString("MongoDBName", "corerasp")
 	AppConfig.MongoDBUser = beego.AppConfig.DefaultString("MongoDBUser", "")
 	AppConfig.MongoDBPwd = beego.AppConfig.DefaultString("MongoDBPwd", "")
 	AppConfig.MaxPlugins = beego.AppConfig.DefaultInt("MaxPlugins", 30)
@@ -109,7 +109,7 @@ func InitConfig(startFlag *Flag) {
 	AppConfig.LogMaxSize = beego.AppConfig.DefaultInt64("LogMaxSize", 104857600)
 	AppConfig.LogMaxDays = beego.AppConfig.DefaultInt("LogMaxDays", 10)
 	AppConfig.DebugModeEnable = beego.AppConfig.DefaultBool("DebugModeEnable", false)
-	AppConfig.LogPath = beego.AppConfig.DefaultString("LogPath", path + "logs")
+	AppConfig.LogPath = beego.AppConfig.DefaultString("LogPath", path+"logs")
 	AppConfig.OffLineInterval = beego.AppConfig.DefaultInt64("OffLineInterval", 180)
 	ValidRaspConf(AppConfig)
 }

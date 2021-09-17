@@ -363,7 +363,7 @@ func RegisterCallback(url string, token string, rasp *Rasp) error {
 	if err != nil {
 		return err
 	}
-	response, err := request.Header("openrasp-token", token).
+	response, err := request.Header("corerasp-token", token).
 		SetTimeout(10*time.Second, 10*time.Second).
 		Response()
 	if err != nil {

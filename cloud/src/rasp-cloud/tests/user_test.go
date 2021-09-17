@@ -1,24 +1,24 @@
 package test
 
 import (
-	"testing"
-	. "github.com/smartystreets/goconvey/convey"
-	"rasp-cloud/tests/inits"
-	_ "rasp-cloud/tests/start"
-	"rasp-cloud/models"
+	"github.com/astaxie/beego/context"
 	"github.com/bouk/monkey"
 	"github.com/pkg/errors"
+	. "github.com/smartystreets/goconvey/convey"
 	"golang.org/x/crypto/bcrypt"
-	"github.com/astaxie/beego/context"
-	"reflect"
+	"rasp-cloud/models"
 	"rasp-cloud/mongo"
+	"rasp-cloud/tests/inits"
+	_ "rasp-cloud/tests/start"
+	"reflect"
+	"testing"
 )
 
 func TestUserLogin(t *testing.T) {
 	Convey("Subject: Test Logout Api\n", t, func() {
 		Convey("when the param is valid", func() {
 			r := inits.GetResponse("POST", "/v1/user/login", inits.GetJson(map[string]interface{}{
-				"username": "openrasp",
+				"username": "corerasp",
 				"password": "admin@123",
 			}))
 			So(r.Status, ShouldEqual, 0)
@@ -29,7 +29,7 @@ func TestUserLogin(t *testing.T) {
 				return errors.New("")
 			})
 			r := inits.GetResponse("POST", "/v1/user/login", inits.GetJson(map[string]interface{}{
-				"username": "openrasp",
+				"username": "corerasp",
 				"password": "admin@123",
 			}))
 			So(r.Status, ShouldBeGreaterThan, 0)
@@ -111,7 +111,7 @@ func TestUserUpdate(t *testing.T) {
 		})
 
 		Convey("when mongo has errors", func() {
-			monkey.Patch(models.RemoveAllCookie, func() (error) {
+			monkey.Patch(models.RemoveAllCookie, func() error {
 				return errors.New("")
 			})
 			defer monkey.Unpatch(models.RemoveAllCookie)
@@ -148,7 +148,7 @@ func TestUserUpdate(t *testing.T) {
 			})
 			_, err = models.GetLoginUserName()
 			So(err, ShouldNotEqual, nil)
-			_, err = models.VerifyUser("openrasp", "admin@123")
+			_, err = models.VerifyUser("corerasp", "admin@123")
 			So(err, ShouldNotEqual, nil)
 			err = models.UpdatePassword("admin@123", "admin@123")
 			So(err, ShouldNotEqual, nil)
@@ -162,7 +162,7 @@ func TestUserUpdate(t *testing.T) {
 	})
 }
 
-func TestCheckDefault(t *testing.T)  {
+func TestCheckDefault(t *testing.T) {
 	Convey("Subject: Test Check Default Api\n", t, func() {
 		Convey("when the param is valid", func() {
 			r := inits.GetResponse("POST", "/v1/user/default", inits.GetJson(map[string]interface{}{}))

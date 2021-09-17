@@ -32,7 +32,7 @@ var (
 	UpdateMappingConfig map[string]interface{}
 	StartBeego          = true
 	Version             = "1.3.6"
-	LogPath             = beego.AppConfig.DefaultString("LogPath", "/home/openrasp/logs")
+	LogPath             = beego.AppConfig.DefaultString("LogPath", "/home/corerasp/logs")
 	LogApiPath          = LogPath + "/api"
 	PidFileName         = LogPath + "/pid.file"
 	OldPid              = ""

@@ -22,10 +22,10 @@ import (
 var (
 	AttackAlarmInfo = AlarmLogInfo{
 		EsType:       "attack-alarm",
-		EsIndex:      "openrasp-attack-alarm",
-		EsAliasIndex: "real-openrasp-attack-alarm",
+		EsIndex:      "corerasp-attack-alarm",
+		EsAliasIndex: "real-corerasp-attack-alarm",
 		AlarmBuffer:  make(chan map[string]interface{}, conf.AppConfig.AlarmBufferSize),
-		FileLogger:   initAlarmFileLogger("openrasp-logs/attack-alarm", "attack.log"),
+		FileLogger:   initAlarmFileLogger("corerasp-logs/attack-alarm", "attack.log"),
 	}
 	geoIpDbPath string
 	geoIpDb     *geoip2.Reader
@@ -50,15 +50,15 @@ var (
 		"deserialization":            "Transformer 反序列化",
 		"xss_echo":                   "Echo XSS 跨站脚本攻击",
 		"xss_userinput":              "BODY XSS 跨站脚本攻击",
-		"xssSql":					  "XSS SQL数据库存储攻击",
+		"xssSql":                     "XSS SQL数据库存储攻击",
 		"webshell_callable":          "WebShell - 变形后门",
 		"webshell_eval":              "WebShell - 中国菜刀",
 		"webshell_command":           "WebShell - 命令执行",
 		"webshell_file_put_contents": "WebShell - 后门上传",
 		"webshell_ld_preload":        "WebShell - LD_PRELOAD 后门",
 		"response":                   "HTTP 响应采样检测",
-		"request": 					  "请求开始",
-		"requestPathScan":             "服务器路径扫描",
+		"request":                    "请求开始",
+		"requestPathScan":            "服务器路径扫描",
 		"link":                       "文件链接",
 	}
 

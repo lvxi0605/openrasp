@@ -105,7 +105,7 @@ func TestPostLog(t *testing.T) {
           },
           "@timestamp" : "2018-11-21T15:26:05.057Z",
           "stack_trace" : "com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:299)\ncom.mchange.v2.c3p0.DriverManagerDataSource.getConnection(DriverManagerDataSource.java:134)\ncom.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:182)\ncom.mchange.v2.c3p0.WrapperConnectionPoolDataSource.getPooledConnection(WrapperConnectionPoolDataSource.java:171)\ncom.mchange.v2.c3p0.impl.C3P0PooledConnectionPool$1PooledConnectionResourcePoolManager.acquireResource(C3P0PooledConnectionPool.java:137)\ncom.mchange.v2.resourcepool.BasicResourcePool.doAcquire(BasicResourcePool.java:1014)\ncom.mchange.v2.resourcepool.BasicResourcePool.access$800(BasicResourcePool.java:32)\ncom.mchange.v2.resourcepool.BasicResourcePool$AcquireTask.run(BasicResourcePool.java:1810)\ncom.mchange.v2.async.ThreadPoolAsynchronousRunner$PoolThread.run(ThreadPoolAsynchronousRunner.java:547)\n",
-          "path" : "/home/work/openrasp-server/openrasp-logs/policy-alarm/policy.log"}]`)
+          "path" : "/home/work/corerasp-server/corerasp-logs/policy-alarm/policy.log"}]`)
 			So(r.Status, ShouldEqual, 0)
 		})
 
@@ -114,13 +114,13 @@ func TestPostLog(t *testing.T) {
 			{ "app_id" : "`+start.TestApp.Id+`",
           "@version" : "1",
           "rasp_id" : "68e21b7df62b96bbf327db5b51530df1",
-          "stack_trace" : "java.net.URL.<init>(URL.java:600)\njava.net.URL.<init>(URL.java:490)\njava.net.URL.<init>(URL.java:439)\ncom.baidu.openrasp.messaging.LogConfig.syslogManager(LogConfig.java:52)\ncom.baidu.openrasp.cloud.KeepAlive.handleResponse(KeepAlive.java:112)\ncom.baidu.openrasp.cloud.KeepAlive.access$000(KeepAlive.java:36)\ncom.baidu.openrasp.cloud.KeepAlive$KeepAliveThread.run(KeepAlive.java:52)\njava.lang.Thread.run(Thread.java:748)\n",
+          "stack_trace" : "java.net.URL.<init>(URL.java:600)\njava.net.URL.<init>(URL.java:490)\njava.net.URL.<init>(URL.java:439)\ncom.gxdun.corerasp.messaging.LogConfig.syslogManager(LogConfig.java:52)\ncom.gxdun.corerasp.cloud.KeepAlive.handleResponse(KeepAlive.java:112)\ncom.gxdun.corerasp.cloud.KeepAlive.access$000(KeepAlive.java:36)\ncom.gxdun.corerasp.cloud.KeepAlive$KeepAliveThread.run(KeepAlive.java:52)\njava.lang.Thread.run(Thread.java:748)\n",
           "pid" : 7672,
           "message" : "syslog url: tcp://172.24.180.174:8848 parsed error",
           "event_time" : "1551882976000",
           "host" : "example.com",
           "error_code" : 20004,
-          "path" : "/home/work/openrasp-server-agent/openrasp-logs/error-alarm/error.log",
+          "path" : "/home/work/corerasp-server-agent/corerasp-logs/error-alarm/error.log",
           "type" : "error-alarm",
           "server_hostname" : "my-computer",
           "level" : "WARN",

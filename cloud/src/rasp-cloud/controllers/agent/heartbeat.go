@@ -55,7 +55,7 @@ func (o *HeartbeatController) Post() {
 	}
 	pluginMd5 := heartbeat.PluginMd5
 	configTime := heartbeat.ConfigTime
-	appId := o.Ctx.Input.Header("X-OpenRASP-AppID")
+	appId := o.Ctx.Input.Header("X-CoreRASP-AppID")
 	app, err := models.GetAppById(appId)
 	if err != nil || app == nil {
 		o.ServeError(http.StatusBadRequest, "cannot get the app", err)

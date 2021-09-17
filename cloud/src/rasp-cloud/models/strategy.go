@@ -68,7 +68,7 @@ func AddStratety(strategy *Strategy) (result *Strategy, err error) {
 }
 
 func generateStrategyId(Name string, AppId string) string {
-	random := "openrasp_strategy" + Name + "_" + AppId + strconv.FormatInt(time.Now().UnixNano(), 10) +
+	random := "corerasp_strategy" + Name + "_" + AppId + strconv.FormatInt(time.Now().UnixNano(), 10) +
 		strconv.Itoa(rand.Intn(10000))
 	return fmt.Sprintf("%x", sha1.Sum([]byte(random)))
 }

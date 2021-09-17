@@ -13,10 +13,10 @@ import (
 var (
 	PolicyAlarmInfo = AlarmLogInfo{
 		EsType:       "policy-alarm",
-		EsIndex:      "openrasp-policy-alarm",
-		EsAliasIndex: "real-openrasp-policy-alarm",
+		EsIndex:      "corerasp-policy-alarm",
+		EsAliasIndex: "real-corerasp-policy-alarm",
 		AlarmBuffer:  make(chan map[string]interface{}, conf.AppConfig.AlarmBufferSize),
-		FileLogger:   initAlarmFileLogger("openrasp-logs/policy-alarm", "policy.log"),
+		FileLogger:   initAlarmFileLogger("corerasp-logs/policy-alarm", "policy.log"),
 	}
 )
 

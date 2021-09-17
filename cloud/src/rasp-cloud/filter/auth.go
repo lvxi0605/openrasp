@@ -15,7 +15,7 @@ func init() {
 	beego.InsertFilter("*", beego.BeforeRouter, cors.Allow(&cors.Options{
 		AllowAllOrigins:  true,
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Authorization", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Content-Type", "X-OpenRASP-Token"},
+		AllowHeaders:     []string{"Origin", "Authorization", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Content-Type", "X-CoreRASP-Token"},
 		ExposeHeaders:    []string{"Content-Length", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Content-Type"},
 		AllowCredentials: true,
 	}))
@@ -28,8 +28,8 @@ func init() {
 }
 
 func authAgent(ctx *context.Context) {
-	appId := ctx.Input.Header("X-OpenRASP-AppID")
-	appSecret := ctx.Input.Header("X-OpenRASP-AppSecret")
+	appId := ctx.Input.Header("X-CoreRASP-AppID")
+	appSecret := ctx.Input.Header("X-CoreRASP-AppSecret")
 	app, err := models.GetAppById(appId)
 	if appId == "" || err != nil || app == nil || appSecret != app.Secret {
 		ctx.Output.JSON(map[string]interface{}{

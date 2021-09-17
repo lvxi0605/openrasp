@@ -18,9 +18,9 @@
 # test file
 /plugin/
 /logs/
-/openrasp-logs/
+/corerasp-logs/
 /tests/logs/
-/tests/openrasp-logs/
+/tests/corerasp-logs/
 /dist/
 rasp-cloud*
 lastupdate.tmp

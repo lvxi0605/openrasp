@@ -32,7 +32,7 @@ func (o *UserController) Login() {
 	if err != nil {
 		o.ServeError(http.StatusBadRequest, "login failed", err)
 	}
-	cookie := fmt.Sprintf("%x", md5.Sum([]byte(strconv.Itoa(rand.Intn(10000))+logUser+"openrasp"+
+	cookie := fmt.Sprintf("%x", md5.Sum([]byte(strconv.Itoa(rand.Intn(10000))+logUser+"corerasp"+
 		strconv.FormatInt(time.Now().UnixNano(), 10))))
 	err = models.NewCookie(cookie, user.Id)
 	if err != nil {

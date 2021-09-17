@@ -139,7 +139,7 @@ func (o *WebsocketController) Get() {
 	if err != nil {
 		beego.Error("upgrade err:", err)
 	}
-	appId := o.Ctx.Request.Header["X-Openrasp-Appid"][0]
+	appId := o.Ctx.Request.Header["X-CoreRASP-Appid"][0]
 	wsConn := &wsConnection{
 		wsSocket:  wsSocket,
 		inChan:    make(chan *models.WsMessage, 1000),
@@ -270,7 +270,7 @@ func (wsConn *wsConnection) procLoop(appId string) {
 		for {
 			select {
 			case <-time.After(4 * time.Second):
-				if err := wsConn.wsWrite(websocket.TextMessage, []byte("heartbeat from OpenRASP cloud")); err != nil {
+				if err := wsConn.wsWrite(websocket.TextMessage, []byte("heartbeat from CoreRASP cloud")); err != nil {
 					beego.Error("heartbeat error:", err)
 					goto error
 				}

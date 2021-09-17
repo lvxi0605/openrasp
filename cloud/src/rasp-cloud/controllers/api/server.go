@@ -78,7 +78,7 @@ func (o *ServerController) ClearLogs() {
 	}
 
 	for _, docType := range docTypeList {
-		index := "real-openrasp-" + docType + "-" + param.AppId
+		index := "real-corerasp-" + docType + "-" + param.AppId
 		err := es.DeleteLogs(index)
 		if err != nil {
 			o.ServeError(http.StatusBadRequest, err.Error())

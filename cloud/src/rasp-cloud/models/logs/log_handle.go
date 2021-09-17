@@ -236,7 +236,7 @@ func AddLogWithFile(alarmType string, alarm map[string]interface{}) error {
 
 func AddLogWithKafka(alarmType string, log map[string]interface{}) error {
 	if appId, ok := log["app_id"].(string); ok {
-		kafkaIndex := "real-openrasp-" + alarmType + "-" + appId
+		kafkaIndex := "real-corerasp-" + alarmType + "-" + appId
 		err := kafka.SendMessage(appId, kafkaIndex, log)
 		if err != nil {
 			return err
@@ -246,7 +246,7 @@ func AddLogWithKafka(alarmType string, log map[string]interface{}) error {
 }
 
 func AddLogsWithKafka(alarmType string, appId string, logs []interface{}) error {
-	kafkaIndex := "real-openrasp-" + alarmType + "-" + appId
+	kafkaIndex := "real-corerasp-" + alarmType + "-" + appId
 	err := kafka.SendMessages(appId, kafkaIndex, logs)
 	if err != nil {
 		return err

@@ -21,7 +21,7 @@ type RaspController struct {
 // @router / [post]
 func (o *RaspController) Post() {
 	var rasp = &models.Rasp{}
-	rasp.AppId = o.Ctx.Input.Header("X-OpenRASP-AppID")
+	rasp.AppId = o.Ctx.Input.Header("X-CoreRASP-AppID")
 	o.UnmarshalJson(rasp)
 	if rasp.Id == "" {
 		o.ServeError(http.StatusBadRequest, "rasp id cannot be empty")

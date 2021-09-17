@@ -20,7 +20,7 @@ import (
 
 const (
 	userCollectionName = "user"
-	defaultUserName    = "openrasp"
+	defaultUserName    = "corerasp"
 	defaultPassword    = "admin@123"
 )
 

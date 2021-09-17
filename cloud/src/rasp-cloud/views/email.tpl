@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>[OpenRASP] 邮件报警</title>
+        <title>[CoreRASP] 邮件报警</title>
         <meta name="viewport" content="width=device-width" />
        <style type="text/css">
             @media only screen and (max-width: 550px), screen and (max-device-width: 550px) {
@@ -74,7 +74,7 @@
             </tr>
             <tr>
                 <td align="center" bgcolor="#dddddd" style="padding: 15px 10px 15px 10px; color: #555555; font-family: Arial, sans-serif; font-size: 12px; line-height: 18px;">
-                    Powered by <a href="https://rasp.baidu.com">OpenRASP</a>
+                    Powered by CoreRASP
                 </td>
             </tr>
         </table>

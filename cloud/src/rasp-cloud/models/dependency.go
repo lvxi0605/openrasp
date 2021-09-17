@@ -44,8 +44,8 @@ type SearchDependencyParam struct {
 }
 
 var (
-	DependencyIndexName      = "openrasp-dependency-data"
-	AliasDependencyIndexName = "real-openrasp-dependency-data"
+	DependencyIndexName      = "corerasp-dependency-data"
+	AliasDependencyIndexName = "real-corerasp-dependency-data"
 	dependencyType           = "dependency"
 )
 

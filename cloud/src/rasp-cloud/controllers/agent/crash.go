@@ -37,7 +37,7 @@ type crashTemplateParam struct {
 
 // @router /report [post]
 func (o *CrashController) Post() {
-	appId := o.Ctx.Input.Header("X-OpenRASP-AppID")
+	appId := o.Ctx.Input.Header("X-CoreRASP-AppID")
 	app, err := models.GetAppById(appId)
 	//if !app.EmailAlarmConf.Enable {
 	//	o.ServeWithEmptyData()
@@ -158,11 +158,11 @@ func sendCrashEmailAlarm(crashLogContent []byte, fileName string, app *models.Ap
 			if err == nil {
 				emailAddr.Name = hostName
 			} else {
-				emailAddr.Name = "OpenRASP"
+				emailAddr.Name = "CoreRASP"
 			}
 		}
-		subject := "OpenRASP agent crashed on " + rasp.HostName
-		boundary := "OpenRASPCrashLogData"
+		subject := "CoreRASP agent crashed on " + rasp.HostName
+		boundary := "CoreRASPCrashLogData"
 		head := map[string]string{
 			"From":              emailAddr.String(),
 			"To":                strings.Join(emailConf.RecvAddr, ","),
