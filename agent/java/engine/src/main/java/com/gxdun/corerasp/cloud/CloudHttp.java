@@ -86,9 +86,9 @@ public class CloudHttp implements Request {
             HttpURLConnection httpUrlConnection = (HttpURLConnection) conn;
             httpUrlConnection.setRequestProperty("Content-Type", "application/json");
             String appId = Config.getConfig().getCloudAppId();
-            httpUrlConnection.setRequestProperty("X-OpenRASP-AppID", appId);
+            httpUrlConnection.setRequestProperty("X-CoreRASP-AppID", appId);
             String appSecret = Config.getConfig().getCloudAppSecret();
-            httpUrlConnection.setRequestProperty("X-OpenRASP-AppSecret", appSecret);
+            httpUrlConnection.setRequestProperty("X-CoreRASP-AppSecret", appSecret);
             httpUrlConnection.setRequestProperty("Accept-Encoding", "gzip");
             httpUrlConnection.setConnectTimeout(DEFAULT_CONNECTION_TIMEOUT);
             httpUrlConnection.setReadTimeout(DEFAULT_READ_TIMEOUT);

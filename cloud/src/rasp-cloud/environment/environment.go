@@ -115,13 +115,13 @@ func HandleOperation(operation string) {
 }
 
 func restart() {
-	pid, err := strconv.Atoi(OldPid)
+	_, err := strconv.Atoi(OldPid)
 	if CheckPIDAlreadyRunning(PidFileName) {
 		log.Println("Restarting........")
 		if err != nil {
 			tools.Panic(tools.ErrCodeGetPidFailed, "Failed to get pid", err)
 		}
-		err = syscall.Kill(pid, syscall.SIGHUP)
+		//err = syscall.Kill(pid, syscall.SIGHUP)
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -150,13 +150,13 @@ func restart() {
 }
 
 func stop() {
-	pid, err := strconv.Atoi(OldPid)
+	_, err := strconv.Atoi(OldPid)
 	if CheckPIDAlreadyRunning(PidFileName) {
 		log.Println("Stopping........")
 		if err != nil {
 			tools.Panic(tools.ErrCodeGetPidFailed, "Failed to get pid", err)
 		} else {
-			err = syscall.Kill(pid, syscall.SIGQUIT)
+			//err = syscall.Kill(pid, syscall.SIGQUIT)
 			if err != nil {
 				log.Fatalln(err)
 			}
