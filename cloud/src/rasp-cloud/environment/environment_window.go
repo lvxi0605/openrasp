@@ -1,4 +1,4 @@
-// +build !windows
+// +build windows
 //Copyright 2021-2021 corecna Inc.
 
 package environment
@@ -15,7 +15,6 @@ import (
 	"path/filepath"
 	"rasp-cloud/conf"
 	"rasp-cloud/tools"
-	"runtime"
 	"strconv"
 	"strings"
 	"syscall"
@@ -117,18 +116,18 @@ func HandleOperation(operation string) {
 }
 
 func restart() {
-	pid, err := strconv.Atoi(OldPid)
+	_, err := strconv.Atoi(OldPid)
 	if CheckPIDAlreadyRunning(PidFileName) {
 		log.Println("Restarting........")
 		if err != nil {
 			tools.Panic(tools.ErrCodeGetPidFailed, "Failed to get pid", err)
 		}
-		if runtime.GOOS == "linux" {
-			err = syscall.Kill(pid, syscall.SIGHUP)
-			if err != nil {
-				log.Fatalln(err)
-			}
+
+		// err = syscall.Kill(pid, syscall.SIGHUP)
+		if err != nil {
+			log.Fatalln(err)
 		}
+
 		restartCnt := 0
 		for {
 			exist := CheckPIDAlreadyRunning(PidFileName)
@@ -154,16 +153,16 @@ func restart() {
 }
 
 func stop() {
-	pid, err := strconv.Atoi(OldPid)
+	_, err := strconv.Atoi(OldPid)
 	if CheckPIDAlreadyRunning(PidFileName) {
 		log.Println("Stopping........")
 		if err != nil {
 			tools.Panic(tools.ErrCodeGetPidFailed, "Failed to get pid", err)
 		} else {
-			err = syscall.Kill(pid, syscall.SIGQUIT)
-			if err != nil {
-				log.Fatalln(err)
-			}
+			// err = syscall.Kill(pid, syscall.SIGQUIT)
+			// if err != nil {
+			// 	log.Fatalln(err)
+			// }
 			log.Println("Stop ok!")
 		}
 	} else {
