@@ -279,9 +279,9 @@ public enum ConfigItem {
     BLOCK_REDIRECT_URL(new ConfigSetter<String>("block.redirect_url") {
         @Override
         public synchronized void setValue(String blockUrl) {
-            if (StringUtils.isEmpty(blockUrl)) {
-                throw new ConfigLoadException(itemName + " can not be empty");
-            }
+//            if (StringUtils.isEmpty(blockUrl)) {
+//                throw new ConfigLoadException(itemName + " can not be empty");
+//            }
             Config.getConfig().blockUrl = blockUrl;
         }
 
