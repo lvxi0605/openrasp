@@ -56,10 +56,12 @@ public class TestController
 
 
 	@PostMapping("/upload")
-    public String SingleFileUpLoad(@RequestParam("myfile") MultipartFile file) 
-    {
+    public String SingleFileUpLoad(@RequestParam("myfile") MultipartFile file) throws IOException {
+		System.out.println(file.getClass().getName());
     	System.out.println(file.getName());
-        return "1";
+		//byte[] bytes = file.getBytes();
+		file.getInputStream();
+		return "1";
     }
     
 	public static void main(String[] args) {
