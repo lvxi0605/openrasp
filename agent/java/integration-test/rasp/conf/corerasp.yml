@@ -1,4 +1,4 @@
-debug.level: 1
+#debug.level: 1
 cloud.enable: true
 cloud.backend_url: http://127.0.0.1:8086/
 cloud.app_id: f8b775c8f028a01bfd1d45316ec4f3e4429faeda

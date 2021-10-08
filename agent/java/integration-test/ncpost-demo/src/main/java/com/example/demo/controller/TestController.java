@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.baomidou.mybatisplus.extension.api.R;
 import com.example.demo.biz.IDemoBiz;
+import com.example.demo.biz.impl.Test;
 import com.example.demo.entry.TestEntry;
 import com.mysql.jdbc.PreparedStatement;
 import javassist.ClassClassPath;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.ref.SoftReference;
 import java.util.UUID;
 
 @RestController
@@ -30,13 +32,7 @@ public class TestController
 	@ResponseBody
 	public Object hello(HttpServletResponse response)
 	{
-		try{
-			PrintWriter writer = response.getWriter();
-			writer.println("hhhh");
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		return demoBiz.sayHello();
 	}
 
@@ -63,32 +59,7 @@ public class TestController
 		file.getInputStream();
 		return "1";
     }
-    
-	public static void main(String[] args) {
-		try {
-		  
-			  ClassPool pool = ClassPool.getDefault();
-		        //获取一个ctClass对象
-		     CtClass ctClass = pool.makeClass("com.mysql.jdbc.PreparedStatement");
-		        
-		     CtMethod[] menths;
-			
-				menths = ctClass.getDeclaredMethods("executeInternal");
-			
-		for (CtMethod method : menths) 
-			{
-			CtClass[] params = method.getParameterTypes();
-			for (CtClass param : params) 
-			{ 
-				System.out.println(param);
-			}
-		  
-		 }
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+
     @PostMapping("/insert")
     @ResponseBody
     public R insert(@RequestBody TestEntry entry)

@@ -19,6 +19,7 @@ package com.gxdun.corerasp;
 import com.gxdun.corerasp.cloud.model.HookWhiteModel;
 import com.gxdun.corerasp.config.Config;
 import com.gxdun.corerasp.exceptions.SecurityException;
+import com.gxdun.corerasp.hook.sql.SQLPreparedStatementHook;
 import com.gxdun.corerasp.hook.xxe.XXEHook;
 import com.gxdun.corerasp.messaging.ErrorType;
 import com.gxdun.corerasp.messaging.LogTool;
@@ -226,6 +227,8 @@ public class HookHandler {
     public static void onServiceExit() {
         enableCurrThreadHook.set(false);
         requestCache.set(null);
+        dataThreadHook.set(null);
+        SQLPreparedStatementHook.sqlParamsData.remove();
     }
 
     /**
@@ -235,6 +238,8 @@ public class HookHandler {
     public static void onDubboExit() {
         enableCurrThreadHook.set(false);
         requestCache.set(null);
+        dataThreadHook.set(null);
+        SQLPreparedStatementHook.sqlParamsData.remove();
     }
 
     // 当前v8返回数据

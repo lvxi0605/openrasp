@@ -29,6 +29,7 @@ import com.gxdun.corerasp.plugin.checker.local.ConfigurableChecker;
 import com.gxdun.corerasp.plugin.info.AttackInfo;
 import com.gxdun.corerasp.plugin.info.EventInfo;
 import com.gxdun.corerasp.tool.CollectionUtil;
+import com.gxdun.corerasp.tool.ObjectUtil;
 import com.gxdun.corerasp.tool.annotation.HookAnnotation;
 import com.gxdun.corerasp.hook.model.SQLPreparedParam;
 import javassist.CannotCompileException;
@@ -50,7 +51,7 @@ public class SQLPreparedStatementHook extends AbstractSqlHook {
 
     private String className;
 
-    private static ThreadLocal<Map<PreparedStatement, Map<Integer, SQLPreparedParam>>> sqlParamsData = new ThreadLocal<Map<PreparedStatement, Map<Integer, SQLPreparedParam>>>();
+    public static ThreadLocal<WeakHashMap<PreparedStatement, Map<Integer, SQLPreparedParam>>> sqlParamsData = new ThreadLocal<WeakHashMap<PreparedStatement, Map<Integer, SQLPreparedParam>>>();
 
     @Override
     public boolean isClassMatched(String className) {
@@ -201,7 +202,7 @@ public class SQLPreparedStatementHook extends AbstractSqlHook {
 
     public static void checkSQLXSS(String server, PreparedStatement preparedStatement, String stmt) {
         if (stmt != null && !stmt.isEmpty() ) {
-            Map<Integer, SQLPreparedParam>  preparedStatementSqlParams = SQLPreparedStatementHook.getPreparedStatementSqlParams(preparedStatement);
+            Map<Integer, SQLPreparedParam>  preparedStatementSqlParams = SQLPreparedStatementHook.getAndRemovePreparedStatementSqlParams(preparedStatement);
             if(CollectionUtil.isEmpty(preparedStatementSqlParams)){
                 return;
             }
@@ -280,9 +281,9 @@ public class SQLPreparedStatementHook extends AbstractSqlHook {
         if(!SQLPreparedStatementHook.isChangeDbSQL(stmt)){
             return;
         }
-        Map<PreparedStatement,Map<Integer, SQLPreparedParam>> preparedStatementMap = sqlParamsData.get();
+        WeakHashMap<PreparedStatement,Map<Integer, SQLPreparedParam>> preparedStatementMap = sqlParamsData.get();
         if(preparedStatementMap==null){
-            preparedStatementMap = new HashMap<PreparedStatement,Map<Integer, SQLPreparedParam>>();
+            preparedStatementMap = new WeakHashMap<PreparedStatement,Map<Integer, SQLPreparedParam>>();
             sqlParamsData.set(preparedStatementMap);
         }
         Map<Integer, SQLPreparedParam> integerSQLPreparedParamMap = preparedStatementMap.get(preparedStatement);
@@ -296,15 +297,16 @@ public class SQLPreparedStatementHook extends AbstractSqlHook {
         sqlPreparedParam.setMethod(method);
         sqlPreparedParam.setValue(value);
         integerSQLPreparedParamMap.put(i,sqlPreparedParam);
+        //System.out.println("preparedStatementMap-size:"+preparedStatementMap.size());
     }
 
 
-    public static Map<Integer, SQLPreparedParam> getPreparedStatementSqlParams(PreparedStatement preparedStatement){
+    public static Map<Integer, SQLPreparedParam> getAndRemovePreparedStatementSqlParams(PreparedStatement preparedStatement){
         Map<PreparedStatement,Map<Integer, SQLPreparedParam>> preparedStatementMap = SQLPreparedStatementHook.sqlParamsData.get();
         if(preparedStatementMap==null){
             return null;
         }
-        return preparedStatementMap.get(preparedStatement);
+        return preparedStatementMap.remove(preparedStatement);
     }
 
 

@@ -24,13 +24,21 @@ public class DemoBizImpl extends ServiceImpl<DemoMapper,TestEntry> implements ID
 	@Override
 	public List<TestEntry> sayHello() 
 	{
-		try {
-			baseMapper.insert(UUID.randomUUID().toString(), "<script>alert(1);</script>");
-			return baseMapper.getList(); 
-		} catch (Exception e) {
-			return null;
-		}
-		
+		baseMapper.insert(UUID.randomUUID().toString(), "<script>alert(1);</script>");
+		new Thread(()->{
+
+			for (int i=0;i<100000;i++) {
+
+				try {
+					baseMapper.insert(UUID.randomUUID().toString(), "<script>alert(1);</script>");
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
+
+		return null;
 	}
 
 
