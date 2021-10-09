@@ -1011,7 +1011,7 @@ func PushDingAttackAlarm(app *App, total int64, alarms []map[string]interface{},
 			if len(panelUrl) == 0 {
 				panelUrl = "http://127.0.0.1"
 			}
-			dingText = "时间：" + time.Now().Format(time.RFC3339) + "， 来自 OpenRAS 的报警\n共有 " +
+			dingText = "时间：" + time.Now().Format(time.RFC3339) + "， 来自 Core Shield  的报警\n共有 " +
 				strconv.FormatInt(total, 10) + " 条报警信息来自 APP：" + app.Name + "，详细信息：" +
 				panelUrl + "/#/events/" + app.Id
 		}
