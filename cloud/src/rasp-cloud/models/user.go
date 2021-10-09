@@ -20,8 +20,8 @@ import (
 
 const (
 	userCollectionName = "user"
-	defaultUserName    = "corerasp"
-	defaultPassword    = "admin@123"
+	defaultUserName    = "coreshield"
+	defaultPassword    = "core@SHIELD@2021#"
 )
 
 type User struct {
