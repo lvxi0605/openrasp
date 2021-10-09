@@ -278,7 +278,7 @@ public class HookHandler {
     }
 
     private static void handleBlock(CheckParameter parameter) {
-        SecurityException securityException = new SecurityException("Request blocked by CoreRASP");
+        SecurityException securityException = new SecurityException("Request blocked by Core Shield");
         if (responseCache.get() != null) {
             responseCache.get().sendError(parameter);
         }

@@ -129,17 +129,17 @@ var (
 		"block.status_code": 302,
 		//"block.redirect_url": "https://rasp.baidu.com/blocked/?request_id=%request_id%",
 		"block.redirect_url": "",
-		"block.content_xml":  "<?xml version=\"1.0\"?><doc><error>true</error><reason>Request blocked by CoreRASP</reason><request_id>%request_id%</request_id></doc>",
+		"block.content_xml":  "<?xml version=\"1.0\"?><doc><error>true</error><reason>Request blocked by Core Shield</reason><request_id>%request_id%</request_id></doc>",
 		/*
 			"block.content_html": "</script><script>" +
 				"location.href=\"https://rasp.baidu.com/blocked2/?request_id=%request_id%\"</script>",
 		*/
-		"block.content_html":    "<html lang=\"zh\"><head><meta charset=\"utf-8\"/><title>400-Request blocked by CoreRASP</title><meta name=\"viewport\"content=\"width=device-width, initial-scale=1, maximum-scale=1\"/></head><body style=\"text-align: center;background:#E6A23C;\"><div style=\"margin-top: 25vh;\"><svg t=\"1631174645282\"class=\"icon\"viewBox=\"0 0 1024 1024\"version=\"1.1\"xmlns=\"http://www.w3.org/2000/svg\"p-id=\"10519\"width=\"100\"height=\"100\"><path d=\"M898.1 881.1h-772c-12.4 0-24-6.7-30.3-17.4-6.3-10.7-6.3-24.1-0.2-34.9l0.1-0.2 386-668.5c6.2-10.8 17.8-17.6 30.3-17.6s24.1 6.7 30.3 17.6l385.9 668.4c6.3 10.7 6.3 24.1 0.2 34.9-6.1 10.9-17.8 17.7-30.3 17.7z m-746.1-50h720L512 207.6 152 831.1z\"fill=\"#ff0000\"p-id=\"10520\"></path><path d=\"M511.4 427.3c-19.2 0-34.6 15.9-33.9 35.1l5.6 168.1c0.5 15.3 13.1 27.4 28.4 27.4 15.3 0 27.8-12.1 28.4-27.4l5.6-168.1c0.5-19.2-14.9-35.1-34.1-35.1zM511.4 708.1c-9.3-0.1-18.2 3.5-24.7 10.1-6.7 6.3-10.5 15.2-10.4 24.5 0 9.8 3.4 18 10.4 24.6 6.6 6.5 15.5 10.1 24.7 9.9 9.2 0.1 18.2-3.4 24.7-9.9 6.8-6.4 10.6-15.3 10.4-24.6 0.1-9.2-3.6-18.1-10.4-24.5-6.5-6.6-15.4-10.3-24.7-10.1z\"fill=\"#ff0000\"p-id=\"10521\"></path></svg><h2 style=\"color:#fff;\">400-Request blocked by CoreRASP</h2><div><span style=\"color:\t#303133;font-size: 1.2rem;\">&#24744;&#30340;&#35831;&#27714;&#21253;&#21547;&#24694;&#24847;&#34892;&#20026;&#65292;&#24050;&#34987;&#26381;&#21153;&#22120;&#25298;&#32477;&#12290;</span><div style=\"color:#F5F5DC;font-size:0.8rem;margin-top:10px;\">&#35831;&#27714;ID:%request_id%</div></div></div></body></html>",
-		"block.content_json":    `{"error":true,"reason": "Request blocked by CoreRASP","request_id": "%request_id%"}`,
+		"block.content_html":    "<html lang=\"zh\"><head><meta charset=\"utf-8\"/><title>400-Request blocked by Core Shield</title><meta name=\"viewport\"content=\"width=device-width, initial-scale=1, maximum-scale=1\"/></head><body style=\"text-align: center;background:#E6A23C;\"><div style=\"margin-top: 25vh;\"><svg t=\"1631174645282\"class=\"icon\"viewBox=\"0 0 1024 1024\"version=\"1.1\"xmlns=\"http://www.w3.org/2000/svg\"p-id=\"10519\"width=\"100\"height=\"100\"><path d=\"M898.1 881.1h-772c-12.4 0-24-6.7-30.3-17.4-6.3-10.7-6.3-24.1-0.2-34.9l0.1-0.2 386-668.5c6.2-10.8 17.8-17.6 30.3-17.6s24.1 6.7 30.3 17.6l385.9 668.4c6.3 10.7 6.3 24.1 0.2 34.9-6.1 10.9-17.8 17.7-30.3 17.7z m-746.1-50h720L512 207.6 152 831.1z\"fill=\"#ff0000\"p-id=\"10520\"></path><path d=\"M511.4 427.3c-19.2 0-34.6 15.9-33.9 35.1l5.6 168.1c0.5 15.3 13.1 27.4 28.4 27.4 15.3 0 27.8-12.1 28.4-27.4l5.6-168.1c0.5-19.2-14.9-35.1-34.1-35.1zM511.4 708.1c-9.3-0.1-18.2 3.5-24.7 10.1-6.7 6.3-10.5 15.2-10.4 24.5 0 9.8 3.4 18 10.4 24.6 6.6 6.5 15.5 10.1 24.7 9.9 9.2 0.1 18.2-3.4 24.7-9.9 6.8-6.4 10.6-15.3 10.4-24.6 0.1-9.2-3.6-18.1-10.4-24.5-6.5-6.6-15.4-10.3-24.7-10.1z\"fill=\"#ff0000\"p-id=\"10521\"></path></svg><h2 style=\"color:#fff;\">400-Request blocked by Core Shield</h2><div><span style=\"color:\t#303133;font-size: 1.2rem;\">&#24744;&#30340;&#35831;&#27714;&#21253;&#21547;&#24694;&#24847;&#34892;&#20026;&#65292;&#24050;&#34987;&#26381;&#21153;&#22120;&#25298;&#32477;&#12290;</span><div style=\"color:#F5F5DC;font-size:0.8rem;margin-top:10px;\">&#35831;&#27714;ID:%request_id%</div></div></div></body></html>",
+		"block.content_json":    `{"error":true,"reason": "Request blocked by Core Shield","request_id": "%request_id%"}`,
 		"plugin.timeout.millis": 100,
 		"body.maxbytes":         12288,
 		"inject.custom_headers": map[string]interface{}{
-			"X-Protected-By": "CoreRASP",
+			"X-Protected-By": "Core Shield",
 		},
 		"plugin.filter":             true,
 		"cpu.usage.enable":          false,
@@ -149,7 +149,7 @@ var (
 		"log.maxstack":              50,
 		"log.maxburst":              100,
 		"log.maxbackup":             30,
-		"syslog.tag":                "CoreRASP",
+		"syslog.tag":                "CORERASP",
 		"syslog.url":                "",
 		"syslog.facility":           1,
 		"syslog.enable":             false,
@@ -667,7 +667,7 @@ func UpdateAppConfig(version string) error {
 					}
 				}
 				app.GeneralConfig["inject.custom_headers"] = map[string]interface{}{
-					"X-Protected-By": "CoreRASP",
+					"X-Protected-By": "Core Shield",
 				}
 				_, err := UpdateGeneralConfig(appId, app.GeneralConfig)
 				if err != nil {
@@ -746,11 +746,11 @@ func PushEmailAttackAlarm(app *App, total int64, alarms []map[string]interface{}
 			if err == nil {
 				emailAddr.Name = hostName
 			} else {
-				emailAddr.Name = "CoreRASP"
+				emailAddr.Name = "Core Shield"
 			}
 		}
 		if emailConf.Subject == "" {
-			subject = "CoreRASP alarm"
+			subject = "Core Shield alarm"
 		} else {
 			subject = emailConf.Subject
 		}
@@ -1005,7 +1005,7 @@ func PushDingAttackAlarm(app *App, total int64, alarms []map[string]interface{},
 		body := make(map[string]interface{})
 		dingText := ""
 		if isTest {
-			dingText = "CoreRASP test message from app: " + app.Name + ", time: " + time.Now().Format(time.RFC3339)
+			dingText = "Core Shield test message from app: " + app.Name + ", time: " + time.Now().Format(time.RFC3339)
 		} else {
 			panelUrl, _ := getPanelServerUrl()
 			if len(panelUrl) == 0 {
