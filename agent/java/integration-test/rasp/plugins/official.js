@@ -614,7 +614,7 @@ var algorithmConfig = {
         name:   '算法1 - xss_sql拦截',
         action: 'block',
         algorithm: 'xssSql_save',
-        filter_regex: "(javascript)|(<\\s*\\r*\\n*script)|(script\\s*\\r*\\n*>)|(<\\s*\\r*\\n*iframe)|(<\\s*\\r*\\n*embed)|(<\\s*\\r*\\n*object)|(alert\\r*\\n*\\s*\\()|(prompt\\r*\\n*\\s*\\()|(confirm\\r*\\n*\\s*\\()|(addEventListener\\r*\\n*\\s*\\()|(expression\\r*\\n*\\s*\\()|(eval\\r*\\n*\\s*\\()|(onmouseover\\r*\\n*\\s*=)|(onclimbatree\\r*\\n*\\s*=)|(onhashchange\\r*\\n*\\s*=)|(onerror\\r*\\n*\\s*=)|(action\\r*\\n*\\s*=)|(formaction\\r*\\n*\\s*=)|(onload\\r*\\n*\\s*=)|(onstart\\r*\\n*\\s*=)|(onfocus\\r*\\n*\\s*=)|(oncut\\r*\\n*\\s*=)|(code\\r*\\n*\\s*=)|(location\\r*\\n*\\s*.)",
+        filter_regex: "(javascript)|(<\\s*\\r*\\n*script)|(script\\s*\\r*\\n*>)|(<\\s*\\r*\\n*iframe)|(<\\s*\\r*\\n*embed)|(<\\s*\\r*\\n*object)|(alert\\r*\\n*\\s*\\()|(prompt\\r*\\n*\\s*\\()|(confirm\\r*\\n*\\s*\\()|(addEventListener\\r*\\n*\\s*\\()|(expression\\r*\\n*\\s*\\()|(eval\\r*\\n*\\s*\\()|(onmouseover\\r*\\n*\\s*=)|(onclimbatree\\r*\\n*\\s*=)|(onhashchange\\r*\\n*\\s*=)|(onerror\\r*\\n*\\s*=)|(action\\r*\\n*\\s*=)|(formaction\\r*\\n*\\s*=)|(onload\\r*\\n*\\s*=)|(onstart\\r*\\n*\\s*=)|(onfocus\\r*\\n*\\s*=)|(oncut\\r*\\n*\\s*=)|(code\\r*\\n*\\s*=)|(ontoggle\\r*\\n*\\s*=)|(location\\r*\\n*\\s*.)",
         replaceSqlParam:true
     },
     //java 本地检测
