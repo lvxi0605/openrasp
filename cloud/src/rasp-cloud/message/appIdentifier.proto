@@ -1,0 +1,38 @@
+// 
+message AppIdentifier
+{
+    optional string appkey_=1;
+    optional string appsecret_=2;
+    optional int32 userCount_=3;
+    optional int64 deadLine_=4;
+    optional int64 licenseIndex_=5;
+    optional int32 packageCount_=6;
+    optional int32 rtcUserCount_=7;
+    optional int32 rtcMode_=8;
+    optional bytes rtcSecret_=9;
+}
+
+// 
+message License
+{
+    optional string naviHost_=1;
+    optional string apiHost_=2;
+    optional bool isClustered_=3;
+    optional int32 userCount_=4;
+    optional int32 appKeyCode_=5;
+    optional int64 deadLine_=6;
+    optional int64 createdTime_=7;
+    optional string desc_=8;
+    optional bytes encodeKey_=9;
+    optional int64 index_=10;
+}
+
+//
+message ServerLicense
+{
+    optional string appkey=1;
+    optional string appsecret=2;
+    optional int64 deadLine=3;
+    optional int64 createdTime=4;
+    optional string network=5;
+}
