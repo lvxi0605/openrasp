@@ -5,11 +5,8 @@ package main
 import (
 	"log"
 	"rasp-cloud/config"
-	_ "rasp-cloud/config"
 	"rasp-cloud/controllers"
-	_ "rasp-cloud/controllers"
 	"rasp-cloud/environment"
-	_ "rasp-cloud/environment"
 	_ "rasp-cloud/filter"
 	_ "rasp-cloud/models"
 	"rasp-cloud/routers"

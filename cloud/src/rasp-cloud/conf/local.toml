@@ -2,8 +2,8 @@
 app_key = "83f4xq9fltleq"
 
 #服务secret
-app_secret = "TBfyiak8tjrNpUE8F6Mc0lOLcX6A3yb0goZBlaYT66mghPJd6l8HFZynfgf0UhZMxtSKJJ7YB27fkhB1jCiX7L0u2Bn/9GCpw4FFPTUCfnAg4AsChzjlBoRGt3WImDJi4kOTdmVwCRNMb2caodKLc37qhw6+w34blheDU738NJs="
-#app_secret = "TBfyiak8tjrNpUE8F6Mc0lOLcX6A3yb0evg1fjk5Z+2GIMbRfhPrwZTdp+OC4OtX5rrDkz6WnUlOvwmYUrv3gozjfu7njnZFYIl7qT2g/dx4S8tQKncOf6ftJoojXvccos42VKBWoC+IvOZSh/ygcRqOH5oY9fCQqKUUcVqRoTs="
+#app_secret = "TBfyiak8tjrNpUE8F6Mc0lOLcX6A3yb0goZBlaYT66mghPJd6l8HFZynfgf0UhZMxtSKJJ7YB27fkhB1jCiX7L0u2Bn/9GCpw4FFPTUCfnAg4AsChzjlBoRGt3WImDJi4kOTdmVwCRNMb2caodKLc37qhw6+w34blheDU738NJs="
+app_secret = "TBfyiak8tjrNpUE8F6Mc0lOLcX6A3yb0evg1fjk5Z+2GIMbRfhPrwZTdp+OC4OtX5rrDkz6WnUlOvwmYUrv3gozjfu7njnZFYIl7qT2g/dx4S8tQKncOf6ftJoojXvccos42VKBWoC+IvOZSh/ygcRqOH5oY9fCQqKUUcVqRoTs="
 #服务版本号
 app_version = "1.0.0"
 
@@ -22,9 +22,9 @@ http_dns = "http://203.107.1.33/174597/d"
 
 [kafkaservers]
     [kafkaservers.online]
-    KafkaAddr = core.xinghuoyouxi.com
-    KafkaPort = 39092
-    KafkaUser = 
-    KafkaPwd =
+    KafkaAddr = "core.xinghuoyouxi.com"
+    KafkaPort = "39092"
+    KafkaUser = ""
+    KafkaPwd = ""
     KafkaEnable = true
-    KafkaTopic = core.alarm.info
+    KafkaTopic = "core.alarm.info"
