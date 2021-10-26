@@ -73,6 +73,7 @@ func getCurrentSerial(networkName string) string {
 
 	// passwordStr := fmt.Sprintf("%v%v", ipString, hardwareAddr)
 	passwordStr := fmt.Sprintf("%v", hardwareAddr)
+	// passwordStr = "f0:d4:e2:e8:89:bc"
 	newPasswd := pbkdf2.Key([]byte(passwordStr), []byte(key), 10000, 50, sha256.New)
 	Passwd := fmt.Sprintf("%x", newPasswd)
 	return Passwd

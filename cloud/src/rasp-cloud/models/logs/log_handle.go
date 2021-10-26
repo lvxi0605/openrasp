@@ -241,6 +241,11 @@ func AddLogWithKafka(alarmType string, log map[string]interface{}) error {
 		if err != nil {
 			return err
 		}
+
+		err2 := tools.SendMessage(kafkaIndex, log)
+		if err2 != nil {
+			return err2
+		}
 	}
 	return nil
 }

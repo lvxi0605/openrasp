@@ -51,6 +51,10 @@ func CheckAppkeyAndSecret(appkey, appsecret string) bool {
 	if req.GetNetwork() != getCurrentSerial(config.TOMLConfig.ServerNetwork) {
 		return false
 	}
+
+	appidInt, _ := string2Long(appkey)
+
+	config.TOMLConfig.AppId = fmt.Sprintf("%d", appidInt)
 	return true
 
 }
