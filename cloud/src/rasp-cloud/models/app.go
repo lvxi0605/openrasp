@@ -72,6 +72,10 @@ type GeneralAlarmConf struct {
 	AlarmCheckInterval int64 `json:"alarm_check_interval" bson:"alarm_check_interval"`
 }
 
+type StartTimeConf struct {
+	ServerStartTime int64 `json:"server_start_time" bson:"server_start_time"`
+}
+
 type EmailAlarmConf struct {
 	Enable     bool     `json:"enable" bson:"enable"`
 	From       string   `json:"from" bson:"from"`
@@ -114,16 +118,19 @@ type dingResponse struct {
 var AlarmTypes = []string{"email", "ding", "http"}
 
 const (
-	appCollectionName    = "app"
-	configCollectionName = "config"
-	defaultAppName       = "PHP 示例应用"
-	SecreteMask          = "************"
-	DefalutPluginName    = "plugin.js"
-	IastPluginName       = "iast.js"
+	appCollectionName       = "app"
+	configCollectionName    = "config"
+	startTimeCollectionName = "start_time"
+	defaultAppName          = "PHP 示例应用"
+	SecreteMask             = "************"
+	DefalutPluginName       = "plugin.js"
+	IastPluginName          = "iast.js"
 )
 
 var (
-	lastAlarmTime        = time.Now().UnixNano() / 1000000
+	lastAlarmTime   = time.Now().UnixNano() / 1000000
+	ServerstartTime = time.Now().Unix()
+
 	DefaultGeneralConfig = map[string]interface{}{
 		"clientip.header":   "ClientIP",
 		"block.status_code": 302,
@@ -179,6 +186,7 @@ var (
 )
 
 func init() {
+
 	count, err := mongo.Count(appCollectionName)
 	if err != nil {
 		tools.Panic(tools.ErrCodeMongoInitFailed, "failed to get app collection count", err)
@@ -194,6 +202,15 @@ func init() {
 	if err != nil {
 		tools.Panic(tools.ErrCodeMongoInitFailed, "failed to create index for app collection", err)
 	}
+
+	// 添加服务第一次启动时间配置
+	startTimeConf, err := getStartTimeConfig()
+	if err != nil {
+		tools.Panic(tools.ErrCodeMongoInitFailed, "failed to getStartTimeConfig", err)
+	} else {
+		ServerstartTime = startTimeConf.ServerStartTime
+	}
+
 	if *conf.AppConfig.Flag.Upgrade == "121to122" {
 		err := UpdateAppConfig(*conf.AppConfig.Flag.Upgrade)
 		if err != nil {
@@ -545,6 +562,21 @@ func getGeneralConfig() (conf *GeneralAlarmConf, err error) {
 	}
 	conf = &result.GeneralAlarmConf
 	return
+}
+
+func getStartTimeConfig() (conf *StartTimeConf, err error) {
+	var result struct {
+		StartTimeConf StartTimeConf `json:"server_start_time" bson:"server_start_time"`
+	}
+	err = mongo.FindId(startTimeCollectionName, "0", &result)
+	if err != nil {
+		result.StartTimeConf.ServerStartTime = time.Now().Unix()
+		UpdateConfigById(startTimeCollectionName, "0", bson.M{"server_start_time": result.StartTimeConf})
+		// return
+	}
+	conf = &result.StartTimeConf
+	return
+
 }
 
 func RegenerateSecret(appId string) (secret string, err error) {

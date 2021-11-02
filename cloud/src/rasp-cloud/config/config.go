@@ -19,10 +19,16 @@ type ServerConfig struct {
 	AppId         string                 //服务器appid
 	HTTPDNS       string                 `toml:"http_dns"`     //阿里http dns
 	Kafkaservers  map[string]KafkaServer `toml:"kafkaservers"` //kafka服务器配置
+	AttackTypes   map[string]AttackType  `toml:"attacktypes"`  //攻击类型
 }
 
 func (m ServerConfig) GetKafkaServer(name string) (KafkaServer, bool) {
 	s, ok := m.Kafkaservers[name]
+	return s, ok
+}
+
+func (m ServerConfig) GetAttackType(name string) (AttackType, bool) {
+	s, ok := m.AttackTypes[name]
 	return s, ok
 }
 
@@ -36,6 +42,13 @@ type KafkaServer struct {
 	Enable   bool   `toml:"KafkaEnable"`
 	Topic    string `toml:"KafkaTopic"`
 	Port     string `toml:"KafkaPort"`
+}
+
+type AttackType struct {
+	ID    int    `toml:"AttackID"`
+	Type  string `toml:"AttackType"`
+	Name  string `toml:"AttackName"`
+	Level string `toml:"AttackLevel"`
 }
 
 func init() {

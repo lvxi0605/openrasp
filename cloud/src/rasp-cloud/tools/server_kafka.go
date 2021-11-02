@@ -30,8 +30,9 @@ func SendMessage(key string, val map[string]interface{}) error {
 		} else {
 			kafkaconfig.Net.SASL.Enable = false
 		}
-		addrIp := GetDnsIP(kafka.Addr)
+		addrIp := GetDnsIP(kafka.Addr) + ":" + kafka.Port
 		addrIps := strings.Split(addrIp, ",")
+		// log.Printf("SendMessage: addrIps[%v], kafkaconfig[%v]", addrIps, kafkaconfig)
 		producer, err := sarama.NewSyncProducer(addrIps, kafkaconfig)
 		if err != nil {
 			beego.Error(err)

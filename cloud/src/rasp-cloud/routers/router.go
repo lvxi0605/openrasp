@@ -94,6 +94,11 @@ func InitRouter() {
 				&api.AppController{},
 			),
 		),
+		beego.NSNamespace("/display",
+			beego.NSInclude(
+				&api.DisplayController{},
+			),
+		),
 		beego.NSNamespace("/rasp",
 			beego.NSInclude(
 				&api.RaspController{},
