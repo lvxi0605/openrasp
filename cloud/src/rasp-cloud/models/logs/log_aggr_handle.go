@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"rasp-cloud/config"
 	"rasp-cloud/es"
 	"time"
 
@@ -12,9 +13,15 @@ import (
 
 // 攻击列表
 type AttackInfoList struct {
-	AttackSource string `json:"attack_source"`
-	AttackType   string `json:"attack_type"`
-	EventTime    string `json:"event_time"`
+	AttackSource  string `json:"attack_source"`
+	AttackType    string `json:"attack_type"`
+	EventTime     string `json:"event_time"`
+	LocationZH    string `json:"location_zh_cn"`
+	LocationEN    string `json:"location_en"`
+	SrcLatitude   string `json:"src_latitude"`
+	SrcLongitude  string `json:"src_longitude"`
+	DestLatitude  string `json:"dest_latitude"`
+	DestLongitude string `json:"dest_longitude"`
 }
 
 type AttackInfoLists []AttackInfoList
@@ -61,6 +68,39 @@ func SearchAttackAggrByIndexAndDate(index string, startTime string) ([]*elastic.
 
 	// 使用Terms函数和前面定义的聚合条件名称，查询结果
 	agg, found := searchResult.Aggregations.Terms("attack_event_time")
+	if !found {
+		// log.Fatal("没有找到聚合数据")
+		return nil, fmt.Errorf("没有找到聚合数据")
+	}
+
+	return agg.Buckets, nil
+
+}
+
+// 根据攻击国家分组
+func SearchAttackAggrByCountry(index string) ([]*elastic.AggregationBucketKeyItem, error) {
+	ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(15*time.Second))
+	defer cancel()
+
+	aggs := elastic.NewTermsAggregation().
+		Field("new_location_en.keyword") // 根据attack_type字段值，对数据进行分组
+
+	count := elastic.NewTermsAggregation().Field("new_location_zh_cn.keyword")
+	aggs.SubAggregation("location_zh_cn", count)
+
+	searchResult, err := es.ElasticClient.Search().
+		Index(index).                      // 设置索引名
+		Query(elastic.NewMatchAllQuery()). // 设置查询条件
+		Aggregation("location_en", aggs).  // 设置聚合条件，并为聚合条件设置一个名字
+		Size(0).                           // 设置分页参数 - 每页大小,设置为0代表不返回搜索结果，仅返回聚合分析结果
+		Do(ctx)                            // 执行请求
+
+	if err != nil {
+		return nil, err
+	}
+
+	// 使用Terms函数和前面定义的聚合条件名称，查询结果
+	agg, found := searchResult.Aggregations.Terms("location_en")
 	if !found {
 		// log.Fatal("没有找到聚合数据")
 		return nil, fmt.Errorf("没有找到聚合数据")
@@ -145,6 +185,16 @@ func SearchAttackList(index string, sizeList int) (AttackInfoLists, error) {
 			attackInfoList.AttackType = attackType.(string)
 			eventTime, _ := result[index]["event_time"]
 			attackInfoList.EventTime = eventTime.(string)
+			locationZH, _ := result[index]["new_location_zh_cn"]
+			attackInfoList.LocationZH = locationZH.(string)
+			locationEN, _ := result[index]["new_location_en"]
+			attackInfoList.LocationEN = locationEN.(string)
+			srcLatitude, _ := result[index]["new_latitude"]
+			attackInfoList.SrcLatitude = srcLatitude.(string)
+			srcLongitude, _ := result[index]["new_longitude"]
+			attackInfoList.SrcLongitude = srcLongitude.(string)
+			attackInfoList.DestLatitude = config.TOMLConfig.Location.Latitude
+			attackInfoList.DestLongitude = config.TOMLConfig.Location.Longitude
 
 			resultaaa = append(resultaaa, attackInfoList)
 		}

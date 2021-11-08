@@ -39,6 +39,11 @@ func authAgent(ctx *context.Context) {
 }
 
 func authApi(ctx *context.Context) {
+
+	urlPath := ctx.Request.RequestURI
+	if urlPath == "/v1/api/display/getconfig" {
+		return
+	}
 	cookie := ctx.GetCookie(models.AuthCookieName)
 	if has, err := models.HasCookie(cookie); !has || err != nil {
 		token := ctx.Input.Header(models.AuthTokenName)

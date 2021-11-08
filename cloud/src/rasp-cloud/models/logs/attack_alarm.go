@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"rasp-cloud/conf"
 	"rasp-cloud/es"
+	"rasp-cloud/ipsearch"
 	"rasp-cloud/tools"
 	"time"
 
@@ -29,6 +30,8 @@ var (
 	}
 	geoIpDbPath string
 	geoIpDb     *geoip2.Reader
+
+	ips ipsearch.IpSearch
 
 	AttackTypeMap = map[interface{}]string{
 		"sql":                        "SQL 注入",
@@ -75,6 +78,11 @@ func init() {
 	geoIpDb, err = geoip2.Open(geoIpDbPath)
 	if err != nil {
 		tools.Panic(tools.ErrCodeGeoipInit, "failed to open geoip database", err)
+	}
+
+	ips, err = ipsearch.New()
+	if err != nil {
+		tools.Panic(tools.ErrCodeGeoipInit, "failed to open ipSearch database", err)
 	}
 }
 
@@ -124,6 +132,13 @@ func setAlarmLocation(alarm map[string]interface{}) {
 					"longitude":      record.Location.Longitude,
 				}
 			}
+
+			localtionstr := ips.Get(attackSource.(string))
+			localtioninfo := ips.ParseLocaltion(localtionstr)
+			alarm["new_location_zh_cn"] = localtioninfo.Country
+			alarm["new_location_en"] = localtioninfo.CountryEN
+			alarm["new_latitude"] = localtioninfo.Latitude
+			alarm["new_longitude"] = localtioninfo.Longitude
 		}
 	}
 }

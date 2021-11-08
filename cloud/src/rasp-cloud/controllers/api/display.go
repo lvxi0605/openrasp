@@ -50,9 +50,31 @@ func dealAttackTypeCountMap(attackTypeMap map[string]int64, allCount int64) map[
 	return returnMap
 }
 
+// 城市攻击排名
+type AttackCountryInfo struct {
+	CountyNameZH string `json:"country_name_zh_cn"`
+	CountyNameEN string `json:"country_name_en"`
+	Count        int64  `json:"count"`
+}
+
+type AttackCountryInfos []AttackCountryInfo
+
+func (m AttackCountryInfos) Len() int {
+	return len(m)
+}
+
+func (m AttackCountryInfos) Less(i, j int) bool {
+	return m[i].Count > m[j].Count
+}
+
+func (m AttackCountryInfos) Swap(i, j int) {
+	m[i], m[j] = m[j], m[i]
+}
+
 type AppCount struct {
-	AppName string `json:"appname"`
-	Count   int64  `json:"Count"`
+	AppName      string `json:"appname"`
+	AppHeadImage string `json:"head_image_base64"`
+	Count        int64  `json:"Count"`
 }
 
 type AppCounts []AppCount
@@ -69,29 +91,59 @@ func (m AppCounts) Swap(i, j int) {
 	m[i], m[j] = m[j], m[i]
 }
 
-func dealAppCountMap(appCountMap map[string]int64) AppCounts {
+func dealAppCountMap(appCountMap map[string]AppCount) AppCounts {
 
 	var appCountList AppCounts
 	appCountList = make([]AppCount, 0)
 	for appName, count := range appCountMap {
 		var appCount AppCount
 		appCount.AppName = appName
-		appCount.Count = count
+		appCount.Count = count.Count
+		appCount.AppHeadImage = count.AppHeadImage
 		appCountList = append(appCountList, appCount)
 	}
 	sort.Sort(appCountList)
 	return appCountList
 }
 
+func dealAttackCountryMap(attackCountryMap map[string]AttackCountryInfo) AttackCountryInfos {
+
+	var attackCountryInfos AttackCountryInfos
+	attackCountryInfos = make([]AttackCountryInfo, 0)
+	for _, info := range attackCountryMap {
+		var attackCountryInfo AttackCountryInfo
+		attackCountryInfo.Count = info.Count
+		attackCountryInfo.CountyNameEN = info.CountyNameEN
+		attackCountryInfo.CountyNameZH = info.CountyNameZH
+		attackCountryInfos = append(attackCountryInfos, attackCountryInfo)
+	}
+	sort.Sort(attackCountryInfos)
+	return attackCountryInfos
+}
+
+// @router /getconfig [get]
+func (o *DisplayController) GetConfig() {
+	var result = make(map[string]interface{})
+	result["mobile"] = config.TOMLConfig.AppMobile
+	result["email"] = config.TOMLConfig.AppEmail
+	result["version"] = config.TOMLConfig.AppVersion
+	o.Serve(result)
+
+}
+
 // @router /get [post]
 func (o *DisplayController) GetDisplay() {
 
 	currentTime := time.Now()
-	currentDate := currentTime.Format("2006-01-02")
+	currentDate := currentTime.AddDate(0, 0, -6).Format("2006-01-02")
 
 	var AllAttackCount int64
 
-	appCountMap := make(map[string]int64)
+	appCountMap := make(map[string]AppCount)
+	attackCountryMap := make(map[string]AttackCountryInfo)
+
+	// var attackCountryList AttackCountryInfos
+	// attackCountryList = make([]AttackCountryInfo, 0)
 
 	attackTypeCountMap := make(map[string]int64)
 
@@ -141,8 +193,42 @@ func (o *DisplayController) GetDisplay() {
 				}
 			}
 
-			appCountMap[appinfo.Name] = appCount
+			var appInfo AppCount
+			appInfo.Count = appCount
+			appInfo.AppHeadImage = appinfo.HeadImageBase64
+			appInfo.AppName = appinfo.Name
+			appCountMap[appinfo.Name] = appInfo
 			AllAttackCount += appCount
+
+			// 获取城市排名
+			bucketCountryList, err3 := logs.SearchAttackAggrByCountry("corerasp-attack-alarm-" + appinfo.Id)
+			if err3 == nil {
+				for _, bucket := range bucketCountryList {
+					childagg, isfind2 := bucket.Aggregations.Terms("location_zh_cn")
+					if isfind2 {
+						for _, bucket1 := range childagg.Buckets {
+							// var attackCountryInfo AttackCountryInfo
+							// attackCountryInfo.Count = bucket1.DocCount
+							countyNameEN := fmt.Sprintf("%q", bucket.Key)
+							countyNameEN = strings.ReplaceAll(countyNameEN, "\"", "")
+							countyNameCH := fmt.Sprintf("%q", bucket1.Key)
+							countyNameCH = strings.ReplaceAll(countyNameCH, "\"", "")
+							attackCountryInfo, ok := attackCountryMap[countyNameEN+":"+countyNameCH]
+							if ok {
+								attackCountryInfo.Count = attackCountryInfo.Count + bucket1.DocCount
+								attackCountryMap[countyNameEN+":"+countyNameCH] = attackCountryInfo
+							} else {
+								var tempattackCountryInfo AttackCountryInfo
+								tempattackCountryInfo.Count = bucket1.DocCount
+								tempattackCountryInfo.CountyNameEN = countyNameEN
+								tempattackCountryInfo.CountyNameZH = countyNameCH
+								attackCountryMap[countyNameEN+":"+countyNameCH] = tempattackCountryInfo
+							}
+							// fmt.Printf("bucket = %q  bucket1 = %q 文档总数 = %d\n", bucket.Key, bucket1.Key, bucket1.DocCount)
+						}
+					}
+				}
+			}
 
 			// 获取近期攻击流量趋势
 			bucketDateList, err2 := logs.SearchAttackAggrByIndexAndDate("corerasp-attack-alarm-"+appinfo.Id, currentDate)
@@ -151,6 +237,7 @@ func (o *DisplayController) GetDisplay() {
 
 					keyString := *bucket.KeyAsString
 
+					fmt.Printf("bucket = %v 文档总数 = %d\n", keyString, bucket.DocCount)
 					// 攻击类型排名赋值
 					attackDateCount, ok := attackDateCoutMap[keyString]
 					if ok {
@@ -159,6 +246,8 @@ func (o *DisplayController) GetDisplay() {
 						attackDateCoutMap[keyString] = bucket.DocCount
 					}
 				}
+			} else {
+				fmt.Printf("err2 = %v\n", err2)
 			}
 
 			attackList, err3 := logs.SearchAttackList("corerasp-attack-alarm-"+appinfo.Id, 5)
@@ -194,6 +283,7 @@ func (o *DisplayController) GetDisplay() {
 	result["attack_level_count"] = attackLevelCountMap
 
 	// 攻击来源排名
+	result["attack_country_count"] = dealAttackCountryMap(attackCountryMap)
 
 	// 被攻击应用排名
 	result["app_attack_count"] = dealAppCountMap(appCountMap)

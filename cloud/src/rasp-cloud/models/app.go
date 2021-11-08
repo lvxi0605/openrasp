@@ -52,6 +52,7 @@ type App struct {
 	AlgorithmConfig     map[string]interface{} `json:"algorithm_config"`
 	GeneralAlarmConf    GeneralAlarmConf       `json:"general_alarm_conf" bson:"general_alarm_conf"`
 	KafkaConf           *kafka.Kafka           `json:"kafka_alarm_conf" bson:"kafka_alarm_conf"`
+	HeadImageBase64     string                 `json:"head_image_base64"  bson:"head_image_base64"`
 }
 
 type ExportAPP struct {

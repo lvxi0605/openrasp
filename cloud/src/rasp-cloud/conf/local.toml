@@ -19,6 +19,20 @@ app_email = "126@qq.com"
 #阿里云httpDns服务器
 http_dns = "http://203.107.1.33/174597/d"
 
+#服务器位置信息
+[location_info]
+continent = "亚洲"
+country = "中国"
+province="江西"
+city="南昌"
+county=""
+isp="电信"
+area_code="360100"
+country_en="China"
+country_simple="CN"
+latitude="115.892151"
+longitude="28.676493"
+
 
 [kafkaservers]
     [kafkaservers.online]
