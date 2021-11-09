@@ -287,10 +287,11 @@ func (o *AppController) Post() {
 // @router /config [post]
 func (o *AppController) ConfigApp() {
 	var param struct {
-		AppId       string `json:"app_id"`
-		Language    string `json:"language,omitempty"`
-		Name        string `json:"name,omitempty"`
-		Description string `json:"description,omitempty"`
+		AppId           string `json:"app_id"`
+		Language        string `json:"language,omitempty"`
+		Name            string `json:"name,omitempty"`
+		HeadImageBase64 string `json:"head_image_base64,omitempty"`
+		Description     string `json:"description,omitempty"`
 	}
 
 	o.UnmarshalJson(&param)
@@ -326,7 +327,7 @@ func (o *AppController) ConfigApp() {
 	if len(param.Description) > 1024 {
 		o.ServeError(http.StatusBadRequest, "the length of app description can not be greater than 1024")
 	}
-	updateData := bson.M{"name": param.Name, "language": param.Language, "description": param.Description}
+	updateData := bson.M{"name": param.Name, "language": param.Language, "description": param.Description, "head_image_base64": param.HeadImageBase64}
 	app, err := models.UpdateAppById(param.AppId, updateData)
 	if err != nil {
 		o.ServeError(http.StatusBadRequest, "failed to update app config", err)

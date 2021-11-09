@@ -52,9 +52,10 @@ func dealAttackTypeCountMap(attackTypeMap map[string]int64, allCount int64) map[
 
 // 城市攻击排名
 type AttackCountryInfo struct {
-	CountyNameZH string `json:"country_name_zh_cn"`
-	CountyNameEN string `json:"country_name_en"`
-	Count        int64  `json:"count"`
+	CountyNameZH string  `json:"country_name_zh_cn"`
+	CountyNameEN string  `json:"country_name_en"`
+	Count        int64   `json:"count"`
+	Percent      float32 `json:"percent"`
 }
 
 type AttackCountryInfos []AttackCountryInfo
@@ -115,6 +116,7 @@ func dealAttackCountryMap(attackCountryMap map[string]AttackCountryInfo) AttackC
 		attackCountryInfo.Count = info.Count
 		attackCountryInfo.CountyNameEN = info.CountyNameEN
 		attackCountryInfo.CountyNameZH = info.CountyNameZH
+		attackCountryInfo.Percent = info.Percent
 		attackCountryInfos = append(attackCountryInfos, attackCountryInfo)
 	}
 	sort.Sort(attackCountryInfos)
@@ -222,6 +224,7 @@ func (o *DisplayController) GetDisplay() {
 								tempattackCountryInfo.Count = bucket1.DocCount
 								tempattackCountryInfo.CountyNameEN = countyNameEN
 								tempattackCountryInfo.CountyNameZH = countyNameCH
+								tempattackCountryInfo.Percent = float32(bucket1.DocCount) / float32(AllAttackCount)
 								attackCountryMap[countyNameEN+":"+countyNameCH] = tempattackCountryInfo
 							}
 							// fmt.Printf("bucket = %q  bucket1 = %q 文档总数 = %d\n", bucket.Key, bucket1.Key, bucket1.DocCount)
