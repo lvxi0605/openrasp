@@ -107,7 +107,7 @@ func dealAppCountMap(appCountMap map[string]AppCount) AppCounts {
 	return appCountList
 }
 
-func dealAttackCountryMap(attackCountryMap map[string]AttackCountryInfo) AttackCountryInfos {
+func dealAttackCountryMap(attackCountryMap map[string]AttackCountryInfo, allCount int64) AttackCountryInfos {
 
 	var attackCountryInfos AttackCountryInfos
 	attackCountryInfos = make([]AttackCountryInfo, 0)
@@ -116,7 +116,7 @@ func dealAttackCountryMap(attackCountryMap map[string]AttackCountryInfo) AttackC
 		attackCountryInfo.Count = info.Count
 		attackCountryInfo.CountyNameEN = info.CountyNameEN
 		attackCountryInfo.CountyNameZH = info.CountyNameZH
-		attackCountryInfo.Percent = info.Percent
+		attackCountryInfo.Percent = float32(info.Count) / float32(allCount)
 		attackCountryInfos = append(attackCountryInfos, attackCountryInfo)
 	}
 	sort.Sort(attackCountryInfos)
@@ -224,7 +224,7 @@ func (o *DisplayController) GetDisplay() {
 								tempattackCountryInfo.Count = bucket1.DocCount
 								tempattackCountryInfo.CountyNameEN = countyNameEN
 								tempattackCountryInfo.CountyNameZH = countyNameCH
-								tempattackCountryInfo.Percent = float32(bucket1.DocCount) / float32(AllAttackCount)
+								// tempattackCountryInfo.Percent = float32(bucket1.DocCount) / float32(AllAttackCount)
 								attackCountryMap[countyNameEN+":"+countyNameCH] = tempattackCountryInfo
 							}
 							// fmt.Printf("bucket = %q  bucket1 = %q 文档总数 = %d\n", bucket.Key, bucket1.Key, bucket1.DocCount)
@@ -286,7 +286,7 @@ func (o *DisplayController) GetDisplay() {
 	result["attack_level_count"] = attackLevelCountMap
 
 	// 攻击来源排名
-	result["attack_country_count"] = dealAttackCountryMap(attackCountryMap)
+	result["attack_country_count"] = dealAttackCountryMap(attackCountryMap, AllAttackCount)
 
 	// 被攻击应用排名
 	result["app_attack_count"] = dealAppCountMap(appCountMap)
