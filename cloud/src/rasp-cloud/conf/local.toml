@@ -2,8 +2,8 @@
 app_key = "83f4xq9fltleq"
 
 #服务secret
-#app_secret = "TBfyiak8tjrNpUE8F6Mc0lOLcX6A3yb0goZBlaYT66mghPJd6l8HFZynfgf0UhZMxtSKJJ7YB27fkhB1jCiX7L0u2Bn/9GCpw4FFPTUCfnAg4AsChzjlBoRGt3WImDJi4kOTdmVwCRNMb2caodKLc37qhw6+w34blheDU738NJs="
-app_secret = "TBfyiak8tjrNpUE8F6Mc0lOLcX6A3yb0evg1fjk5Z+2GIMbRfhPrwZTdp+OC4OtX5rrDkz6WnUlOvwmYUrv3gozjfu7njnZFYIl7qT2g/dx4S8tQKncOf6ftJoojXvccos42VKBWoC+IvOZSh/ygcRqOH5oY9fCQqKUUcVqRoTs="
+app_secret = "TBfyiak8tjrNpUE8F6Mc0lOLcX6A3yb0goZBlaYT66mghPJd6l8HFZynfgf0UhZMxtSKJJ7YB27fkhB1jCiX7L0u2Bn/9GCpw4FFPTUCfnAg4AsChzjlBoRGt3WImDJi4kOTdmVwCRNMb2caodKLc37qhw6+w34blheDU738NJs="
+#app_secret = "TBfyiak8tjrNpUE8F6Mc0lOLcX6A3yb0evg1fjk5Z+2GIMbRfhPrwZTdp+OC4OtX5rrDkz6WnUlOvwmYUrv3gozjfu7njnZFYIl7qT2g/dx4S8tQKncOf6ftJoojXvccos42VKBWoC+IvOZSh/ygcRqOH5oY9fCQqKUUcVqRoTs="
 #服务版本号
 app_version = "1.0.0"
 
@@ -19,6 +19,20 @@ app_email = "126@qq.com"
 #阿里云httpDns服务器
 http_dns = "http://203.107.1.33/174597/d"
 
+#服务器位置信息
+[location_info]
+continent = "亚洲"
+country = "中国"
+province="江西"
+city="南昌"
+county=""
+isp="电信"
+area_code="360100"
+country_en="China"
+country_simple="CN"
+latitude="115.892151"
+longitude="28.676493"
+
 
 [kafkaservers]
     [kafkaservers.online]
@@ -28,3 +42,155 @@ http_dns = "http://203.107.1.33/174597/d"
     KafkaPwd = ""
     KafkaEnable = true
     KafkaTopic = "core.alarm.info"
+
+[AttackTypes]
+    [AttackTypes.sql]
+    AttackID = 1
+    AttackType = "sql"
+    AttackName = "SQL 注入"
+    AttackLevel = "高危"
+    [AttackTypes.sql_exception]
+    AttackID = 2
+    AttackType = "sql_exception"
+    AttackName = "SQL 语句异常"
+    AttackLevel = "高危"
+    [AttackTypes.eval]
+    AttackID = 3
+    AttackType = "eval"
+    AttackName = "SQL 注入"
+    AttackLevel = "EVAL 代码执行"
+    [AttackTypes.loadLibrary]
+    AttackID = 4
+    AttackType = "loadLibrary"
+    AttackName = "类库加载"
+    AttackLevel = "高危"
+    [AttackTypes.command]
+    AttackID = 5
+    AttackType = "command"
+    AttackName = "命令执行"
+    AttackLevel = "高危"
+    [AttackTypes.xxe]
+    AttackID = 6
+    AttackType = "xxe"
+    AttackName = "XXE 外部实体加载"
+    AttackLevel = "中危"
+    [AttackTypes.directory]
+    AttackID = 7
+    AttackType = "directory"
+    AttackName = "目录遍历"
+    AttackLevel = "低危"
+    [AttackTypes.rename]
+    AttackID = 8
+    AttackType = "rename"
+    AttackName = "文件重命名"
+    AttackLevel = "高危"
+    [AttackTypes.readFile]
+    AttackID = 9
+    AttackType = "readFile"
+    AttackName = "任意文件读取"
+    AttackLevel = "高危"
+    [AttackTypes.deleteFile]
+    AttackID = 10
+    AttackType = "deleteFile"
+    AttackName = "任意文件删除"
+    AttackLevel = "高危"
+    [AttackTypes.include]
+    AttackID = 11
+    AttackType = "include"
+    AttackName = "任意文件包含"
+    AttackLevel = "高危"
+    [AttackTypes.writeFile]
+    AttackID = 12
+    AttackType = "writeFile"
+    AttackName = "任意文件写入"
+    AttackLevel = "高危"
+    [AttackTypes.ssrf]
+    AttackID = 13
+    AttackType = "ssrf"
+    AttackName = "SSRF 请求伪造"
+    AttackLevel = "高危"
+    [AttackTypes.ssrfRedirect]
+    AttackID = 14
+    AttackType = "ssrfRedirect"
+    AttackName = "SSRF 请求伪造(重定向后)"
+    AttackLevel = "高危"
+    [AttackTypes.ognl]
+    AttackID = 15
+    AttackType = "ognl"
+    AttackName = "OGNL 代码执行"
+    AttackLevel = "高危"
+    [AttackTypes.webdav]
+    AttackID = 16
+    AttackType = "webdav"
+    AttackName = "SQL 注入"
+    AttackLevel = "任意文件上传 (PUT)"
+    [AttackTypes.fileUpload]
+    AttackID = 17
+    AttackType = "fileUpload"
+    AttackName = "任意文件上传"
+    AttackLevel = "高危"
+    [AttackTypes.deserialization]
+    AttackID = 18
+    AttackType = "deserialization"
+    AttackName = "反序列化攻击"
+    AttackLevel = "高危"
+    [AttackTypes.xss_echo]
+    AttackID = 19
+    AttackType = "xss_echo"
+    AttackName = "Echo XSS 跨站脚本攻击"
+    AttackLevel = "低危"
+    [AttackTypes.xss_userinput]
+    AttackID = 20
+    AttackType = "xss_userinput"
+    AttackName = "BODY XSS 跨站脚本攻击"
+    AttackLevel = "低危"
+    [AttackTypes.xssSql]
+    AttackID = 21
+    AttackType = "xssSql"
+    AttackName = "XSS SQL数据库存储攻击"
+    AttackLevel = "高危"
+    [AttackTypes.webshell_callable]
+    AttackID = 22
+    AttackType = "webshell_callable"
+    AttackName = "WebShell - 变形后门"
+    AttackLevel = "高危"
+    [AttackTypes.webshell_eval]
+    AttackID = 23
+    AttackType = "webshell_eval"
+    AttackName = "WebShell - 中国菜刀"
+    AttackLevel = "高危"
+    [AttackTypes.webshell_command]
+    AttackID = 24
+    AttackType = "webshell_command"
+    AttackName = "WebShell - 命令执行"
+    AttackLevel = "高危"
+    [AttackTypes.webshell_file_put_contents]
+    AttackID = 25
+    AttackType = "webshell_file_put_contents"
+    AttackName = "WebShell - 后门上传"
+    AttackLevel = "高危"
+    [AttackTypes.webshell_ld_preload]
+    AttackID = 26
+    AttackType = "webshell_ld_preload"
+    AttackName = "WebShell - 环境变量方式"
+    AttackLevel = "高危"
+    [AttackTypes.response]
+    AttackID = 27
+    AttackType = "response"
+    AttackName = "HTTP 响应采样检测"
+    AttackLevel = "低危"
+    [AttackTypes.request]
+    AttackID = 28
+    AttackType = "request"
+    AttackName = "请求开始"
+    AttackLevel = "低危"
+    [AttackTypes.requestPathScan]
+    AttackID = 29
+    AttackType = "requestPathScan"
+    AttackName = "服务器路径扫描"
+    AttackLevel = "低危"
+    [AttackTypes.link]
+    AttackID = 30
+    AttackType = "link"
+    AttackName = "文件操作"
+    AttackLevel = "高危"

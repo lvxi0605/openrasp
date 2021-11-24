@@ -15,9 +15,10 @@
 package conf
 
 import (
-	"github.com/astaxie/beego"
 	"rasp-cloud/tools"
 	"strings"
+
+	"github.com/astaxie/beego"
 )
 
 const (
@@ -77,6 +78,7 @@ var (
 
 func InitConfig(startFlag *Flag) {
 	initConstConfig()
+
 	path, err := tools.GetCurrentPath()
 	if err != nil {
 		beego.Warn(err)
