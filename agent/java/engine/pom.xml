@@ -118,6 +118,7 @@
                 </executions>
                 <configuration>
                     <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
                         <manifestEntries>
                             <Rasp-Module-Name>rasp-engine</Rasp-Module-Name>
                             <Rasp-Module-Class>com.gxdun.corerasp.EngineBoot</Rasp-Module-Class>

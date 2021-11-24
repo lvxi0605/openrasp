@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 Baidu Inc.
+ * Copyright 2021 CORE SHIELD Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,6 @@ import java.util.UUID;
  * All rights reserved
  * 攻击信息类，主要用于报警
  *
- * @see <a href="https://rasp.baidu.com/doc/setup/log/main.html">document</a>
  */
 public class AttackInfo extends EventInfo {
     public static final String TYPE_ATTACK = "attack";

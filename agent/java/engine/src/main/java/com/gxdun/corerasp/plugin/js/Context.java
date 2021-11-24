@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 Baidu Inc.
+ * Copyright 2021 CORE SHIELD Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -162,7 +162,7 @@ public class Context extends com.gxdun.corerasp.v8.Context {
         }
     }
 
-    // TODO: update openrasp-v8, accept string body
+    // TODO: update corerasp-v8, accept string body
     public byte[] getBody() {
         try {
             return escape(request.getStringBody());

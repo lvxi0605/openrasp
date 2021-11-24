@@ -3,7 +3,7 @@ const plugin_name    = 'official'
 const plugin_desc    = '官方插件'
 
 /*
- * Copyright 2017-2021 Baidu Inc.
+ * Copyright 2021 CORE SHIELD Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,8 @@ const plugin_desc    = '官方插件'
 // 常用链接
 //
 // Web 攻击检测能力说明、零规则检测算法介绍
-// https://rasp.baidu.com/doc/usage/web.html
 //
 // CVE 漏洞覆盖说明
-// https://rasp.baidu.com/doc/usage/cve.html
 
 'use strict'
 var plugin  = new RASP(plugin_name)
@@ -137,7 +135,6 @@ var algorithmConfig = {
     sql_exception: {
         name:      '算法3 - 记录数据库异常',
         action:    'log',
-        reference: 'https://rasp.baidu.com/doc/dev/official.html#sql-exception',
 
         // error_code 最多允许 100 个，超过直接清空
         mysql: {
@@ -291,7 +288,6 @@ var algorithmConfig = {
     readFile_outsideWebroot: {
         name:      '算法4 - 禁止使用 ../../ 访问web目录以外的文件',
         action:    'ignore',
-        reference: 'https://rasp.baidu.com/doc/dev/official.html#case-out-webroot'
     },
     // 任意文件下载防护 - 读取敏感文件，最后一道防线
     readFile_unwanted: {
@@ -310,10 +306,8 @@ var algorithmConfig = {
     //     action: 'block'
     // },
     // 写文件操作 - 脚本文件
-    // https://rasp.baidu.com/doc/dev/official.html#case-file-write
     writeFile_script: {
         name:      '算法2 - 拦截 php/jsp 等脚本文件的写入操作',
-        reference: 'https://rasp.baidu.com/doc/dev/official.html#case-file-write',
         action:    'block',
         userinput:  true,
         lcs_search: false
@@ -433,7 +427,6 @@ var algorithmConfig = {
     // XXE - 使用 file 协议读取内容，可能误报，默认 log
     xxe_file: {
         name:      '算法3 - 使用 file:// 协议读取文件',
-        reference: 'https://rasp.baidu.com/doc/dev/official.html#case-xxe',
         action:    'log',
     },
 
@@ -920,7 +913,6 @@ function validate_stack_java(stacks) {
 
     var userCode = false, reachedInvoke = false, i = 0, message = undefined
 
-    // v1.1.1 要求在堆栈里过滤 com.baidu.openrasp 相关的类，因为没有实现正确而产生了多余的反射堆栈，这里需要兼容下防止误报
     // v1.1.2 修复了这个问题，即堆栈顶部为命令执行的方法
     if (stacks.length > 3
         && stacks[0].startsWith('sun.reflect.GeneratedMethodAccessor')
@@ -939,8 +931,7 @@ function validate_stack_java(stacks) {
                 reachedInvoke = true
             }
 
-            // 用户代码，即非 JDK、com.baidu.openrasp 相关的函数
-            if (! method.startsWith('java.') 
+            if (! method.startsWith('java.')
                 && !method.startsWith('sun.') 
                 && !method.startsWith('com.sun.') 
                 && !method.startsWith('com.gxdun.corerasp.'))
@@ -2170,7 +2161,6 @@ plugin.register('readFile', function (params, context) {
         if (is_from_userinput(all_parameter, params.path))
         {
             // 1. 读取 http(s):// 内容
-            // ?file=http://www.baidu.com
             if (proto === 'http' || proto === 'https')
             {
                 if (algorithmConfig.readFile_userinput_http.action != 'ignore')
@@ -2323,7 +2313,6 @@ plugin.register('writeFile', function (params, context) {
     // }
 
     // 关于这个算法，请参考这个插件定制文档
-    // https://rasp.baidu.com/doc/dev/official.html#case-file-write
     if (algorithmConfig.writeFile_script.action != 'ignore')
     {
         var all_parameter = get_all_parameter(context)

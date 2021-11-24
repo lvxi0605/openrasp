@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 Baidu Inc.
+ * Copyright 2021 CORE SHIELD Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -113,7 +113,6 @@ public abstract class AbstractSqlHook extends AbstractClassHook {
         int errCode = e.getErrorCode();
         if (e != null && errCode == 0) {
             String message = "Unable to derive error code from SQL exceptions, error message: " + e.getMessage() + ".";
-            //+ "Please refer to https://rasp.baidu.com/doc/usage/exception.html#faq-errorcode for details.";
             LogTool.traceHookWarn(message, e);
             return true;
         }

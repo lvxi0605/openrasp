@@ -2,21 +2,6 @@ const plugin_version = '2021-0120-1432'
 const plugin_name    = 'official'
 const plugin_desc    = '官方插件'
 
-/*
- * Copyright 2017-2021 Baidu Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 
 'use strict'
@@ -301,7 +286,6 @@ var algorithmConfig = {
     //     action: 'block'
     // },
     // 写文件操作 - 脚本文件
-    // https://rasp.baidu.com/doc/dev/official.html#case-file-write
     writeFile_script: {
         name:      '算法2 - 拦截 php/jsp 等脚本文件的写入操作',
         action:    'block',
@@ -929,7 +913,7 @@ function validate_stack_java(stacks) {
 
     var userCode = false, reachedInvoke = false, i = 0, message = undefined
 
-    // v1.1.1 要求在堆栈里过滤 com.baidu.openrasp 相关的类，因为没有实现正确而产生了多余的反射堆栈，这里需要兼容下防止误报
+    // v1.1.1 要求在堆栈里过滤 com.gxdun.corerasp 相关的类，因为没有实现正确而产生了多余的反射堆栈，这里需要兼容下防止误报
     // v1.1.2 修复了这个问题，即堆栈顶部为命令执行的方法
     if (stacks.length > 3
         && stacks[0].startsWith('sun.reflect.GeneratedMethodAccessor')
@@ -948,7 +932,7 @@ function validate_stack_java(stacks) {
                 reachedInvoke = true
             }
 
-            // 用户代码，即非 JDK、com.baidu.openrasp 相关的函数
+            // 用户代码，即非 JDK、com.gxdun.corerasp 相关的函数
             if (! method.startsWith('java.') 
                 && !method.startsWith('sun.') 
                 && !method.startsWith('com.sun.') 
@@ -2179,7 +2163,7 @@ plugin.register('readFile', function (params, context) {
         if (is_from_userinput(all_parameter, params.path))
         {
             // 1. 读取 http(s):// 内容
-            // ?file=http://www.baidu.com
+            // ?file=http://www.corerasp.com
             if (proto === 'http' || proto === 'https')
             {
                 if (algorithmConfig.readFile_userinput_http.action != 'ignore')

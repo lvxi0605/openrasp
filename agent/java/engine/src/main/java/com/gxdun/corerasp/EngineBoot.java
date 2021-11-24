@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 Baidu Inc.
+ * Copyright 2021 CORE SHIELD Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,7 +67,6 @@ public class EngineBoot implements Module {
             Loader.load();
         } catch (Exception e) {
             System.out.println("[CoreRASP] Failed to load native library");
-                   // ", please refer to https://rasp.baidu.com/doc/install/software.html#faq-v8-load for possible solutions.");
             e.printStackTrace();
             return;
         }

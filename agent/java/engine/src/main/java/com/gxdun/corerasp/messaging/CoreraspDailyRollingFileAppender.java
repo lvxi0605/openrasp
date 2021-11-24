@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 Baidu Inc.
+ * Copyright 2021 CORE SHIELD Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import java.util.*;
  * 在DailyRollingFileAppender基础上增加MaxBackupIndex配置,
  * 仅在rollover时删除最近的超过时间范围的文件(一个)
  */
-public class OpenraspDailyRollingFileAppender extends FileAppender {
+public class CoreraspDailyRollingFileAppender extends FileAppender {
 
     // The code assumes that the following constants are in a increasing
     // sequence.
@@ -80,7 +80,7 @@ public class OpenraspDailyRollingFileAppender extends FileAppender {
 
     SimpleDateFormat sdf;
 
-    OpenraspRollingCalendar rc = new OpenraspRollingCalendar();
+    CoreraspRollingCalendar rc = new CoreraspRollingCalendar();
 
     int checkPeriod = TOP_OF_TROUBLE;
 
@@ -91,15 +91,15 @@ public class OpenraspDailyRollingFileAppender extends FileAppender {
     /**
      * The default constructor does nothing.
      */
-    public OpenraspDailyRollingFileAppender() {
+    public CoreraspDailyRollingFileAppender() {
     }
 
     /**
-     * Instantiate a <code>OpenraspDailyRollingFileAppender</code> and open the
+     * Instantiate a <code>CoreraspDailyRollingFileAppender</code> and open the
      * file designated by <code>filename</code>. The opened filename will
      * become the ouput destination for this appender.
      */
-    public OpenraspDailyRollingFileAppender(Layout layout, String filename,
+    public CoreraspDailyRollingFileAppender(Layout layout, String filename,
                                             String datePattern) throws IOException {
         super(layout, filename, true);
         this.datePattern = datePattern;
@@ -191,7 +191,7 @@ public class OpenraspDailyRollingFileAppender extends FileAppender {
     // GMT (the epoch).
 
     int computeCheckPeriod() {
-        OpenraspRollingCalendar rollingCalendar = new OpenraspRollingCalendar(gmtTimeZone, Locale.getDefault());
+        CoreraspRollingCalendar rollingCalendar = new CoreraspRollingCalendar(gmtTimeZone, Locale.getDefault());
         // set sate to 1970-01-01 00:00:00 GMT
         Date epoch = new Date(0);
         if (datePattern != null) {
@@ -258,7 +258,7 @@ public class OpenraspDailyRollingFileAppender extends FileAppender {
     }
 
     /**
-     * This method differentiates OpenraspDailyRollingFileAppender from its
+     * This method differentiates CoreraspDailyRollingFileAppender from its
      * super class.
      *
      * <p>Before actually logging, this method will check whether it is
@@ -317,20 +317,20 @@ public class OpenraspDailyRollingFileAppender extends FileAppender {
 }
 
 /**
- * OpenraspRollingCalendar is a helper class to OpenraspDailyRollingFileAppender.
+ * CoreraspRollingCalendar is a helper class to CoreraspDailyRollingFileAppender.
  * Given a periodicity type and the current time, it computes the
  * start of the next interval.
  */
-class OpenraspRollingCalendar extends GregorianCalendar {
+class CoreraspRollingCalendar extends GregorianCalendar {
     private static final long serialVersionUID = -1788133458110660402L;
 
-    int type = OpenraspDailyRollingFileAppender.TOP_OF_TROUBLE;
+    int type = CoreraspDailyRollingFileAppender.TOP_OF_TROUBLE;
 
-    OpenraspRollingCalendar() {
+    CoreraspRollingCalendar() {
         super();
     }
 
-    OpenraspRollingCalendar(TimeZone tz, Locale locale) {
+    CoreraspRollingCalendar(TimeZone tz, Locale locale) {
         super(tz, locale);
     }
 
@@ -346,18 +346,18 @@ class OpenraspRollingCalendar extends GregorianCalendar {
         this.setTime(now);
 
         switch (type) {
-            case OpenraspDailyRollingFileAppender.TOP_OF_MINUTE:
+            case CoreraspDailyRollingFileAppender.TOP_OF_MINUTE:
                 this.set(Calendar.SECOND, 0);
                 this.set(Calendar.MILLISECOND, 0);
                 this.add(Calendar.MINUTE, 1);
                 break;
-            case OpenraspDailyRollingFileAppender.TOP_OF_HOUR:
+            case CoreraspDailyRollingFileAppender.TOP_OF_HOUR:
                 this.set(Calendar.MINUTE, 0);
                 this.set(Calendar.SECOND, 0);
                 this.set(Calendar.MILLISECOND, 0);
                 this.add(Calendar.HOUR_OF_DAY, 1);
                 break;
-            case OpenraspDailyRollingFileAppender.HALF_DAY:
+            case CoreraspDailyRollingFileAppender.HALF_DAY:
                 this.set(Calendar.MINUTE, 0);
                 this.set(Calendar.SECOND, 0);
                 this.set(Calendar.MILLISECOND, 0);
@@ -369,14 +369,14 @@ class OpenraspRollingCalendar extends GregorianCalendar {
                     this.add(Calendar.DAY_OF_MONTH, 1);
                 }
                 break;
-            case OpenraspDailyRollingFileAppender.TOP_OF_DAY:
+            case CoreraspDailyRollingFileAppender.TOP_OF_DAY:
                 this.set(Calendar.HOUR_OF_DAY, 0);
                 this.set(Calendar.MINUTE, 0);
                 this.set(Calendar.SECOND, 0);
                 this.set(Calendar.MILLISECOND, 0);
                 this.add(Calendar.DATE, 1);
                 break;
-            case OpenraspDailyRollingFileAppender.TOP_OF_WEEK:
+            case CoreraspDailyRollingFileAppender.TOP_OF_WEEK:
                 this.set(Calendar.DAY_OF_WEEK, getFirstDayOfWeek());
                 this.set(Calendar.HOUR_OF_DAY, 0);
                 this.set(Calendar.MINUTE, 0);
@@ -384,7 +384,7 @@ class OpenraspRollingCalendar extends GregorianCalendar {
                 this.set(Calendar.MILLISECOND, 0);
                 this.add(Calendar.WEEK_OF_YEAR, 1);
                 break;
-            case OpenraspDailyRollingFileAppender.TOP_OF_MONTH:
+            case CoreraspDailyRollingFileAppender.TOP_OF_MONTH:
                 this.set(Calendar.DATE, 1);
                 this.set(Calendar.HOUR_OF_DAY, 0);
                 this.set(Calendar.MINUTE, 0);
@@ -405,18 +405,18 @@ class OpenraspRollingCalendar extends GregorianCalendar {
     public Date getRemoveDate(Date now, int backupIndex) {
         this.setTime(now);
         switch (type) {
-            case OpenraspDailyRollingFileAppender.TOP_OF_MINUTE:
+            case CoreraspDailyRollingFileAppender.TOP_OF_MINUTE:
                 this.set(Calendar.SECOND, 0);
                 this.set(Calendar.MILLISECOND, 0);
                 this.add(Calendar.MINUTE, (-1) * backupIndex);
                 break;
-            case OpenraspDailyRollingFileAppender.TOP_OF_HOUR:
+            case CoreraspDailyRollingFileAppender.TOP_OF_HOUR:
                 this.set(Calendar.MINUTE, 0);
                 this.set(Calendar.SECOND, 0);
                 this.set(Calendar.MILLISECOND, 0);
                 this.add(Calendar.HOUR_OF_DAY, (-1) * backupIndex);
                 break;
-            case OpenraspDailyRollingFileAppender.HALF_DAY:
+            case CoreraspDailyRollingFileAppender.HALF_DAY:
                 this.set(Calendar.MINUTE, 0);
                 this.set(Calendar.SECOND, 0);
                 this.set(Calendar.MILLISECOND, 0);
@@ -433,14 +433,14 @@ class OpenraspRollingCalendar extends GregorianCalendar {
                     }
                 }
                 break;
-            case OpenraspDailyRollingFileAppender.TOP_OF_DAY:
+            case CoreraspDailyRollingFileAppender.TOP_OF_DAY:
                 this.set(Calendar.HOUR_OF_DAY, 0);
                 this.set(Calendar.MINUTE, 0);
                 this.set(Calendar.SECOND, 0);
                 this.set(Calendar.MILLISECOND, 0);
                 this.add(Calendar.DATE, (-1) * backupIndex);
                 break;
-            case OpenraspDailyRollingFileAppender.TOP_OF_WEEK:
+            case CoreraspDailyRollingFileAppender.TOP_OF_WEEK:
                 this.set(Calendar.DAY_OF_WEEK, getFirstDayOfWeek());
                 this.set(Calendar.HOUR_OF_DAY, 0);
                 this.set(Calendar.MINUTE, 0);
@@ -448,7 +448,7 @@ class OpenraspRollingCalendar extends GregorianCalendar {
                 this.set(Calendar.MILLISECOND, 0);
                 this.add(Calendar.WEEK_OF_YEAR, (-1) * backupIndex);
                 break;
-            case OpenraspDailyRollingFileAppender.TOP_OF_MONTH:
+            case CoreraspDailyRollingFileAppender.TOP_OF_MONTH:
                 this.set(Calendar.DATE, 1);
                 this.set(Calendar.HOUR_OF_DAY, 0);
                 this.set(Calendar.MINUTE, 0);

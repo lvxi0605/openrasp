@@ -40,6 +40,7 @@
                 </executions>
                 <configuration>
                     <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
                         <manifestEntries>
                             <Premain-Class>com.gxdun.corerasp.Agent</Premain-Class>
                             <Agent-Class>com.gxdun.corerasp.Agent</Agent-Class>

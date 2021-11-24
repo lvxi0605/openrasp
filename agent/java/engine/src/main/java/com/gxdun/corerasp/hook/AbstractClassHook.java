@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 Baidu Inc.
+ * Copyright 2021 CORE SHIELD Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,7 +63,6 @@ public abstract class AbstractClassHook {
      * hook点所属检测类型．
      *
      * @return 检测类型
-     * @see <a href="https://rasp.baidu.com/doc/dev/data.html">https://rasp.baidu.com/doc/dev/data.html</a>
      */
     public abstract String getType();
 

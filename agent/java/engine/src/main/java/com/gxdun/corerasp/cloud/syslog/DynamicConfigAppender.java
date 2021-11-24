@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021 Baidu Inc.
+ * Copyright 2021 CORE SHIELD Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import com.gxdun.corerasp.cloud.httpappender.HttpAppender;
 import com.gxdun.corerasp.cloud.model.AppenderMappedLogger;
 import com.gxdun.corerasp.config.Config;
 import com.gxdun.corerasp.messaging.BurstFilter;
-import com.gxdun.corerasp.messaging.OpenraspDailyRollingFileAppender;
+import com.gxdun.corerasp.messaging.CoreraspDailyRollingFileAppender;
 import com.gxdun.corerasp.messaging.SyslogTcpAppender;
 import com.gxdun.corerasp.tool.FileUtil;
 import com.gxdun.corerasp.tool.FilterConstructor;
@@ -138,8 +138,8 @@ public class DynamicConfigAppender {
     /**
      * 创建fileAppender
      */
-    public static OpenraspDailyRollingFileAppender createFileAppender(String appender, String targetPath) {
-        OpenraspDailyRollingFileAppender fileAppender = new OpenraspDailyRollingFileAppender();
+    public static CoreraspDailyRollingFileAppender createFileAppender(String appender, String targetPath) {
+        CoreraspDailyRollingFileAppender fileAppender = new CoreraspDailyRollingFileAppender();
         fileAppender.setName(appender);
         fileAppender.setErrorHandler(new OnlyOnceErrorHandler());
         fileAppender.setFile(targetPath);
@@ -237,7 +237,7 @@ public class DynamicConfigAppender {
                 if ("root".equals(type.getLogger())) {
                     Appender appender = Logger.getRootLogger().getAppender(type.getAppender());
                     if (appender instanceof FileAppender) {
-                        OpenraspDailyRollingFileAppender fileAppender = (OpenraspDailyRollingFileAppender) appender;
+                        CoreraspDailyRollingFileAppender fileAppender = (CoreraspDailyRollingFileAppender) appender;
                         fileAppender.setMaxBackupIndex(logMaxBackup);
                         fileAppenderRollFiles(fileAppender);
                     }
@@ -245,7 +245,7 @@ public class DynamicConfigAppender {
                     Logger logger = Logger.getLogger(type.getLogger());
                     Appender appender = logger.getAppender(type.getAppender());
                     if (appender instanceof FileAppender) {
-                        OpenraspDailyRollingFileAppender fileAppender = (OpenraspDailyRollingFileAppender) appender;
+                        CoreraspDailyRollingFileAppender fileAppender = (CoreraspDailyRollingFileAppender) appender;
                         fileAppender.setMaxBackupIndex(logMaxBackup);
                         fileAppenderRollFiles(fileAppender);
                     }
@@ -255,7 +255,7 @@ public class DynamicConfigAppender {
     }
 
     //手动触发日志文件rotate
-    private static void fileAppenderRollFiles(OpenraspDailyRollingFileAppender fileAppender) {
+    private static void fileAppenderRollFiles(CoreraspDailyRollingFileAppender fileAppender) {
         try {
             String fileName = fileAppender.getFile();
             fileAppender.rollFiles(new File(fileName));
